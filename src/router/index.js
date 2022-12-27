@@ -23,13 +23,6 @@ const routes = [
         }
       },
       {
-        path: 'user/add-new',
-        component: () => import('../views/user/UserAddNewView.vue'),
-        meta:{
-          title:'酷鯊商城運營管理平台-新增用戶模塊'
-        }
-      },
-      {
         path: 'admin/list',
         component: () => import('../views/admin/AdminListView.vue'),
         meta:{
@@ -37,7 +30,7 @@ const routes = [
         }
       },
       {
-        path: 'admin/add-new',
+        path: 'admin/addNew',
         component: () => import('../views/admin/AdminAddNewView.vue'),
         meta:{
           title:'酷鯊商城運營管理平台-新增管理員列表模塊'
@@ -48,11 +41,11 @@ const routes = [
         component: () => import('../views/brand/BrandListView')
       },
       {
-        path: 'brand/add-new',
+        path: 'brand/addNew',
         component: () => import('../views/brand/BrandAddNewView')
       },
       {
-        path: 'category/add-new',
+        path: 'category/addNew',
         component: () => import('../views/category/CategoryAddNewView')
       },
       {
@@ -60,18 +53,30 @@ const routes = [
         component: () => import('../views/category/CategoryListView')
       },
       {
-        path: '/index',
+        path: 'product/addNew',
+        component: () => import('../views/product/ProductAddNewView.vue')
+      },
+      {
+        path: 'product/list',
+        component: () => import('../views/product/ProductListView.vue')
+      },
+      {
+        path: 'product/details',
+        component: () => import('../views/product/ProductDetailView.vue')
+      },
+      {
+        path: 'index',
         component: () => import('../views/Index')
       }
-    ]
+    ],
   },
-  // {
-  //   /*配置/login*/
-  //   path: '/',
-  //   /*name 可要可不要，作用在於辨識*/
-  //   name: 'login',
-  //   component: () => import('../views/Index.vue')
-  // },
+  {
+    /*配置/login*/
+    path: '/login',
+    /*name 可要可不要，作用在於辨識*/
+    name: 'login',
+    component: () => import('../views/LoginView.vue')
+  },
 ]
 
 const router = new VueRouter({

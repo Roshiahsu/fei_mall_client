@@ -10,7 +10,7 @@
                   <a href="/product/list">商品介紹</a><el-divider direction="vertical"></el-divider>
                   <a href="">購物車</a><el-divider direction="vertical"></el-divider>
                   <a href="">顧客中心</a><el-divider direction="vertical"></el-divider>
-                  <a href="login.html">會員登入</a>
+                  <a href="/login">會員登入</a>
               </span>
           </div>
           <el-divider></el-divider>
@@ -19,8 +19,9 @@
 
       <el-container class="layout-body">
           <el-aside class="layout-side" width="200px">
-              <!--添加router 屬性開啟跳轉功能 默認為false-->
+              <!--TODO 根據權限是否為admin顯現 開始-->
               <el-menu
+                      v-if="aa === 1"
                       router
                       :default-active=this.$router.currentRoute.path
                       class="el-menu-vertical-demo"
@@ -52,15 +53,26 @@
                   <el-submenu index="3">
                       <template slot="title">
                           <i class="el-icon-first-aid-kit"></i>
+                          <span>商品管理</span>
+                      </template>
+                      <el-menu-item index="/admin/brand/list" class="el-icon-first-aid-kit" >商品列表</el-menu-item>
+                      <el-menu-item index="/admin/brand/add-new" class="el-icon-first-aid-kit">新增商品</el-menu-item>
+                  </el-submenu>
+                  <!--商品管理結束-->
+
+                  <!--品牌管理開始-->
+                  <el-submenu index="4">
+                      <template slot="title">
+                          <i class="el-icon-first-aid-kit"></i>
                           <span>品牌管理</span>
                       </template>
                       <el-menu-item index="/admin/brand/list" class="el-icon-first-aid-kit" >品牌列表</el-menu-item>
                       <el-menu-item index="/admin/brand/add-new" class="el-icon-first-aid-kit">新增品牌</el-menu-item>
                   </el-submenu>
-                  <!--商品管理結束-->
+                  <!--品牌管理結束-->
 
                   <!--類別管理開始-->
-                  <el-submenu index="4">
+                  <el-submenu index="5">
                       <template slot="title">
                           <i class="el-icon-tickets"></i>
                           <span>類別管理</span>
@@ -70,6 +82,7 @@
                   </el-submenu>
                   <!--類別管理結束-->
               </el-menu>
+              <!--TODO 根據權限是否為admin顯現 結束-->
 
           </el-aside>
         <el-main>
@@ -107,9 +120,37 @@
 import HelloWorld from '@/components/HelloWorld.vue'
 
 export default {
-  name: 'HomeView',
-  components: {
-    HelloWorld
-  }
+    data() {
+        return {
+            aa:2,
+            tableData:[]
+        };
+    },
+    methods: {
+        handleEdit(id){
+            console.log(id)
+            //更改數據ByID
+        },
+        loadAdmins(){
+            //自動獲取
+            let url="http://localhost:9080/user/userInfo"
+            this.axios.get(url).then((response)=>{
+                let json=response.data
+                console.log(json)
+                if(json.serviceCode===20000){
+                    this.tableData=json.data;
+                }else{
+                    this.$message.error(json.message)
+                }
+                console.log(this.tableData)
+            })
+        },
+    },
+    created() {
+
+    },
+    mounted() {
+        this.loadAdmins();
+    }
 }
 </script>

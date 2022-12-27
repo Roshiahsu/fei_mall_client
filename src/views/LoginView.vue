@@ -5,7 +5,7 @@
     margin: 0 auto;background-color: rgba(255,255,255,0.3)">
       <img
               style="width: 100px; height: 100px;margin:auto;display:block"
-              src="../assets/shark.png">
+              src="/au.png">
       <el-form :model="ruleForm" :rules="rules" ref="ruleForm" label-width="100px" class="demo-ruleForm">
       <el-form-item label="用戶名稱" prop="username">
         <el-input v-model="ruleForm.username"></el-input>
@@ -34,11 +34,11 @@
         rules: {
           username: [
             { required: true, message: '請輸入用戶名', trigger: 'blur' },
-            { min: 2, max: 15, message: '长度在 4 到 15 个字符', trigger: 'blur' }
+            { min: 2, max: 15, message: '長度在 4 到 15 個字符', trigger: 'blur' }
           ],
           password: [
             { required: true, message: '請輸入密碼', trigger: 'blur' },
-            { min: 4, max: 15, message: '长度在 4 到 15 个字符', trigger: 'blur' }
+            { min: 4, max: 15, message: '長度在 4 到 15 個字符', trigger: 'blur' }
           ]
         }
       };
@@ -48,7 +48,7 @@
         this.$refs[formName].validate((valid) => {
           if (valid) {
             // alert('submit!');
-            let url="http://localhost:9081/admins/login";
+            let url="http://localhost:9080/user/login";
 
             //將this.ruleForm裡面的username & password 包裝在formData
             let formData={
@@ -57,12 +57,12 @@
             }
             this.axios.post(url,formData).then((response)=>{
               console.log(response.data)
-              if(response.data.statusCode==20000){
+              if(response.data.serviceCode===20000){
                 this.$message.success("登錄成功")
                 let jwt = response.data.data;
                 console.log("jwt:",jwt)
                 localStorage.setItem('jwt',jwt)
-                location.href="http://localhost:8080/admin/admin/list"
+                location.href="http://localhost:8080/index"
               }else{
                 this.$message.error("登錄失敗,用戶名或密碼錯誤")
               }
