@@ -27,7 +27,7 @@
                             <div style="padding: 14px;">
                                 <span>{{item.productName}}</span>
                                 <div class="bottom clearfix">
-                                    <el-button type="text" class="button">商品詳情</el-button>
+                                    <el-button type="text" class="button" @click="productDetails(item.id)">商品詳情</el-button>
                                 </div>
                             </div>
                         </el-card>
@@ -49,7 +49,7 @@
                             <div style="padding: 14px;">
                                 <span>{{item.productName}}</span>
                                 <div class="bottom clearfix">
-                                    <el-button type="text" class="button">商品詳情</el-button>
+                                    <el-button type="text" class="button" @click="productDetails(item.id)">商品詳情</el-button>
                                 </div>
                             </div>
                         </el-card>
@@ -76,12 +76,11 @@
                 newProductArr:[],
                 hotProductArr:[],
                 discountedProductArr:[],
-                id:11
             };
         },
         methods: {
             productDetails(id){
-                location.href = "http://localhost:8080/product/details?="+id
+                location.href = "/product/details?id="+id
             },
         },
         created() {
@@ -95,11 +94,11 @@
          */
         //TODO 冗余代碼提取成方法
         mounted() {
-            let url = "http://localhost:9080/product/"+newProduct+"/listProduct"
+            let url = "http://localhost:9080/product/"+newProduct+"/listProduct?pageNum=1&pageSize=4"
             this.axios
                 .get(url).then((response) => {
                 if (response.data.serviceCode === 20000) {
-                   this.newProductArr = response.data.data
+                   this.newProductArr = response.data.data.list
                 } else {
                     let message = response.data.message
                     this.$message.error(message);
@@ -107,11 +106,12 @@
             }).catch(function (error) { //響應成功會走then，響應失敗走catch
                     console.log("響應結果失敗")
             }),
-                url = "http://localhost:9080/product/"+hotProduct+"/listProduct"
+                url = "http://localhost:9080/product/"+hotProduct+"/listProduct?pageNum=1&pageSize=6"
             this.axios
                 .get(url).then((response) => {
+                console.log("獲取的資料",response.data)
                 if (response.data.serviceCode === 20000) {
-                    this.hotProductArr = response.data.data
+                    this.hotProductArr = response.data.data.list
                 } else {
                     let message = response.data.message
                     this.$message.error(message);
@@ -119,11 +119,11 @@
             }).catch(function (error) { //響應成功會走then，響應失敗走catch
                 console.log("響應結果失敗")
             }),
-            url = "http://localhost:9080/product/"+discountedProduct+"/listProduct"
+            url = "http://localhost:9080/product/"+discountedProduct+"/listProduct?pageNum=1&pageSize=6"
             this.axios
                 .get(url).then((response) => {
                 if (response.data.serviceCode === 20000) {
-                    this.discountedProductArr = response.data.data
+                    this.discountedProductArr = response.data.data.list
                 } else {
                     let message = response.data.message
                     this.$message.error(message);

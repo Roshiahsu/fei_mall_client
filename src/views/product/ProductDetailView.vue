@@ -1,13 +1,13 @@
 <template>
 <div>
-    <h1 style="margin: 20px 0;">商品詳情</h1>
+    <h1 style="margin: 20px 0;">{{product.productName}}</h1>
         <!--行間距-->
         <el-row :gutter="20">
             <!--:span 佈局-->
             <el-col :span="12">
                 <el-card :body-style="{ padding: '0px' }">
                     <img
-                            :src="'/productImg/'+product.picture"
+                            :src="'/productImg/' + url "
                             class="image">
                     <div style="padding: 14px;">
                         <span>{{product.productName}}</span>
@@ -28,7 +28,6 @@
                 </p>
                 <p style="font-size: 25px;font-weight: bold">
                     <span style="color: #999;font-size: 15px">
-                            <!--<s>刪除線-->
                             {{product.description}}
                         </span>
                 </p>
@@ -43,9 +42,9 @@
     export default {
         data() {
             return {
-                product:[
-                ],
-                jwt:''
+                product:[],
+                url:'',
+                jwt:'',
             };
         },
         methods: {
@@ -59,6 +58,7 @@
                     console.log("JSON",json)
                     if(json.serviceCode===20000){
                         this.product=json.data
+                        this.url = json.data.picture
                     }else {
                         this.$message.error(json.message)
                     }
@@ -102,5 +102,13 @@
         width: 100%;
         display: block;
     }
+    .clearfix:before,
+    .clearfix:after {
+        display: table;
+        content: "";
+    }
 
+    .clearfix:after {
+        clear: both
+    }
 </style>

@@ -7,7 +7,7 @@
           <div style="width: 1200px;margin:0 auto; background-color: #42b983">
               <span style="position: absolute;left:37%">
                   <a href="/index">首頁</a><el-divider direction="vertical"></el-divider>
-                  <a href="/product/list">商品介紹</a><el-divider direction="vertical"></el-divider>
+                  <a href="/product/list?pageNum=1&pageSize=3">商品介紹</a><el-divider direction="vertical"></el-divider>
                   <a href="">購物車</a><el-divider direction="vertical"></el-divider>
                   <a href="">顧客中心</a><el-divider direction="vertical"></el-divider>
                   <a href="/login">會員登入</a>
@@ -122,21 +122,15 @@ import HelloWorld from '@/components/HelloWorld.vue'
 export default {
     data() {
         return {
-            aa:2,
             tableData:[]
         };
     },
     methods: {
-        handleEdit(id){
-            console.log(id)
-            //更改數據ByID
-        },
         loadAdmins(){
             //自動獲取
             let url="http://localhost:9080/user/userInfo"
             this.axios.get(url).then((response)=>{
                 let json=response.data
-                console.log(json)
                 if(json.serviceCode===20000){
                     this.tableData=json.data;
                 }else{
