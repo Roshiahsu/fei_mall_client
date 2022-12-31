@@ -6,15 +6,18 @@
             <a :href="'/cart/list?pageNum=' + i + '&pageSize='+pageSize">{{i}}</a><el-divider direction="vertical"></el-divider>
         </span>
     </div>
-    <el-card class="box-card" style="width: 900px;margin: 0 auto" >
+    <el-divider></el-divider>
+    <el-card class="box-card" style="width: 1000px;margin: 0 auto" >
         <el-table
                 :data="cartArr"
                 border
                 style="width: 100%">
             <el-table-column prop="id" label="ID" width="70" align="center"></el-table-column>
             <el-table-column prop="productName" label="商品名稱" width="300" align="center"></el-table-column>
-            <el-table-column prop="price" label="單價" width="160"  align="center"></el-table-column>
-            <el-table-column prop="quantity" label="購買數量" width="160" align="center" ></el-table-column>
+            <el-table-column prop="price" label="單價" width="150"  align="center"></el-table-column>
+            <el-table-column prop="quantity" label="購買數量" width="150" align="center" >
+            </el-table-column>
+            <el-table-column prop="subtotal" label="小計" width="150" align="center" ></el-table-column>
 
             <el-table-column
                     label="操作"
@@ -26,8 +29,9 @@
             </el-table-column>
         </el-table>
     </el-card>
-
-
+    <p>
+        總計：
+    </p>
 </div>
 </template>
 

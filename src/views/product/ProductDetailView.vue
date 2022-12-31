@@ -24,7 +24,7 @@
                 <el-form style="font-size:25px" ref="form" :model="productAddNewDTO" label-width="90px" >
                     <el-form-item label="購買數量：" >
                         <el-select v-model="productAddNewDTO.quantity" placeholder="購買數量" size="small">
-                            <el-option :label=o :value=o v-for="o in 9" :key="o"></el-option>
+                            <el-option  :value=o v-for="o in 9"></el-option>
                         </el-select>
                     </el-form-item>
                 </el-form>
@@ -83,6 +83,7 @@
             addNewCart(){
                 this.productAddNewDTO.spuId=this.id
                 this.productAddNewDTO.price=this.product.price
+                console.log(this.productAddNewDTO)
                 let url = "http://localhost:9080/cart/insert"
                 this.axios
                 .post(url,this.productAddNewDTO).then((response)=>{
