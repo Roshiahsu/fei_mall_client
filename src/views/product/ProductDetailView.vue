@@ -21,17 +21,15 @@
                 <p >
                     <span style="font-size:25px">價錢：{{product.price}}NT</span>
                 </p>
-                <el-form style="font-size:25px" ref="form" :model="productAddNewDTO" label-width="90px" >
-                    <el-form-item label="購買數量：" >
-                        <el-select v-model="productAddNewDTO.quantity" placeholder="購買數量" size="small">
-                            <el-option  :value=o v-for="o in 9"></el-option>
-                        </el-select>
-                    </el-form-item>
-                </el-form>
-
+                <template>
+                    <span style="font-size:20px">購買數量：</span>
+                    <el-select v-model="quantity" placeholder="購買數量" size="small">
+                        <el-option  :value=o v-for="o in 9"></el-option>
+                    </el-select>
+                </template>
                 <p >
-                    <span style="font-size:15px" >剩餘數量：{{product.stock}}</span>
-                    <el-button style="float: right; font-size: 16px" type="text" @click="addNewCart()">加入購物車</el-button>
+                    <span style="font-size:20px" >剩餘數量：{{product.stock}}</span>
+                    <el-button style="float: right; font-size: 20px" type="text" @click="addNewCart()">加入購物車</el-button>
                 </p>
 
 
@@ -57,11 +55,7 @@
                 url:'',
                 jwt:'',
                 id:'',
-                productAddNewDTO:{
-                    spuId:'',
-                    price:'',
-                    quantity:''
-                },
+                quantity:'',
             };
         },
         methods: {
@@ -81,12 +75,16 @@
                 })
             },
             addNewCart(){
-                this.productAddNewDTO.spuId=this.id
-                this.productAddNewDTO.price=this.product.price
-                console.log(this.productAddNewDTO)
+                let productAddNewDTO={
+                    spuId:this.id,
+                    price:this.product.price,
+                    quantity:this.quantity
+                }
+
+                console.log(productAddNewDTO)
                 let url = "http://localhost:9080/cart/insert"
                 this.axios
-                .post(url,this.productAddNewDTO).then((response)=>{
+                .post(url,productAddNewDTO).then((response)=>{
                     let json=response.data
                     console.log("JSON",json)
                     if(json.serviceCode===20000){
@@ -121,7 +119,7 @@
     }
 
     .el-form-item__label{
-        font-size: 15px;
+        font-size: 20px;
         text-align: left;
     }
 
