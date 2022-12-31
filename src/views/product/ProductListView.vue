@@ -1,9 +1,13 @@
 <template>
 <div>
     <h1 style="margin: 20px 0;">商品介紹</h1>
-    <span v-for=" i in pages" :key="i" style="margin: 0 auto">
+    <div  style="width: 150px;margin: 0 auto">
+        <span v-for=" i in pages" :key="i">
             <a :href="'/product/list?pageNum=' + i + '&pageSize='+pageSize">{{i}}</a><el-divider direction="vertical"></el-divider>
         </span>
+    </div>
+    <el-divider></el-divider>
+
     <el-row :gutter="10">
         <el-col :span="6" v-for="item in brandArr" style="margin-top:10px" >
             <el-card :body-style="{ padding: '0px' }">

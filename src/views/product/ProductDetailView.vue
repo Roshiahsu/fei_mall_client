@@ -12,20 +12,31 @@
                     <div style="padding: 14px;">
                         <span>{{product.productName}}</span>
                         <div class="bottom clearfix">
-                            <el-button type="text" class="button">加入購物車</el-button>
+                            <el-button type="text" class="button" @click="addNewCart()">加入購物車</el-button>
                         </div>
                     </div>
                 </el-card>
             </el-col>
             <el-col :span="12">
-                <p style="=font-size:25px">
-                    價錢：{{product.price}}NT
+                <p >
+                    <span style="font-size:25px">價錢：{{product.price}}NT</span>
                 </p>
+                <el-form style="font-size:25px" ref="form" :model="productAddNewDTO" label-width="90px" >
+                    <el-form-item label="購買數量：" >
+                        <el-select v-model="productAddNewDTO.quantity" placeholder="購買數量" size="small">
+                            <el-option :label=o :value=o v-for="o in 9" :key="o"></el-option>
+                        </el-select>
+                    </el-form-item>
+                </el-form>
+
+                <p >
+                    <span style="font-size:15px" >剩餘數量：{{product.stock}}</span>
+                    <el-button style="float: right; font-size: 16px" type="text" @click="addNewCart()">加入購物車</el-button>
+                </p>
+
+
                 <!--分割線-->
                 <el-divider></el-divider>
-                <p style="font-size:15px">
-                    剩餘數量：{{product.stock}}
-                </p>
                 <p style="font-size: 25px;font-weight: bold">
                     <span style="color: #999;font-size: 15px">
                             {{product.description}}
@@ -45,13 +56,18 @@
                 product:[],
                 url:'',
                 jwt:'',
+                id:'',
+                productAddNewDTO:{
+                    spuId:'',
+                    price:'',
+                    quantity:''
+                },
             };
         },
         methods: {
             loadBrands(){
-                let id = location.search.split("=")[1];
                 //自動獲取
-                let url = "http://localhost:9080/product/"+id+"/details"
+                let url = "http://localhost:9080/product/"+this.id+"/details"
                 this.axios
                 .get(url).then((response)=>{
                     let json=response.data
@@ -64,11 +80,27 @@
                     }
                 })
             },
+            addNewCart(){
+                this.productAddNewDTO.spuId=this.id
+                this.productAddNewDTO.price=this.product.price
+                let url = "http://localhost:9080/cart/insert"
+                this.axios
+                .post(url,this.productAddNewDTO).then((response)=>{
+                    let json=response.data
+                    console.log("JSON",json)
+                    if(json.serviceCode===20000){
+                        this.$message.success("新增成功")
+                    }else {
+                        this.$message.error(json.message)
+                    }
+                })
+            }
         },
         created() { //已創建 在mounted 顯示頁面之前執行
 
         },
         mounted() { //已掛載 在created 顯示頁面之後執行
+            this.id = location.search.split("=")[1];
             this.loadBrands();
         }
     }
@@ -85,6 +117,11 @@
     }
     header a:hover{
         color: #0aa1ed;
+    }
+
+    .el-form-item__label{
+        font-size: 15px;
+        text-align: left;
     }
 
     /*card*/
@@ -111,4 +148,6 @@
     .clearfix:after {
         clear: both
     }
+
+
 </style>

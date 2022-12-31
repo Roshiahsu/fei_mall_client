@@ -8,7 +8,7 @@
               <span style="position: absolute;left:37%">
                   <a href="/index">首頁</a><el-divider direction="vertical"></el-divider>
                   <a href="/product/list?pageNum=1&pageSize=3">商品介紹</a><el-divider direction="vertical"></el-divider>
-                  <a href="">購物車</a><el-divider direction="vertical"></el-divider>
+                  <a href="/cart/list?pageNum=1&pageSize=10">購物車</a><el-divider direction="vertical"></el-divider>
                   <a href="">顧客中心</a><el-divider direction="vertical"></el-divider>
                   <a href="/login">會員登入</a>
               </span>
@@ -19,9 +19,11 @@
 
       <el-container class="layout-body">
           <el-aside class="layout-side" width="200px">
+              預計放置搜索匡與關鍵字快捷
+
               <!--TODO 根據權限是否為admin顯現 開始-->
               <el-menu
-                      v-if="aa === 1"
+                      v-if="role === 1"
                       router
                       :default-active=this.$router.currentRoute.path
                       class="el-menu-vertical-demo"
@@ -122,7 +124,8 @@ import HelloWorld from '@/components/HelloWorld.vue'
 export default {
     data() {
         return {
-            tableData:[]
+            tableData:[],
+            role:'' //角色設定(未完成)
         };
     },
     methods: {
