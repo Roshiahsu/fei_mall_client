@@ -5,7 +5,7 @@
           <img src="/au.png"
                style="width: 150px;display:block; margin:0 auto; "alt="">
           <div style="width: 1200px;margin:0 auto; background-color: #42b983">
-              <span style="position: absolute;left:37%">
+              <span style="position: absolute;left:38%">
                   <a href="/index">首頁</a><el-divider direction="vertical"></el-divider>
                   <a href="/product/list?pageNum=1&pageSize=3">商品介紹</a><el-divider direction="vertical"></el-divider>
                   <a href="/cart/list?pageNum=1&pageSize=10">購物車</a><el-divider direction="vertical"></el-divider>
