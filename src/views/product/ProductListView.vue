@@ -11,8 +11,8 @@
     <el-row :gutter="10">
         <el-col :span="6" v-for="item in brandArr" style="margin-top:10px" >
             <el-card :body-style="{ padding: '0px' }">
-                <img swidth="230" height="230"
-                     :src="'/productImg/'+ item.picture"
+                <img :width=imgWidth :height=imgHeight
+                     :src="require('@/assets/productImg/'+ item.picture)"
                      class="image"
                      @click="productDetails(item.id)">
                 <div style="padding: 14px;">
@@ -39,7 +39,9 @@
                 jwt:'',
                 url:"http://localhost:9080/product/",
                 pageSize:"3",//預設每頁顯示12項
-                pages:""//頁數總計
+                pages:"",//頁數總計
+                imgWidth:250,
+                imgHeight:250,
 
             };
         },
@@ -88,13 +90,14 @@
     }
 /*card*/
     .bottom {
-        margin-top: 13px;
+        margin-top: 10px;
         line-height: 12px;
     }
 
     .button {
         padding: 0;
         float: right;
+        font-size: 20px;
     }
 
     .image {
@@ -102,13 +105,4 @@
         display: block;
     }
 
-    .clearfix:before,
-    .clearfix:after {
-        display: table;
-        content: "";
-    }
-
-    .clearfix:after {
-        clear: both
-    }
 </style>

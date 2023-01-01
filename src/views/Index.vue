@@ -20,7 +20,7 @@
             <!--   熱門商品開始     -->
             <el-col :span="12">
                 <h4>熱門商品</h4>
-                <el-row :gutter="20">
+                <el-row :gutter="gutter">
                     <el-col :span="12" v-for="item in hotProductArr" style="margin-top: 10px" :key="item.id" >
                         <el-card shadow="always" :body-style="{ padding: '0px' }">
                             <img :width=imgWidth :height=imgHeight
@@ -38,11 +38,10 @@
                 </el-row>
             </el-col>
             <!--   熱門商品結束     -->
-
             <!--   優惠商品開始     -->
             <el-col :span="12">
                 <h4>優惠商品</h4>
-                <el-row :gutter="20">
+                <el-row :gutter="gutter">
                     <el-col :span="12" v-for="item in discountedProductArr" style="margin-top: 10px">
                         <el-card :body-style="{ padding: '0px' }">
                             <img :width=imgWidth :height=imgHeight
@@ -74,6 +73,7 @@
     export default {
         data() {
             return {
+                gutter:15,
                 jwt: '',
                 categoryArr: [],
                 newProductArr:[],
@@ -164,7 +164,6 @@
     .bottom {
         margin-top: 10px;
         line-height: 12px;
-        font-size: 20px;
     }
 
     .button {
