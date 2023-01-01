@@ -1,6 +1,6 @@
 <template>
-<div>
-    <h1 style="margin: 20px 0;">{{product.productName}}</h1>
+    <div>
+        <h1 style="margin: 20px 0;">{{product.productName}}</h1>
         <!--行間距-->
         <el-row :gutter="20">
             <!--:span 佈局-->
@@ -18,17 +18,17 @@
                 </el-card>
             </el-col>
             <el-col :span="12">
-                <p >
+                <p>
                     <span style="font-size:25px">價錢：{{product.price}}NT</span>
                 </p>
                 <template>
                     <span style="font-size:20px">購買數量：</span>
                     <el-select v-model="quantity" placeholder="購買數量" size="small">
-                        <el-option  :value=o v-for="o in 9"></el-option>
+                        <el-option :value=o v-for="o in 9"></el-option>
                     </el-select>
                 </template>
-                <p >
-                    <span style="font-size:20px" >剩餘數量：{{product.stock}}</span>
+                <p>
+                    <span style="font-size:20px">剩餘數量：{{product.stock}}</span>
                     <el-button style="float: right; font-size: 20px" type="text" @click="addNewCart()">加入購物車</el-button>
                 </p>
 
@@ -42,63 +42,74 @@
                 </p>
             </el-col>
         </el-row>
-</div>
+    </div>
 </template>
-
 
 
 <script>
     export default {
         data() {
             return {
-                product:[],
-                url:'',
-                jwt:'',
-                id:'',
-                quantity:'',
+                product: [],
+                url: '',
+                jwt: '',
+                id: '',
+                quantity: '',
             };
         },
         methods: {
-            loadBrands(){
+            loadBrands() {
                 //自動獲取
-                let url = "http://localhost:9080/product/"+this.id+"/details"
+                let url = "http://localhost:9080/product/" + this.id + "/details"
                 this.axios
-                .get(url).then((response)=>{
-                    let json=response.data
-                    console.log("JSON",json)
-                    if(json.serviceCode===20000){
-                        this.product=json.data
+                    .get(url).then((response) => {
+                    let json = response.data
+                    console.log("JSON", json)
+                    if (json.serviceCode === 20000) {
+                        this.product = json.data
                         this.url = json.data.picture
-                    }else {
+                    } else {
                         this.$message.error(json.message)
                     }
                 })
             },
-            addNewCart(){
-                let productAddNewDTO={
-                    spuId:this.id,
-                    price:this.product.price,
-                    quantity:this.quantity
+            addNewCart() {
+                let productAddNewDTO = {
+                    spuId: this.id,
+                    price: this.product.price,
+                    quantity: this.quantity
                 }
 
                 console.log(productAddNewDTO)
                 let url = "http://localhost:9080/cart/insert"
                 this.axios
-                .post(url,productAddNewDTO).then((response)=>{
-                    let json=response.data
-                    console.log("JSON",json)
-                    if(json.serviceCode===20000){
+                    .create({headers:{'Authorization':this.jwt}})
+                    .post(url, productAddNewDTO).then((response) => {
+                    let json = response.data
+                    console.log("JSON", json)
+                    if (json.serviceCode === 20000) {
                         this.$message.success("新增成功")
-                    }else {
+                    } else if (json.serviceCode === 40004){
+                        this.open()
+                    }else{
                         this.$message.error(json.message)
                     }
                 })
+            },
+            open() {
+                this.$alert('請先登入', '尚未登入', {
+                    confirmButtonText: '確定',
+                    callback: action => {
+                        location.href = "/login"
+                    }
+                });
             }
         },
         created() { //已創建 在mounted 顯示頁面之前執行
 
         },
         mounted() { //已掛載 在created 顯示頁面之後執行
+            this.jwt = localStorage.getItem("jwt")
             this.id = location.search.split("=")[1];
             this.loadBrands();
         }
@@ -106,19 +117,21 @@
 </script>
 
 <style>
-    body{
+    body {
         font: 18px "Microsoft YaHei UI";
         margin: 0;
     }
-    header a{
+
+    header a {
         text-decoration: none;
         color: #6c6c6c;
     }
-    header a:hover{
+
+    header a:hover {
         color: #0aa1ed;
     }
 
-    .el-form-item__label{
+    .el-form-item__label {
         font-size: 20px;
         text-align: left;
     }
@@ -138,6 +151,7 @@
         width: 100%;
         display: block;
     }
+
     .clearfix:before,
     .clearfix:after {
         display: table;

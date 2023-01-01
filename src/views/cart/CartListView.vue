@@ -42,7 +42,7 @@
         data() {
             return {
                 cartArr:[],
-                jwt:"eyJ0eXBlIjoiand0IiwiYWxnIjoiSFMyNTYifQ.eyJleHAiOjE2NzI0ODc2MTQsInVzZXIiOiJ7XCJhdXRob3JpdGllc1wiOltcIlJPTEVfdXNlclwiXSxcImlkXCI6MTMsXCJ1c2VybmFtZVwiOlwidGVzdDJcIn0ifQ.cAnXJpGrMZg0ABCSAMcVoZI7WYHo7C-KcqbH481K6JE",
+                jwt:"",
                 url:"http://localhost:9080/cart/",
                 pageSize:"10",//預設每頁顯示10項
                 pages:""//頁數總計
@@ -106,9 +106,10 @@
             }
         },
         created() { //已創建 在mounted 顯示頁面之前執行
-            this.jwt=localStorage.getItem("jwt")
+
         },
         mounted() { //已掛載 在created 顯示頁面之後執行
+            this.jwt = localStorage.getItem("jwt")
             let pageNum = location.search.split("&")[0].split("=")[1];
             let pageSize = location.search.split("&")[1].split("=")[1];
             this.loadBrands(pageNum,pageSize);

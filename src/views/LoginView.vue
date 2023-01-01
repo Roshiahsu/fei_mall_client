@@ -62,7 +62,7 @@
                 let jwt = response.data.data;
                 console.log("jwt:",jwt)
                 localStorage.setItem('jwt',jwt)
-                location.href="http://localhost:8080/index"
+                location.href="/index"
               }else{
                 this.$message.error("登錄失敗,用戶名或密碼錯誤")
               }

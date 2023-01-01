@@ -18,6 +18,7 @@
       </el-header>
 
       <el-container class="layout-body">
+          <!--        左邊欄位-->
           <el-aside class="layout-side" width="200px">
               預計放置搜索匡與關鍵字快捷
 
@@ -91,19 +92,26 @@
           <!--主體-->
           <router-view/>
         </el-main>
+
+          <!--        右邊欄位-->
+          <el-aside class="layout-side" width="200px">
+             先空出來
+
+          </el-aside>
+
       </el-container>
     </el-container>
+
   </div>
 </template>
 
 <style>
-  /*body自帶外邊距*/
+
   *{
-    margin: 0;
+      /*歸零body自帶外邊距*/
+      margin: 0;
   }
-  .layout-header{
-    color: #0c4f89;
-  }
+
   .layout-body{
     position: absolute;
     top:150px;
@@ -111,15 +119,27 @@
     left: 0;
     bottom: 0;
   }
+
+  /*側邊欄背景顏色*/
   .el-aside{
     background-color: #ecaf94;
+  }
+
+  body{
+      font: 18px "Microsoft YaHei UI";
+      margin: 0;
+  }
+  header a{
+      text-decoration: none;
+      color: #6c6c6c;
+  }
+  header a:hover{
+      color: #0aa1ed;
   }
 
 </style>
 
 <script>
-// @ is an alias to /src
-import HelloWorld from '@/components/HelloWorld.vue'
 
 export default {
     data() {
