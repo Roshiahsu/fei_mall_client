@@ -3,9 +3,12 @@
         <!--   新品推薦輪播圖開始     -->
         <span class="demonstration"><h4>新品推薦</h4></span>
         <div style="width: 700px;margin: 0 auto" >
-            <el-carousel trigger="click" height="200px" type="card" >
+            <el-carousel trigger="click" height="270px" type="card"  >
                 <el-carousel-item v-for="item in newProductArr" >
-                   <img :src="'/productImg/'+ item.picture" style="width: 100%;height: 100%" alt="" @click="productDetails(item.id)" >
+                    <img width="100%" height="100%"
+                         :src="require('@/assets/productImg/'+ item.picture)"
+                         class="image"
+                         @click="productDetails(item.id)">
                 </el-carousel-item>
             </el-carousel>
         </div>
@@ -14,19 +17,19 @@
         <el-divider></el-divider>
 
         <el-row :gutter="10">
-            <!--   熱門商品輪播圖開始     -->
+            <!--   熱門商品開始     -->
             <el-col :span="12">
                 <h4>熱門商品</h4>
-                <el-row :gutter="10">
-                    <el-col :span="12" v-for="item in hotProductArr" style="margin-top: 10px">
+                <el-row :gutter="20">
+                    <el-col :span="12" v-for="item in hotProductArr" style="margin-top: 10px" :key="item.id" >
                         <el-card shadow="always" :body-style="{ padding: '0px' }">
-                            <img swidth="230" height="230"
-                                 :src="'/productImg/'+ item.picture"
+                            <img :width=imgWidth :height=imgHeight
+                                 :src="require('@/assets/productImg/'+ item.picture)"
                                  class="image"
                                  @click="productDetails(item.id)">
                             <div style="padding: 14px;">
                                 <span>{{item.productName}}</span>
-                                <div class="bottom clearfix">
+                                <div class="bottom ">
                                     <el-button type="text" class="button" @click="productDetails(item.id)">商品詳情</el-button>
                                 </div>
                             </div>
@@ -34,21 +37,21 @@
                     </el-col>
                 </el-row>
             </el-col>
-            <!--   熱門商品輪播圖結束     -->
+            <!--   熱門商品結束     -->
 
-            <!--   優惠商品輪播圖開始     -->
+            <!--   優惠商品開始     -->
             <el-col :span="12">
                 <h4>優惠商品</h4>
-                <el-row :gutter="10">
+                <el-row :gutter="20">
                     <el-col :span="12" v-for="item in discountedProductArr" style="margin-top: 10px">
                         <el-card :body-style="{ padding: '0px' }">
-                            <img swidth="230" height="230"
-                                 :src="'/productImg/'+ item.picture"
+                            <img :width=imgWidth :height=imgHeight
+                                 :src="require('@/assets/productImg/'+ item.picture)"
                                  class="image"
                                  @click="productDetails(item.id)">
                             <div style="padding: 14px;">
                                 <span>{{item.productName}}</span>
-                                <div class="bottom clearfix">
+                                <div class="bottom">
                                     <el-button type="text" class="button" @click="productDetails(item.id)">商品詳情</el-button>
                                 </div>
                             </div>
@@ -56,7 +59,7 @@
                     </el-col>
                 </el-row>
             </el-col>
-            <!--   優惠商品輪播圖結束     -->
+            <!--   優惠商品結束     -->
         </el-row>
 
     </div>
@@ -76,6 +79,8 @@
                 newProductArr:[],
                 hotProductArr:[],
                 discountedProductArr:[],
+                imgWidth:250,
+                imgHeight:250,
             };
         },
         methods: {
@@ -157,27 +162,21 @@
 
     /*card開始*/
     .bottom {
-        margin-top: 13px;
+        margin-top: 10px;
         line-height: 12px;
+        font-size: 20px;
     }
 
     .button {
         padding: 0;
         float: right;
+        font-size: 20px;
     }
 
     .image {
         width: 100%;
         display: block;
     }
-    .clearfix:before,
-    .clearfix:after {
-        display: table;
-        content: "";
-    }
 
-    .clearfix:after {
-        clear: both
-    }
     /*card結束*/
 </style>
