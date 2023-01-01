@@ -1,35 +1,37 @@
 <template>
     <div>
-        <h1 style="margin: 20px 0;">{{product.productName}}</h1>
         <!--行間距-->
         <el-row :gutter="20">
-            <!--:span 佈局-->
+            <!--圖片區-->
             <el-col :span="12">
                 <el-card :body-style="{ padding: '0px' }">
                     <img
-                            :src="'/productImg/' + url "
+                            :src="require('@/assets/productImg/'+url)"
                             class="image">
                     <div style="padding: 14px;">
                         <span>{{product.productName}}</span>
-                        <div class="bottom clearfix">
+                        <div class="bottom">
                             <el-button type="text" class="button" @click="addNewCart()">加入購物車</el-button>
                         </div>
                     </div>
                 </el-card>
             </el-col>
+            <!--文字敘述區-->
             <el-col :span="12">
+                <span class="font-size" style="font-weight:bold">{{product.productName}}</span>
                 <p>
-                    <span style="font-size:25px">價錢：{{product.price}}NT</span>
+                    <span class="font-size" style="color: red;">NT$：{{product.price}}NT</span>
                 </p>
                 <template>
-                    <span style="font-size:20px">購買數量：</span>
+                    <span class="font-size">購買數量：</span>
                     <el-select v-model="quantity" placeholder="購買數量" size="small">
                         <el-option :value=o v-for="o in 9"></el-option>
                     </el-select>
                 </template>
                 <p>
-                    <span style="font-size:20px">剩餘數量：{{product.stock}}</span>
-                    <el-button style="float: right; font-size: 20px" type="text" @click="addNewCart()">加入購物車</el-button>
+                    <span class="font-size">剩餘數量：{{product.stock}}
+                    <el-button class="font-size" style="float: right" type="text" @click="addNewCart()">加入購物車</el-button>
+                </span>
                 </p>
 
 
@@ -130,12 +132,12 @@
     header a:hover {
         color: #0aa1ed;
     }
-
-    .el-form-item__label {
-        font-size: 20px;
-        text-align: left;
+    p {
+        margin: 20px 0
     }
-
+    .font-size {
+        font-size: 20px
+    }
     /*card*/
     .bottom {
         margin-top: 13px;
@@ -152,15 +154,6 @@
         display: block;
     }
 
-    .clearfix:before,
-    .clearfix:after {
-        display: table;
-        content: "";
-    }
-
-    .clearfix:after {
-        clear: both
-    }
 
 
 </style>
