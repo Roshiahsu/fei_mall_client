@@ -30,7 +30,7 @@
                 </template>
                 <p>
                     <span class="font-size">剩餘數量：{{product.stock}}
-                    <el-button class="font-size" style="float: right" type="text" @click="addNewCart()">加入購物車</el-button>
+                    <el-button icon="el-icon-shopping-cart-2" class="font-size" style="float: right" type="primary" @click="addNewCart()">加入購物車</el-button>
                 </span>
                 </p>
 

@@ -1,6 +1,6 @@
 <template>
 <div>
-    <h1 style="margin: 20px 0;">商品介紹</h1>
+    <h1 >商品介紹</h1>
     <div  style="width: 150px;margin: 0 auto">
         <span v-for=" i in pages" :key="i">
             <a :href="'/product/list?page=' + i">{{i}}</a><el-divider direction="vertical"></el-divider>
@@ -10,14 +10,14 @@
 
     <el-row :gutter="10">
         <el-col :span="6" v-for="item in brandArr" style="margin-top:10px" >
-            <el-card :body-style="{ padding: '0px' }">
+            <el-card :body-style="{ padding: '0px'}">
                 <img :width=imgWidth :height=imgHeight
                      :src="require('@/assets/productImg/'+ item.picture)"
                      class="image"
                      @click="productDetails(item.id)">
                 <div style="padding: 14px;">
                     <span>{{item.productName}}</span>
-                    <div class="bottom clearfix">
+                    <div class="bottom">
                         <el-button type="text" class="button" @click="productDetails(item.id)">商品詳情</el-button>
                     </div>
                 </div>
@@ -38,6 +38,7 @@
                 brandArr:[],
                 jwt:'',
                 url:"http://localhost:9080/product/",
+                pages:'',//分類頁
                 imgWidth:250,
                 imgHeight:250,
 
