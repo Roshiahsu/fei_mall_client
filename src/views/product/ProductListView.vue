@@ -3,7 +3,7 @@
     <h1 style="margin: 20px 0;">商品介紹</h1>
     <div  style="width: 150px;margin: 0 auto">
         <span v-for=" i in pages" :key="i">
-            <a :href="'/product/list?pageNum=' + i + '&pageSize='+pageSize">{{i}}</a><el-divider direction="vertical"></el-divider>
+            <a :href="'/product/list?page=' + i">{{i}}</a><el-divider direction="vertical"></el-divider>
         </span>
     </div>
     <el-divider></el-divider>
@@ -38,8 +38,6 @@
                 brandArr:[],
                 jwt:'',
                 url:"http://localhost:9080/product/",
-                pageSize:"3",//預設每頁顯示12項
-                pages:"",//頁數總計
                 imgWidth:250,
                 imgHeight:250,
 
@@ -49,9 +47,9 @@
             productDetails(id){
                 location.href = "/product/details?="+id
             },
-            loadBrands(pageNum,pageSize){
+            loadBrands(pageNum){
                 //自動獲取
-                let url = this.url+allProduct+"/listProduct?pageNum="+pageNum+"&pageSize="+pageSize
+                let url = this.url+allProduct+"/listProduct?pageNum="+pageNum+"&pageSize=8"
                 this.axios
                 .get(url).then((response)=>{
                     let json=response.data
@@ -70,8 +68,8 @@
         },
         mounted() { //已掛載 在created 顯示頁面之後執行
             let pageNum = location.search.split("&")[0].split("=")[1];
-            let pageSize = location.search.split("&")[1].split("=")[1];
-            this.loadBrands(pageNum,pageSize);
+            // let pageSize = location.search.split("&")[1].split("=")[1];
+            this.loadBrands(pageNum);
         }
     }
 </script>

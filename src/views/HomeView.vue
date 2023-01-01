@@ -7,7 +7,7 @@
           <div style="width: 1200px;margin:0 auto; background-color: #42b983">
               <span style="position: absolute;left:38%">
                   <a href="/index">首頁</a><el-divider direction="vertical"></el-divider>
-                  <a href="/product/list?pageNum=1&pageSize=3">商品介紹</a><el-divider direction="vertical"></el-divider>
+                  <a href="/product/list?page=1">商品介紹</a><el-divider direction="vertical"></el-divider>
                   <a href="/cart/list?pageNum=1&pageSize=10">購物車</a><el-divider direction="vertical"></el-divider>
                   <a href="">顧客中心</a><el-divider direction="vertical"></el-divider>
                   <a href="/login">會員登入</a>
