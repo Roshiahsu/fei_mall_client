@@ -56,6 +56,13 @@
 <script>
     export default {
         data() {
+            var validateQuantity = (rule, value, callback) => {
+                if (value > this.product.stock) {
+                    callback(new Error('庫存不足'));
+                }else {
+                    callback()
+                }
+            };
             return {
                 product: [],
                 url: '',
@@ -66,7 +73,9 @@
                 },
                 rules: {
                     quantity: [
-                        {required: true, message: '請輸入購買數量', trigger: 'change'}
+                        {required: true, message: '請輸入購買數量', trigger: 'change'},
+                        {validator: validateQuantity ,trigger: 'blur'}
+
                     ]
                 }
             };
