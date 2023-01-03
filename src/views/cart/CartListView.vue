@@ -17,7 +17,7 @@
             <el-table-column prop="price" label="單價" width="100"  align="center"></el-table-column>
             <el-table-column prop="quantity" label="購買數量" align="center" >
                 <template slot-scope="scope">
-                    <el-input-number size="mini" :min="1" :max="10" @change="handleChange(scope.row)"  v-model="scope.row.quantity" ></el-input-number>
+                    <el-input-number size="mini" :min="scope.row.quantity-10" :max="scope.row.quantity+10" @change="handleChange(scope.row)"  v-model="scope.row.quantity" ></el-input-number>
                 </template>
             </el-table-column>
             <el-table-column prop="subtotal" label="小計" width="150" align="center"></el-table-column>
@@ -39,6 +39,7 @@
                 icon="el-icon-shopping-cart-2"
                 type="danger"
                 class="button"
+                @click="createOrder"
                 >前往結賬</el-button>
 </div>
 </template>
@@ -119,6 +120,34 @@
                     totalPrice = totalPrice+this.cartArr[i].subtotal
                 }
                 this.totalPrice = totalPrice
+            },
+            createOrder(){
+                if(this.cartArr.length == 0){
+                    this.$message.error("沒有商品")
+                    return
+                }
+
+                let OrderAddNerDTO={
+                    amountOfActualPay :'',
+                    amountOfDiscount: '',
+                    amountOfFreight: '',
+                    amountOfOriginalPrice:this.totalPrice,
+                    orderItems:this.cartArr,
+                    rewardPoint: 100
+                }
+                let url ='http://localhost:9080/order/insert'
+                this.axios
+                    .create({headers:{'Authorization':this.jwt}})
+                    .post(url,OrderAddNerDTO).then((response)=>{
+                    let json = response.data
+                    console.log("JSON", json)
+                    if (json.serviceCode === 20000) {
+                        this.$message.success("新增成功")
+                        location.href="/cart/list?pageNum=1&pageSize=8"
+                    }else{
+                        this.$message.error(json.message)
+                    }
+                })
             }
         },
         created() { //已創建 在mounted 顯示頁面之前執行

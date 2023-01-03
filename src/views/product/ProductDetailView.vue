@@ -23,16 +23,21 @@
                     <span class="font-size" style="color: red;">NT$：{{product.price}}NT</span>
                 </p>
                 <template>
-                    <span class="font-size">購買數量：</span>
-                    <el-select v-model="quantity" placeholder="購買數量" size="small">
-                        <el-option :value=o v-for="o in 9"></el-option>
-                    </el-select>
+                    <el-form :model="ruleForm" :rules="rules" ref="ruleForm" label-width="120px" class="demo-ruleForm">
+                        <el-form-item label="購買數量：" prop="quantity">
+                            <el-select v-model="ruleForm.quantity" placeholder="購買數量" size="small">
+                                <el-option :value=o v-for="o in 9" ></el-option>
+                            </el-select>
+                        </el-form-item>
+                    </el-form>
                 </template>
                 <p>
                     <span class="font-size">剩餘數量：{{product.stock}}
-                    <el-button icon="el-icon-shopping-cart-2" class="font-size" style="float: right" type="primary" @click="addNewCart()">加入購物車</el-button>
+                    <el-button icon="el-icon-shopping-cart-2" class="font-size" style="float: right" type="primary" @click="addNewCart('ruleForm')">加入購物車</el-button>
                 </span>
                 </p>
+
+
 
 
                 <!--分割線-->
@@ -40,7 +45,7 @@
                 <p style="font-size: 25px;font-weight: bold">
                     <span style="color: #999;font-size: 15px">
                             {{product.description}}
-                        </span>
+                    </span>
                 </p>
             </el-col>
         </el-row>
@@ -56,7 +61,14 @@
                 url: '',
                 jwt: '',
                 id: '',
-                quantity: '',
+                ruleForm: {
+                    quantity:''
+                },
+                rules: {
+                    quantity: [
+                        {required: true, message: '請輸入購買數量', trigger: 'change'}
+                    ]
+                }
             };
         },
         methods: {
@@ -75,28 +87,35 @@
                     }
                 })
             },
-            addNewCart() {
-                let productAddNewDTO = {
-                    spuId: this.id,
-                    price: this.product.price,
-                    quantity: this.quantity
-                }
+            addNewCart(formName) {
+                this.$refs[formName].validate((valid) => {
+                    if (valid) {
+                        let productAddNewDTO = {
+                            spuId: this.id,
+                            price: this.product.price,
+                            quantity: this.ruleForm.quantity
+                        }
 
-                console.log(productAddNewDTO)
-                let url = "http://localhost:9080/cart/insert"
-                this.axios
-                    .create({headers:{'Authorization':this.jwt}})
-                    .post(url, productAddNewDTO).then((response) => {
-                    let json = response.data
-                    console.log("JSON", json)
-                    if (json.serviceCode === 20000) {
-                        this.$message.success("新增成功")
-                    } else if (json.serviceCode === 40004){
-                        this.open()
-                    }else{
-                        this.$message.error(json.message)
+                        console.log(productAddNewDTO)
+                        let url = "http://localhost:9080/cart/insert"
+                        this.axios
+                            .create({headers:{'Authorization':this.jwt}})
+                            .post(url, productAddNewDTO).then((response) => {
+                            let json = response.data
+                            console.log("JSON", json)
+                            if (json.serviceCode === 20000) {
+                                this.$message.success("新增成功")
+                            } else if (json.serviceCode === 40004){
+                                this.open()
+                            }else{
+                                this.$message.error(json.message)
+                            }
+                        })
+                    } else {
+                        console.log('error submit!!');
+                        return false;
                     }
-                })
+                });
             },
             open() {
                 this.$alert('請先登入', '尚未登入', {
@@ -137,6 +156,10 @@
     }
     .font-size {
         font-size: 20px
+    }
+    .el-form-item__label {
+        font-size: 20px;
+        padding: 0;
     }
     /*card*/
     .bottom {
