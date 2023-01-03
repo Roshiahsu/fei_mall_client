@@ -39,7 +39,7 @@
                 icon="el-icon-shopping-cart-2"
                 type="danger"
                 class="button"
-                @click="productDetails(item.id)">前往結賬</el-button>
+                >前往結賬</el-button>
 </div>
 </template>
 
@@ -58,42 +58,6 @@
             };
         },
         methods: {
-            handleDelete(id){
-                console.log(id)
-                //待完成
-                let url=this.url+id+"/delete"
-                this.axios.create({
-                    headers:{'Authorization':this.jwt}
-                }).
-                post(url).then((response)=>{
-                    let json = response.data;
-                    if(json.serviceCode===20000){
-                        this.$message.success("刪除成功")
-                    }else{
-                        let message = response.data.message
-                        this.$message.error(message);
-                    }
-                    this.loadBrands()
-                })
-            },
-            loadCarts(pageNum){
-                //自動獲取
-
-                let url=this.url+"list?pageNum="+pageNum+"&pageSize=8"
-                this.axios
-                    .create({headers:{'Authorization':this.jwt}})
-                    .get(url).then((response)=>{
-                    let json=response.data
-                    console.log("JSON",json)
-                    if(json.serviceCode===20000){
-                        this.cartArr=json.data.list
-                        this.pages = json.data.pages
-                        this.total()
-                    }else {
-                        this.$message.error(json.message)
-                    }
-                })
-            },
             //刪除購物車內商品
             openDeleteConfirm(id) {
                 console.log(id)
@@ -109,6 +73,39 @@
                         message: '已取消删除'
                     });
                 });
+            },
+            handleDelete(id){
+                console.log(id)
+                let url=this.url+id+"/delete"
+                this.axios.create({
+                    headers:{'Authorization':this.jwt}})
+                    .get(url).then((response)=>{
+                    let json = response.data;
+                    if(json.serviceCode===20000){
+                        this.$message.success("刪除成功")
+                    }else{
+                        let message = response.data.message
+                        this.$message.error(message);
+                    }
+                    this.loadCarts(1)
+                })
+            },
+            loadCarts(pageNum){
+                //自動獲取
+                let url=this.url+"list?pageNum="+pageNum+"&pageSize=8"
+                this.axios
+                    .create({headers:{'Authorization':this.jwt}})
+                    .get(url).then((response)=>{
+                    let json=response.data
+                    console.log("JSON",json)
+                    if(json.serviceCode===20000){
+                        this.cartArr=json.data.list
+                        this.pages = json.data.pages
+                        this.total()
+                    }else {
+                        this.$message.error(json.message)
+                    }
+                })
             },
             //計算更改商品數量金額
             handleChange(spu) {

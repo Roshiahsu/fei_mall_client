@@ -173,6 +173,7 @@
     }
 
     .image {
+        object-fit:contain;
         width: 100%;
         display: block;
     }
