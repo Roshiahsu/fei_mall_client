@@ -99,6 +99,7 @@
          */
         //TODO 冗余代碼提取成方法
         mounted() {
+
             let url = "http://localhost:9080/product/"+newProduct+"/listProduct?pageNum=1&pageSize=4"
             this.axios
                 .get(url).then((response) => {
@@ -140,13 +141,6 @@
     }
 </script>
 <style>
-    header a{
-        text-decoration: none;
-        color: #6c6c6c;
-    }
-    header a:hover{
-        color: #0aa1ed;
-    }
 
     /*跑馬燈開始*/
     .el-carousel__item h3 {

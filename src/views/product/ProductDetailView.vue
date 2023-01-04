@@ -102,7 +102,7 @@
                         let productAddNewDTO = {
                             spuId: this.id,
                             price: this.product.price,
-                            quantity: this.ruleForm.quantity
+                            quantity: this.ruleForm.quantity,
                         }
 
                         console.log(productAddNewDTO)

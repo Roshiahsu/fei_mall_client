@@ -8,7 +8,7 @@
               <span style="position: absolute;left:38%">
                   <a href="/index">首頁</a><el-divider direction="vertical"></el-divider>
                   <a href="/product/list?page=1">商品介紹</a><el-divider direction="vertical"></el-divider>
-                  <a href="/cart/list?page=1">購物車</a><el-divider direction="vertical"></el-divider>
+                  <a href="/cart/list">購物車</a><el-divider direction="vertical"></el-divider>
                   <a href="">顧客中心</a><el-divider direction="vertical"></el-divider>
                   <a href="/login">會員登入</a>
               </span>
@@ -167,7 +167,6 @@ export default {
 
     },
     mounted() {
-        this.loadAdmins();
     }
 }
 </script>
