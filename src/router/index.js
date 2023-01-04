@@ -69,6 +69,10 @@ const routes = [
         component: () => import('../views/cart/CartListView')
       },
       {
+        path: 'order/list',
+        component: () => import('../views/order/OrderListView')
+      },
+      {
         path: 'index',
         component: () => import('../views/Index')
       }

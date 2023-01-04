@@ -1,11 +1,13 @@
 <template>
 <div>
-    <h1>購物車</h1>
-    <div style="width: 150px;margin: 0 auto">
-        <span v-for=" i in pages" :key="i">
-            <a :href="'/cart/list?page=' + i ">{{i}}</a><el-divider direction="vertical"></el-divider>
-        </span>
-    </div>
+    <h1>購物清單</h1>
+
+    <el-steps :active="1" simple>
+        <el-step title="購物清單" ></el-step>
+        <el-step title="訂單確認與送出" ></el-step>
+        <el-step title="訂單完成" ></el-step>
+    </el-steps>
+
     <el-divider></el-divider>
     <el-card class="box-card" style="width: 1000px;margin: 0 auto" >
         <el-table
@@ -17,7 +19,7 @@
             <el-table-column prop="price" label="單價" width="100"  align="center"></el-table-column>
             <el-table-column prop="quantity" label="購買數量" align="center" >
                 <template slot-scope="scope">
-                    <el-input-number size="mini" :min="scope.row.quantity-10" :max="scope.row.quantity+10" @change="handleChange(scope.row)"  v-model="scope.row.quantity" ></el-input-number>
+                    <el-input-number size="mini" :min="0" :max="scope.row.quantity+10" @change="handleChange(scope.row)"  v-model="scope.row.quantity" ></el-input-number>
                 </template>
             </el-table-column>
             <el-table-column prop="subtotal" label="小計" width="150" align="center"></el-table-column>
@@ -34,13 +36,13 @@
     <h3 style="color: #55acb8;margin-top: 20px">
         總計：{{totalPrice}}
     </h3>
-
     <el-button  style="display: block;margin: 0 auto"
                 icon="el-icon-shopping-cart-2"
                 type="danger"
                 class="button"
-                @click="createOrder"
+                @click="updateCart"
                 >前往結賬</el-button>
+
 </div>
 </template>
 
@@ -88,20 +90,19 @@
                         let message = response.data.message
                         this.$message.error(message);
                     }
-                    this.loadCarts(1)
+                    this.loadCarts()
                 })
             },
-            loadCarts(pageNum){
+            loadCarts(){
                 //自動獲取
-                let url=this.url+"list?pageNum="+pageNum+"&pageSize=8"
+                let url=this.url+"list"
                 this.axios
                     .create({headers:{'Authorization':this.jwt}})
                     .get(url).then((response)=>{
                     let json=response.data
                     console.log("JSON",json)
                     if(json.serviceCode===20000){
-                        this.cartArr=json.data.list
-                        this.pages = json.data.pages
+                        this.cartArr=json.data
                         this.total()
                     }else {
                         this.$message.error(json.message)
@@ -110,6 +111,7 @@
             },
             //計算更改商品數量金額
             handleChange(spu) {
+                spu.isUpdate = 1
                 spu.subtotal = spu.quantity * spu.price
                 this.total()
             },
@@ -121,33 +123,36 @@
                 }
                 this.totalPrice = totalPrice
             },
-            createOrder(){
+            //修改購物車購買數量
+            updateCart(){
+                //判斷購物車中有無商品
                 if(this.cartArr.length == 0){
                     this.$message.error("沒有商品")
                     return
                 }
 
-                let OrderAddNerDTO={
-                    amountOfActualPay :'',
-                    amountOfDiscount: '',
-                    amountOfFreight: '',
-                    amountOfOriginalPrice:this.totalPrice,
-                    orderItems:this.cartArr,
-                    rewardPoint: 100
-                }
-                let url ='http://localhost:9080/order/insert'
+                let url ='http://localhost:9080/cart/update'
                 this.axios
                     .create({headers:{'Authorization':this.jwt}})
-                    .post(url,OrderAddNerDTO).then((response)=>{
+                    .post(url,this.cartArr).then((response)=>{
                     let json = response.data
                     console.log("JSON", json)
                     if (json.serviceCode === 20000) {
-                        this.$message.success("新增成功")
-                        location.href="/cart/list?pageNum=1&pageSize=8"
+                        location.href="/order/list"
+                    } else if (json.serviceCode === 40004){
+                        this.open()
                     }else{
                         this.$message.error(json.message)
                     }
                 })
+            },
+            open() {
+                this.$alert('請先登入', '尚未登入', {
+                    confirmButtonText: '確定',
+                    callback: action => {
+                        location.href = "/login"
+                    }
+                });
             }
         },
         created() { //已創建 在mounted 顯示頁面之前執行
@@ -168,13 +173,10 @@
         font: 18px "Microsoft YaHei UI";
         margin: 0;
     }
-    header a{
+
+    a{
         text-decoration: none;
-        color: #6c6c6c;
-    }
-    header a:hover{
-        color: #0aa1ed;
-    }
+        color: #6c6c6c;}
 
 
 

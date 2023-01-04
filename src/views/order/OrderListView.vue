@@ -1,0 +1,218 @@
+<template>
+    <div>
+        <h1>訂單確認與送出</h1>
+        <!--        步驟條開始-->
+        <el-steps :active="2" simple>
+            <el-step title="購物清單" ></el-step>
+            <el-step title="訂單確認與送出" ></el-step>
+            <el-step title="訂單完成" ></el-step>
+        </el-steps>
+        <!--        步驟條結束-->
+        <el-divider></el-divider>
+        <!--        購物清單-->
+        <el-card class="box-card" style="width: 1000px;margin: 0 auto" >
+            <el-table
+                    :data="cartArr"
+                    border
+                    style="width: 100%">
+                <el-table-column type="index" label="ID" width="70" align="center"></el-table-column>
+                <el-table-column prop="productName" label="商品名稱" width="300" align="center"></el-table-column>
+                <el-table-column prop="price" label="單價" width="100"  align="center"></el-table-column>
+                <el-table-column prop="quantity" label="購買數量" align="center" >
+                </el-table-column>
+                <el-table-column prop="subtotal" label="小計" width="150" align="center"></el-table-column>
+            </el-table>
+        </el-card>
+        <h3 style="color: #55acb8;margin-top: 20px">
+            總計：{{totalPrice}}
+        </h3>
+        <el-divider></el-divider>
+
+        <!--    描述列表：用戶詳情開始-->
+        <el-descriptions title="用戶詳情" direction="vertical" :column="4" border>
+            <el-descriptions-item label="用戶名" >{{userInfo[0].username}}</el-descriptions-item>
+            <el-descriptions-item label="手機號碼" >{{userInfo[0].phone}}</el-descriptions-item>
+            <el-descriptions-item label="居住地" >{{userInfo[0].city}}</el-descriptions-item>
+            <el-descriptions-item label="鄉鎮區" >{{userInfo[0].zone}}</el-descriptions-item>
+            <el-descriptions-item label="鄉鎮區" >{{userInfo[0].zipCode}}</el-descriptions-item>
+            <el-descriptions-item label="詳細地址":span="2">{{userInfo[0].detailedAddress}}</el-descriptions-item>
+            <el-descriptions-item label="備註"  >
+                <el-tag size="small" >待完成</el-tag>
+            </el-descriptions-item>
+        </el-descriptions>
+        <!--    描述列表：用戶詳情結束-->
+
+        <br>
+
+        <el-button  style="display: block;margin: 0 auto"
+                    icon="el-icon-shopping-cart-2"
+                    type="danger"
+                    class="button"
+                    @click="createOrder"
+        >前往結賬</el-button>
+
+    </div>
+</template>
+
+
+
+<script>
+    export default {
+        data() {
+            return {
+                cartArr:[],
+                userInfo:[],
+                jwt:"",
+                url:"http://localhost:9080/cart/",
+                subtotal:"",
+                pages:'',
+                totalPrice:'',
+            };
+        },
+        methods: {
+            //刪除購物車內商品
+            openDeleteConfirm(id) {
+                console.log(id)
+                this.$confirm('確認移除商品?', '提示', {
+                    confirmButtonText: '繼續', //點確認走then
+                    cancelButtonText: '取消', //點取消走catch
+                    type: 'warning'
+                }).then(() => {
+                    this.handleDelete(id)
+                }).catch(() => {
+                    this.$message({
+                        type: 'info',
+                        message: '已取消删除'
+                    });
+                });
+            },
+            handleDelete(id){
+                console.log(id)
+                let url=this.url+id+"/delete"
+                this.axios.create({
+                    headers:{'Authorization':this.jwt}})
+                    .get(url).then((response)=>{
+                    let json = response.data;
+                    if(json.serviceCode===20000){
+                        this.$message.success("刪除成功")
+                    }else{
+                        let message = response.data.message
+                        this.$message.error(message);
+                    }
+                    this.loadCarts()
+                })
+            },
+            //自動獲取購物車
+            loadCarts(){
+                let url=this.url+"list"
+                this.axios
+                    .create({headers:{'Authorization':this.jwt}})
+                    .get(url).then((response)=>{
+                    let json=response.data
+                    console.log("JSON",json)
+                    if(json.serviceCode===20000){
+                        this.cartArr=json.data
+                        this.total()
+                    }else {
+                        this.$message.error(json.message)
+                    }
+                })
+            },
+            //計算更改商品數量金額
+            handleChange(spu) {
+                spu.subtotal = spu.quantity * spu.price
+                this.total()
+            },
+            //計算總金額
+            total(){
+                let totalPrice =0
+                for (let i = 0; i < this.cartArr.length ; i++) {
+                    totalPrice = totalPrice+this.cartArr[i].subtotal
+                }
+                this.totalPrice = totalPrice
+            },
+            createOrder(){
+                if(this.cartArr.length == 0){
+                    this.$message.error("沒有商品")
+                    return
+                }
+
+                let OrderAddNerDTO={
+                    amountOfActualPay :'',
+                    amountOfDiscount: '',
+                    amountOfFreight: '',
+                    amountOfOriginalPrice:this.totalPrice,
+                    orderItems:this.cartArr,
+                    rewardPoint: 100
+                }
+                let url ='http://localhost:9080/order/insert'
+                this.axios
+                    .create({headers:{'Authorization':this.jwt}})
+                    .post(url,OrderAddNerDTO).then((response)=>{
+                    let json = response.data
+                    console.log("JSON", json)
+                    if (json.serviceCode === 20000) {
+                        this.$alert('新增成功', '訂單建立成功', {
+                            confirmButtonText: '確定',
+                            callback: action => {
+                                location.href="/cart/list"
+                            }
+                        });
+                    } else if (json.serviceCode === 40004){
+                        this.open()
+                    }else{
+                        this.$message.error(json.message)
+                    }
+                })
+            },
+            //自動獲取用戶資料
+            loadUserInfo(){
+                let url="http://localhost:9080/user/userInfo"
+                this.axios
+                    .create({headers:{'Authorization':this.jwt}})
+                    .get(url).then((response)=>{
+                    let json=response.data
+                    if(json.serviceCode===20000){
+                        this.userInfo=json.data;
+                    }else{
+                        this.$message.error(json.message)
+                    }
+                    console.log("userInfo",this.userInfo)
+                })
+            },
+            open() {
+                this.$alert('請先登入', '尚未登入', {
+                    confirmButtonText: '確定',
+                    callback: action => {
+                        location.href = "/login"
+                    }
+                });
+            }
+        },
+        created() { //已創建 在mounted 顯示頁面之前執行
+
+        },
+        mounted() { //已掛載 在created 顯示頁面之後執行
+            this.jwt = localStorage.getItem("jwt")
+            let pageNum = location.search.split("&")[0].split("=")[1];
+            // let pageSize = location.search.split("&")[1].split("=")[1];
+            this.loadCarts();
+            this.loadUserInfo();
+
+        }
+    }
+</script>
+
+<style>
+    body{
+        font: 18px "Microsoft YaHei UI";
+        margin: 0;
+    }
+    header a{
+        text-decoration: none;
+        color: #6c6c6c;
+    }
+
+
+
+</style>
