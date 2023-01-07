@@ -73,6 +73,10 @@ const routes = [
         component: () => import('../views/order/OrderListView')
       },
       {
+        path: 'customerCenter',
+        component: () => import('../views/user/UserDetailView')
+      },
+      {
         path: 'index',
         component: () => import('../views/Index')
       }

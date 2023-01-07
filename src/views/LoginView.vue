@@ -47,10 +47,8 @@
       submitForm(formName) {
         this.$refs[formName].validate((valid) => {
           if (valid) {
-            // alert('submit!');
             let url="http://localhost:9080/user/login";
 
-            //將this.ruleForm裡面的username & password 包裝在formData
             let formData={
                 username:this.ruleForm.username,
                 password:this.ruleForm.password
@@ -58,13 +56,13 @@
             this.axios.post(url,formData).then((response)=>{
               console.log(response.data)
               if(response.data.serviceCode===20000){
-                this.$message.success("登錄成功")
+                this.$message.success("登入成功")
                 let jwt = response.data.data;
                 console.log("jwt:",jwt)
                 localStorage.setItem('jwt',jwt)
                 location.href="/index"
               }else{
-                this.$message.error("登錄失敗,用戶名或密碼錯誤")
+                this.$message.error("登入失敗,用戶名或密碼錯誤")
               }
             })
           } else {

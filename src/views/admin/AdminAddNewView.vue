@@ -83,15 +83,15 @@
                 rules: {
                     username: [
                         { required: true, message: '請輸入管理員名稱', trigger: 'blur' },
-                        { min: 2, max: 15, message: '長度在 2 到 15 个字符', trigger: 'blur' }
+                        { min: 2, max: 15, message: '長度在 2 到 15 個字符', trigger: 'blur' }
                     ],
                     password: [
-                        { required: true, message: '請輸入管理員拼音', trigger: 'blur' },
-                        { min: 2, max: 25, message: '長度在 2 到 25 个字符', trigger: 'blur' }
+                        { required: true, message: '請輸入管理員密碼', trigger: 'blur' },
+                        { min: 2, max: 25, message: '長度在 2 到 25 個字符', trigger: 'blur' }
                     ],
                     nickname: [
-                        { required: true, message: '請輸入管理員拼音', trigger: 'blur' },
-                        { min: 2, max: 25, message: '長度在 2 到 25 个字符', trigger: 'blur' }
+                        { required: true, message: '請輸入管理員暱稱', trigger: 'blur' },
+                        { min: 2, max: 25, message: '長度在 2 到 25 個字符', trigger: 'blur' }
                     ],
 
                 }

@@ -29,7 +29,7 @@
         <el-divider></el-divider>
 
         <!--    描述列表：用戶詳情開始-->
-        <el-descriptions title="用戶詳情" direction="vertical" :column="4" border>
+        <el-descriptions v-if="userInfo.supports" title="收件人訊息" direction="vertical" :column="4" border>
             <el-descriptions-item label="用戶名" >{{userInfo[0].username}}</el-descriptions-item>
             <el-descriptions-item label="手機號碼" >{{userInfo[0].phone}}</el-descriptions-item>
             <el-descriptions-item label="居住地" >{{userInfo[0].city}}</el-descriptions-item>
@@ -131,6 +131,7 @@
                 }
                 this.totalPrice = totalPrice
             },
+            //建立訂單
             createOrder(){
                 if(this.cartArr.length == 0){
                     this.$message.error("沒有商品")
@@ -194,7 +195,6 @@
         },
         mounted() { //已掛載 在created 顯示頁面之後執行
             this.jwt = localStorage.getItem("jwt")
-            let pageNum = location.search.split("&")[0].split("=")[1];
             // let pageSize = location.search.split("&")[1].split("=")[1];
             this.loadCarts();
             this.loadUserInfo();
@@ -204,15 +204,6 @@
 </script>
 
 <style>
-    body{
-        font: 18px "Microsoft YaHei UI";
-        margin: 0;
-    }
-    header a{
-        text-decoration: none;
-        color: #6c6c6c;
-    }
-
 
 
 </style>

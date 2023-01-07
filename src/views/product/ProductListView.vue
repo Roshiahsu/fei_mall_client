@@ -76,17 +76,7 @@
 </script>
 
 <style>
-    body{
-        font: 18px "Microsoft YaHei UI";
-        margin: 0;
-    }
-    header a{
-        text-decoration: none;
-        color: #6c6c6c;
-    }
-    header a:hover{
-        color: #0aa1ed;
-    }
+
 /*card*/
     .bottom {
         margin-top: 10px;

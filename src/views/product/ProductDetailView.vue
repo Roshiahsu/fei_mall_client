@@ -37,9 +37,6 @@
                 </span>
                 </p>
 
-
-
-
                 <!--分割線-->
                 <el-divider></el-divider>
                 <p style="font-size: 25px;font-weight: bold">
@@ -147,15 +144,6 @@
 </script>
 
 <style>
-    body {
-        font: 18px "Microsoft YaHei UI";
-        margin: 0;
-    }
-
-    header a {
-        text-decoration: none;
-        color: #6c6c6c;
-    }
 
     header a:hover {
         color: #0aa1ed;
@@ -179,6 +167,7 @@
     .button {
         padding: 0;
         float: right;
+        font-size: 18px;
     }
 
     .image {

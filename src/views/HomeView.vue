@@ -9,7 +9,7 @@
                   <a href="/index">首頁</a><el-divider direction="vertical"></el-divider>
                   <a href="/product/list?page=1">商品介紹</a><el-divider direction="vertical"></el-divider>
                   <a href="/cart/list">購物車</a><el-divider direction="vertical"></el-divider>
-                  <a href="">顧客中心</a><el-divider direction="vertical"></el-divider>
+                  <a href="/customerCenter">顧客中心</a><el-divider direction="vertical"></el-divider>
                   <a href="/login">會員登入</a>
               </span>
           </div>
@@ -105,58 +105,23 @@
   </div>
 </template>
 
-<style>
-
-  *{
-      /*歸零body自帶外邊距*/
-      margin: 0;
-  }
-
-  .layout-body{
-    position: absolute;
-    top:150px;
-    right: 0;
-    left: 0;
-    bottom: 0;
-  }
-
-  /*側邊欄背景顏色*/
-  .el-aside{
-    background-color: #ecaf94;
-  }
-
-  body{
-      font: 18px "Microsoft YaHei UI";
-      margin: 0;
-  }
-  header a{
-      text-decoration: none;
-      color: #6c6c6c;
-  }
-  header a:hover{
-      color: #0aa1ed;
-  }
-
-</style>
-
 <script>
-
-export default {
+ export default {
     data() {
         return {
-            tableData:[],
-            role:'' //角色設定(未完成)
+            tableData: [],
+            role: '' //角色設定(未完成)
         };
     },
     methods: {
-        loadAdmins(){
+        loadAdmins() {
             //自動獲取
-            let url="http://localhost:9080/user/userInfo"
-            this.axios.get(url).then((response)=>{
-                let json=response.data
-                if(json.serviceCode===20000){
-                    this.tableData=json.data;
-                }else{
+            let url = "http://localhost:9080/user/userInfo"
+            this.axios.get(url).then((response) => {
+                let json = response.data
+                if (json.serviceCode === 20000) {
+                    this.tableData = json.data;
+                } else {
                     this.$message.error(json.message)
                 }
                 console.log(this.tableData)
@@ -170,3 +135,36 @@ export default {
     }
 }
 </script>
+<style>
+
+    *{
+        /*歸零body自帶外邊距*/
+        margin: 0;
+    }
+
+    .layout-body{
+        position: absolute;
+        top:150px;
+        right: 0;
+        left: 0;
+        bottom: 0;
+    }
+
+    /*側邊欄背景顏色*/
+    .el-aside{
+        background-color: #ecaf94;
+    }
+
+    body{
+        font: 18px "Microsoft YaHei UI";
+        margin: 0;
+    }
+    header a{
+        text-decoration: none;
+        color: #6c6c6c;
+    }
+    header a:hover{
+        color: #0aa1ed;
+    }
+
+</style>
