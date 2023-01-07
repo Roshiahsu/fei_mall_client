@@ -5,7 +5,7 @@
             <!--圖片區-->
             <el-col :span="12">
                 <el-card :body-style="{ padding: '0px' }">
-                    <img
+                    <img v-if="url"
                             :src="require('@/assets/productImg/'+url)"
                             class="image">
                     <div style="padding: 14px;">
@@ -53,7 +53,9 @@
 <script>
     export default {
         data() {
+            //自定義驗證規則
             var validateQuantity = (rule, value, callback) => {
+                //如果輸入的數值大於庫存
                 if (value > this.product.stock) {
                     callback(new Error('庫存不足'));
                 }else {
@@ -72,7 +74,6 @@
                     quantity: [
                         {required: true, message: '請輸入購買數量', trigger: 'change'},
                         {validator: validateQuantity ,trigger: 'blur'}
-
                     ]
                 }
             };
@@ -93,6 +94,7 @@
                     }
                 })
             },
+            //新增購物車
             addNewCart(formName) {
                 this.$refs[formName].validate((valid) => {
                     if (valid) {
@@ -133,12 +135,12 @@
             }
         },
         created() { //已創建 在mounted 顯示頁面之前執行
-
+            this.id = location.search.split("=")[1];
+            this.loadBrands();
         },
         mounted() { //已掛載 在created 顯示頁面之後執行
             this.jwt = localStorage.getItem("jwt")
-            this.id = location.search.split("=")[1];
-            this.loadBrands();
+
         }
     }
 </script>
