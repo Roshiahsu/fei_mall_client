@@ -9,7 +9,7 @@
         </el-steps>
         <!--        步驟條結束-->
         <el-divider></el-divider>
-        <!--        購物清單-->
+        <!--        購物清單開始-->
         <el-card class="box-card" style="width: 1000px;margin: 0 auto" >
             <el-table
                     :data="cartArr"
@@ -26,21 +26,26 @@
         <h3 style="color: #55acb8;margin-top: 20px">
             總計：{{totalPrice}}
         </h3>
+        <!--        購物清單結束-->
         <el-divider></el-divider>
 
-        <!--    描述列表：用戶詳情開始-->
-        <el-descriptions v-if="userInfo.supports" title="收件人訊息" direction="vertical" :column="4" border>
-            <el-descriptions-item label="用戶名" >{{userInfo[0].username}}</el-descriptions-item>
-            <el-descriptions-item label="手機號碼" >{{userInfo[0].phone}}</el-descriptions-item>
-            <el-descriptions-item label="居住地" >{{userInfo[0].city}}</el-descriptions-item>
-            <el-descriptions-item label="鄉鎮區" >{{userInfo[0].zone}}</el-descriptions-item>
-            <el-descriptions-item label="鄉鎮區" >{{userInfo[0].zipCode}}</el-descriptions-item>
-            <el-descriptions-item label="詳細地址":span="2">{{userInfo[0].detailedAddress}}</el-descriptions-item>
+        <!--    描述列表：收件人訊息開始-->
+        <el-descriptions title="收件人訊息" direction="vertical" :column="4" border>
+            <el-descriptions-item label="收件人姓名" >
+                <el-input v-model="userInfo.username" style="size: 10ch"></el-input>
+            </el-descriptions-item>
+            <el-descriptions-item label="收件人電話" >
+                <el-input v-model="userInfo.phone"></el-input>
+            </el-descriptions-item>
+            <el-descriptions-item label="收件地址" >
+                <el-input v-model="userInfo.detailedAddress"></el-input>
+            </el-descriptions-item>
             <el-descriptions-item label="備註"  >
                 <el-tag size="small" >待完成</el-tag>
             </el-descriptions-item>
         </el-descriptions>
-        <!--    描述列表：用戶詳情結束-->
+<!--            描述列表：收件人訊息結束-->
+
 
         <br>
 
@@ -61,7 +66,7 @@
         data() {
             return {
                 cartArr:[],
-                userInfo:[],
+                userInfo:{},
                 jwt:"",
                 url:"http://localhost:9080/cart/",
                 subtotal:"",
@@ -70,38 +75,6 @@
             };
         },
         methods: {
-            //刪除購物車內商品
-            openDeleteConfirm(id) {
-                console.log(id)
-                this.$confirm('確認移除商品?', '提示', {
-                    confirmButtonText: '繼續', //點確認走then
-                    cancelButtonText: '取消', //點取消走catch
-                    type: 'warning'
-                }).then(() => {
-                    this.handleDelete(id)
-                }).catch(() => {
-                    this.$message({
-                        type: 'info',
-                        message: '已取消删除'
-                    });
-                });
-            },
-            handleDelete(id){
-                console.log(id)
-                let url=this.url+id+"/delete"
-                this.axios.create({
-                    headers:{'Authorization':this.jwt}})
-                    .get(url).then((response)=>{
-                    let json = response.data;
-                    if(json.serviceCode===20000){
-                        this.$message.success("刪除成功")
-                    }else{
-                        let message = response.data.message
-                        this.$message.error(message);
-                    }
-                    this.loadCarts()
-                })
-            },
             //自動獲取購物車
             loadCarts(){
                 let url=this.url+"list"
@@ -117,11 +90,6 @@
                         this.$message.error(json.message)
                     }
                 })
-            },
-            //計算更改商品數量金額
-            handleChange(spu) {
-                spu.subtotal = spu.quantity * spu.price
-                this.total()
             },
             //計算總金額
             total(){
@@ -144,7 +112,10 @@
                     amountOfFreight: '',
                     amountOfOriginalPrice:this.totalPrice,
                     orderItems:this.cartArr,
-                    rewardPoint: 100
+                    rewardPoint: 100,
+                    recipientName:this.userInfo.username,
+                    recipientPhone:this.userInfo.phone,
+                    recipientAddress:this.userInfo.detailedAddress
                 }
                 let url ='http://localhost:9080/order/insert'
                 this.axios
