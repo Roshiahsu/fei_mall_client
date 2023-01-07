@@ -124,10 +124,11 @@
                     let json = response.data
                     console.log("JSON", json)
                     if (json.serviceCode === 20000) {
+                        let id = json.data.id
                         this.$alert('新增成功', '訂單建立成功', {
                             confirmButtonText: '確定',
                             callback: action => {
-                                location.href="/cart/list"
+                                location.href="/order/success/orderDetailInfo?id="+id
                             }
                         });
                     } else if (json.serviceCode === 40004){

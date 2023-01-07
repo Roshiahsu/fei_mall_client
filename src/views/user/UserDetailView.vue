@@ -1,7 +1,7 @@
 <template>
     <div>
         <!--增加上下邊距-->
-        <h1 style="margin: 20px 0;">顧客中心</h1>
+        <h1>顧客中心</h1>
         <!--    用戶詳情-->
 
         <el-descriptions title="用戶詳情" direction="vertical" :column="4" border>
@@ -79,10 +79,7 @@
                     align="center"
             >
                 <template slot-scope="scope">
-                    <!--                待完成-->
-                    <a href="/index">
-                        <el-button type="info" size="mini">訂單詳情</el-button>
-                    </a>
+                        <el-button type="info" size="mini" @click="getOrderDetail(scope.row.id)">訂單詳情</el-button>
                 </template>
             </el-table-column>
         </el-table>
@@ -100,9 +97,8 @@
             };
         },
         methods: {
-            handleEdit(id) {
-                console.log(id)
-                //更改數據ByID
+            getOrderDetail(id) {
+                location.href = "/orderDetailInfo?id="+id
             },
 
             //自動獲取用戶資料

@@ -18,23 +18,14 @@ const routes = [
       {
         path: 'user/list',
         component: () => import('../views/user/UserListView.vue'),
-        meta:{
-          title:'酷鯊商城運營管理平台-用戶列表模塊'
-        }
       },
       {
         path: 'admin/list',
         component: () => import('../views/admin/AdminListView.vue'),
-        meta:{
-          title:'酷鯊商城運營管理平台-管理員列表模塊'
-        }
       },
       {
         path: 'admin/addNew',
         component: () => import('../views/admin/AdminAddNewView.vue'),
-        meta:{
-          title:'酷鯊商城運營管理平台-新增管理員列表模塊'
-        }
       },
       {
         path: 'brand/list',
@@ -58,22 +49,44 @@ const routes = [
       },
       {
         path: 'product/list',
+        name:'商品介紹',
         component: () => import('../views/product/ProductListView.vue')
       },
       {
         path: 'product/details',
+        name:'商品詳情',
         component: () => import('../views/product/ProductDetailView.vue')
       },
       {
         path: 'cart/list',
+        name:'購物車列表',
         component: () => import('../views/cart/CartListView')
       },
       {
         path: 'order/list',
+        name:'訂單列表',
         component: () => import('../views/order/OrderListView')
       },
       {
+        path: 'order/success',
+        name:'訂單完成',
+        component: () => import('../views/order/OrderSuccessView'),
+        children:[
+          {
+            path: 'orderDetailInfo',
+            name:'訂單詳情',
+            component: () => import('../views/order/OrderDetailInfoView')
+          },
+        ],
+      },
+      {
+        path: 'orderDetailInfo',
+        name:'訂單詳情',
+        component: () => import('../views/order/OrderDetailInfoView')
+      },
+      {
         path: 'customerCenter',
+        name:'顧客中心',
         component: () => import('../views/user/UserDetailView')
       },
       {
@@ -97,7 +110,7 @@ const router = new VueRouter({
   routes
 })
 router.beforeEach((to, from, next) => {
-    document.title=to.meta.title ? to.meta.title:"酷鯊商城運營管理平台";
+    document.title=to.meta.title ? to.meta.title:"澳洲代購";
   next();
 })
 
