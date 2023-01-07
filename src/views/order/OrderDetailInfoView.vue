@@ -9,7 +9,6 @@
             <el-descriptions-item label="收件人姓名" >{{orderInfo.recipientName}}</el-descriptions-item>
             <el-descriptions-item label="收件人電話" >{{orderInfo.recipientPhone}}</el-descriptions-item>
             <el-descriptions-item label="收件人地址" >{{orderInfo.recipientAddress}}</el-descriptions-item>
-
         </el-descriptions>
 
     </div>
@@ -28,7 +27,7 @@
         methods: {
             //獲取訂單詳情
             loadOrderDetail(){
-                let id=location.search.split("&")[0].split("=")[1]
+                let id=location.search.split("=")[1]
                 let url="http://localhost:9080/order/"+id+"/orderDetail"
                 this.axios
                     .create({headers:{'Authorization':this.jwt}})
@@ -36,6 +35,8 @@
                     let json=response.data
                     if(json.serviceCode===20000){
                         this.orderInfo=json.data;
+                    } else if (json.serviceCode === 40004){
+                        this.open()
                     }else{
                         this.$message.error(json.message)
                     }
