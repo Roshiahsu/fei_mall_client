@@ -103,6 +103,10 @@
 
             //自動獲取用戶資料
             loadUserInfo() {
+                if(this.jwt ===null){
+                    this.open()
+                    return
+                }
                 let url = "http://localhost:9080/user/userInfo"
                 this.axios
                     .create({headers: {'Authorization': this.jwt}})
@@ -110,6 +114,8 @@
                     let json = response.data
                     if (json.serviceCode === 20000) {
                         this.userInfo = json.data;
+                    } else if (json.serviceCode === 40001){
+                        this.open()
                     } else {
                         this.$message.error(json.message)
                     }
@@ -117,6 +123,10 @@
                 })
             },
             loadOrderList() {
+                if(this.jwt ===null){
+                    this.open()
+                    return
+                }
                 let url = "http://localhost:9080/order/list"
                 this.axios
                     .create({headers: {'Authorization': this.jwt}})
@@ -124,6 +134,8 @@
                     let json = response.data
                     if (json.serviceCode === 20000) {
                         this.orderList = json.data;
+                    } else if (json.serviceCode === 40004){
+                        this.open()
                     } else {
                         this.$message.error(json.message)
                     }

@@ -10,7 +10,10 @@
                   <a href="/product/list?page=1">商品介紹</a><el-divider direction="vertical"></el-divider>
                   <a href="/cart/list">購物車</a><el-divider direction="vertical"></el-divider>
                   <a href="/customerCenter">顧客中心</a><el-divider direction="vertical"></el-divider>
-                  <a href="/login">會員登入</a>
+                  <a href="javascript:void(0)" v-if="jwt" @click="logout()">會員登出</a>
+                                    <a href="/login" v-else>會員登入</a>
+
+
               </span>
           </div>
           <el-divider></el-divider>
@@ -109,6 +112,7 @@
  export default {
     data() {
         return {
+            jwt:"",
             tableData: [],
             role: '' //角色設定(未完成)
         };
@@ -127,11 +131,16 @@
                 console.log(this.tableData)
             })
         },
+        logout(){
+            localStorage.clear()
+            location.href = "/"
+        }
     },
     created() {
 
     },
     mounted() {
+        this.jwt=localStorage.getItem("jwt")
     }
 }
 </script>

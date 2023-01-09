@@ -95,6 +95,10 @@
             },
             loadCarts(){
                 //自動獲取
+                if(this.jwt ===null){
+                    this.open()
+                    return
+                }
                 let url=this.url+"list"
                 this.axios
                     .create({headers:{'Authorization':this.jwt}})
@@ -104,6 +108,8 @@
                     if(json.serviceCode===20000){
                         this.cartArr=json.data
                         this.total()
+                    } else if (json.serviceCode === 40001){
+                        this.open()
                     }else {
                         this.$message.error(json.message)
                     }
@@ -126,6 +132,10 @@
             //修改購物車購買數量
             updateCart(){
                 //判斷購物車中有無商品
+                if(this.jwt ===null){
+                    this.open()
+                    return
+                }
                 if(this.cartArr.length == 0){
                     this.$message.error("沒有商品")
                     return
