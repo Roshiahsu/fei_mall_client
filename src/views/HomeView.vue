@@ -48,7 +48,7 @@
                           <i class="el-icon-first-aid-kit"></i>
                           <span>品牌管理</span>
                       </template>
-                      <el-menu-item index="/brand/addNew" class="el-icon-first-aid-kit">新增品牌</el-menu-item>
+                      <el-menu-item index="/brand/addNew/list" class="el-icon-first-aid-kit">新增品牌</el-menu-item>
                   </el-submenu>
                   <!--品牌管理結束-->
 

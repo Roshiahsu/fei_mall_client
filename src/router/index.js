@@ -36,7 +36,7 @@ const routes = [
         component: () => import('../views/brand/BrandAddNewView'),
         children: [
           {
-            path: 'brand/list',
+            path: 'list',
             name:'品牌列表',
             component: () => import('../views/brand/BrandListView')
           },

@@ -77,11 +77,12 @@
                     });
                 });
             },
+            //根據id刪除購物車商品
             handleDelete(id){
                 console.log(id)
                 let url=this.url+id+"/delete"
-                this.axios.create({
-                    headers:{'Authorization':this.jwt}})
+                this.axios
+                    .create({headers:{'Authorization':this.jwt}})
                     .get(url).then((response)=>{
                     let json = response.data;
                     if(json.serviceCode===20000){
@@ -93,12 +94,8 @@
                     this.loadCarts()
                 })
             },
+            //獲取購物車列表
             loadCarts(){
-                //自動獲取
-                if(this.jwt ===null){
-                    this.open()
-                    return
-                }
                 let url=this.url+"list"
                 this.axios
                     .create({headers:{'Authorization':this.jwt}})
@@ -132,16 +129,11 @@
             //修改購物車購買數量
             updateCart(){
                 //判斷購物車中有無商品
-                if(this.jwt ===null){
-                    this.open()
-                    return
-                }
                 if(this.cartArr.length == 0){
                     this.$message.error("沒有商品")
                     return
                 }
-
-                let url ='http://localhost:9080/cart/update'
+                let url =this.url+'update'
                 this.axios
                     .create({headers:{'Authorization':this.jwt}})
                     .post(url,this.cartArr).then((response)=>{
@@ -163,6 +155,13 @@
                         location.href = "/login"
                     }
                 });
+            },
+            //判斷是否有包含jwt，如果沒有則跳到登入頁
+            haveJwt(){
+                if(this.jwt ===null){
+                    this.open()
+                    return
+                }
             }
         },
         created() { //已創建 在mounted 顯示頁面之前執行
@@ -170,6 +169,7 @@
         },
         mounted() { //已掛載 在created 顯示頁面之後執行
             this.jwt = localStorage.getItem("jwt")
+            this.haveJwt()
             let pageNum = location.search.split("&")[0].split("=")[1];
             // let pageSize = location.search.split("&")[1].split("=")[1];
             this.loadCarts(pageNum);
