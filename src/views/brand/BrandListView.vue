@@ -1,73 +1,26 @@
 <template>
 <div>
-    <el-breadcrumb separator-class="el-icon-arrow-right">
-        <el-breadcrumb-item :to="{ path: '/admin' }">首頁</el-breadcrumb-item>
-        <el-breadcrumb-item><a href="/admin/brand/list">品牌管理</a></el-breadcrumb-item>
-        <el-breadcrumb-item>品牌列表品牌</el-breadcrumb-item>
-    </el-breadcrumb>
-    <!--增加上下邊距-->
-    <h1 style="margin: 20px 0;">品牌列表頁面</h1>
+    <h1>品牌列表</h1>
+<!--    分頁開始-->
+    <div  style="width: 150px;margin: 0 auto">
+        <span v-for=" i in pages" :key="i">
+            <a href="javascript:void(0)" @click="loadBrands(i)">{{i}}</a><el-divider direction="vertical"></el-divider>
+        </span>
+    </div>
+    <!--    分頁結束-->
 
     <el-table
             :data="brandArr"
             border
             style="width: 100%">
-        <el-table-column prop="id" label="ID" width="50" align="center"></el-table-column>
-        <el-table-column prop="name" label="品牌名" width="120" align="center"></el-table-column>
-        <el-table-column prop="pinyin" label="拼音" width="120" align="center"></el-table-column>
-<!--        <el-table-column prop="logo" label="圖片URL" align="center"></el-table-column>-->
-<!--        <el-table-column prop="description" label="品牌描述" align="center"></el-table-column>-->
-        <el-table-column prop="keywords" label="關鍵字" align="center" ></el-table-column>
-        <el-table-column prop="sort" label="排序" align="center" width="50"></el-table-column>
-        <el-table-column prop="sales" label="銷量" align="center" width="70"></el-table-column>
-        <el-table-column label="好評/ 評論數量" align="center" width="130">
-            <template slot-scope="scope">
-                <span v-text="scope.row.positiveCommentCount"></span>/
-                <span v-text="scope.row.commentCount"></span>
-            </template>
-        </el-table-column>
-        <el-table-column
-                prop="enable"
-                label="是否啟用"
-                align="center"
-                width="130"
-                >
-            <template slot-scope="scope">
-                <el-switch v-model="scope.row.enable"
-                           :active-value="1"
-                           :inactive-value="0"
-                           active-color="#13ce66"
-                           inactive-color="#999"
-                disabled>
-                </el-switch>
-            </template>
-        </el-table-column>
+        <el-table-column type="index" label="ID" width="100" align="center"></el-table-column>
+        <el-table-column prop="brandName" label="品牌名"  align="center"></el-table-column>
+
+
         <el-table-column
                 label="操作"
                 align="center"
-                width="130">
-<!--            <template slot-scope="scope">-->
-<!--                &lt;!&ndash;@confirm 事件 按下確認會發生什麼-->
-<!--            可以設置 @cancel 事件 按下取消&ndash;&gt;-->
-<!--                &lt;!&ndash;el-popconfirm 氣泡確認匡標籤&ndash;&gt;-->
-<!--                <el-popconfirm @confirm="handleDelete(scope.row.id)"-->
-<!--                               title="这是一段内容确定删除吗？">-->
-<!--                    &lt;!&ndash;slot 觸發用-->
-<!--                        size 按鈕系列的大小標籤-->
-<!--                        type 提示種類，也會影響按鈕顏色:success danger warning-->
-<!--                        icon 添加小圖示&ndash;&gt;-->
-<!--                    <el-button slot="reference"-->
-<!--                               size="mini"-->
-<!--                               type="danger"-->
-<!--                               icon="el-icon-delete" circle></el-button>-->
-<!--                </el-popconfirm>-->
-<!--                <el-button-->
-<!--                        style="background-color:darkorchid"-->
-<!--                        size="mini"-->
-<!--                        type="info"-->
-<!--                        icon="el-icon-setting"-->
-<!--                        @click="handleEdit(scope.row.id)" circle></el-button>-->
-<!--            </template>-->
+             >
             <template slot-scope="scope">
                 <el-button @click="openDeleteConfirm(scope.row.id)" type="info" icon="el-icon-delete" size="mini" circle></el-button>
                 <el-button
@@ -89,26 +42,13 @@
     export default {
         data() {
             return {
-                ruleForm: {
-                    id:'',
-                    name: '',
-                    pinyin: '',
-                    logo: '',
-                    categoryId: '',
-                    description: '',
-                    keywords:'',
-                    sort: '',
-                    sales:'',
-                    productCount:'',
-                    commentCount:'',
-                    positiveCommentCount:'',
-                    enable:'',
-                },
                 brandArr:[],
-                jwt:''
+                jwt:'',
+                pages:''
             };
         },
         methods: {
+            //刪除品牌(待完成)
             handleDelete(id){
                 console.log(id)
                 //deleteById
@@ -127,21 +67,23 @@
                     this.loadBrands()
                 })
             },
+            //編輯品牌(待完成)
             handleEdit(id){
                 console.log(id)
                 //更改數據ByID
             },
-            loadBrands(){
+            //獲取品牌列表
+            loadBrands(pageNum){
                 //自動獲取
-                let url="http://localhost:9080/brands"
-                this.axios.create({
-                    headers:{'Authorization':this.jwt}
-                })
-                .get(url).then((response)=>{
+                let url="http://localhost:9080/brands/list?pageNum="+pageNum
+                this.axios
+                    .create({headers:{'Authorization':this.jwt}})
+                    .get(url).then((response)=>{
                     let json=response.data
                     console.log("JSON",json)
-                    if(json.statusCode==20000){
-                        this.brandArr=json.data
+                    if(json.serviceCode===20000){
+                        this.brandArr=json.data.list
+                        this.pages = json.data.pages
                     }else {
                         this.$message.error(json.message)
                     }
@@ -161,13 +103,30 @@
                         message: '已取消删除'
                     });
                 });
-            }
+            },
+            open() {
+                this.$alert('請先登入', '尚未登入', {
+                    confirmButtonText: '確定',
+                    callback: action => {
+                        location.href = "/login"
+                    }
+                });
+            },
+            //判斷是否有包含jwt，如果沒有則跳到登入頁
+            haveJwt(){
+                if(this.jwt ===null){
+                    this.open()
+                    return
+                }
+            },
         },
         created() { //已創建 在mounted 顯示頁面之前執行
-            this.jwt=localStorage.getItem("jwt")
+
         },
         mounted() { //已掛載 在created 顯示頁面之後執行
-            this.loadBrands();
+            this.jwt=localStorage.getItem("jwt")
+            this.haveJwt()
+            this.loadBrands(1);
         }
     }
 </script>
