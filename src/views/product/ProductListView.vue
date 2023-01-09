@@ -3,7 +3,7 @@
     <h1 >商品介紹</h1>
     <div  style="width: 150px;margin: 0 auto">
         <span v-for=" i in pages" :key="i">
-            <a :href="'/product/list?page=' + i">{{i}}</a><el-divider direction="vertical"></el-divider>
+            <a :href="'/product/list?pageNum=' + i">{{i}}</a><el-divider direction="vertical"></el-divider>
         </span>
     </div>
     <el-divider></el-divider>
