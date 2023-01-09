@@ -16,33 +16,45 @@ const routes = [
     * 添加children 並用 陣列方式呈現*/
     children:[
       {
+        //待完成
         path: 'user/list',
         component: () => import('../views/user/UserListView.vue'),
       },
       {
+        //待完成
         path: 'admin/list',
         component: () => import('../views/admin/AdminListView.vue'),
       },
       {
+        //待完成
         path: 'admin/addNew',
         component: () => import('../views/admin/AdminAddNewView.vue'),
       },
       {
-        path: 'brand/list',
-        component: () => import('../views/brand/BrandListView')
-      },
-      {
         path: 'brand/addNew',
-        component: () => import('../views/brand/BrandAddNewView')
+        name:'新增品牌',
+        component: () => import('../views/brand/BrandAddNewView'),
+        children: [
+          {
+            path: 'brand/list',
+            name:'品牌列表',
+            component: () => import('../views/brand/BrandListView')
+          },
+        ]
       },
       {
         path: 'category/addNew',
-        component: () => import('../views/category/CategoryAddNewView')
+        name: '新增類別',
+        component: () => import('../views/category/CategoryAddNewView'),
+        children: [
+          {
+            path: '/list',
+            name: '新增列表',
+            component: () => import('../views/category/CategoryListView')
+          },
+        ]
       },
-      {
-        path: 'category/list',
-        component: () => import('../views/category/CategoryListView')
-      },
+
       {
         path: 'product/addNew',
         component: () => import('../views/product/ProductAddNewView.vue')

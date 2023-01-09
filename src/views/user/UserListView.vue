@@ -58,7 +58,8 @@
             };
         },
         methods: {
-            handleEdit(id){
+            //刪除
+            handleDelete(id){
                 console.log(id)
                 //更改數據ByID
             },
@@ -96,6 +97,7 @@
 
         },
         mounted() {
+            var jwt=localStorage.getItem("jwt")
             this.loadAdmins();
         }
     }

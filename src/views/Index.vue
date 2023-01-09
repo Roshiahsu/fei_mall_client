@@ -1,7 +1,7 @@
 <template>
     <div class="block">
+        <h1 >新品推薦</h1>
         <!--   新品推薦輪播圖開始     -->
-        <span class="demonstration"><h4>新品推薦</h4></span>
         <div style="width: 700px;margin: 0 auto" >
             <el-carousel trigger="click" height="270px" type="card"  >
                 <el-carousel-item v-for="item in newProductArr" >

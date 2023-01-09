@@ -10,10 +10,9 @@
                   <a href="/product/list?page=1">商品介紹</a><el-divider direction="vertical"></el-divider>
                   <a href="/cart/list">購物車</a><el-divider direction="vertical"></el-divider>
                   <a href="/customerCenter">顧客中心</a><el-divider direction="vertical"></el-divider>
+
                   <a href="javascript:void(0)" v-if="jwt" @click="logout()">會員登出</a>
                                     <a href="/login" v-else>會員登入</a>
-
-
               </span>
           </div>
           <el-divider></el-divider>
@@ -27,64 +26,39 @@
 
               <!--TODO 根據權限是否為admin顯現 開始-->
               <el-menu
-                      v-if="role === 1"
+                      v-if="role === 'ROLE_admin'"
                       router
                       :default-active=this.$router.currentRoute.path
                       class="el-menu-vertical-demo"
               >
-                  <!--用戶管理開始-->
-                  <el-submenu index="1">
-                      <template slot="title">
-                          <i class="el-icon-user"></i>
-                          <span>用戶管理</span>
-                      </template>
-                      <!--直接修改index的值，為業務路徑-->
-                      <el-menu-item index="/user/list" class="el-icon-user" >用戶列表</el-menu-item>
-                  </el-submenu>
-                  <!--用戶管理結束-->
-
-                  <!--管理員管理開始-->
-                  <el-submenu index="2">
-                      <template slot="title">
-                          <i class="el-icon-user"></i>
-                          <span>管理員管理</span>
-                      </template>
-                      <!--直接修改index的值，為業務路徑-->
-                      <el-menu-item index="/admin/admin/list" class="el-icon-user" >管理員列表</el-menu-item>
-                      <el-menu-item index="/admin/admin/add-new" class="el-icon-user">新增管理員</el-menu-item>
-                  </el-submenu>
-                  <!--管理員管理結束-->
-
                   <!--商品管理開始-->
-                  <el-submenu index="3">
+                  <el-submenu index="1">
                       <template slot="title">
                           <i class="el-icon-first-aid-kit"></i>
                           <span>商品管理</span>
                       </template>
                       <el-menu-item index="/admin/brand/list" class="el-icon-first-aid-kit" >商品列表</el-menu-item>
-                      <el-menu-item index="/admin/brand/add-new" class="el-icon-first-aid-kit">新增商品</el-menu-item>
+                      <el-menu-item index="/admin/brand/addNew" class="el-icon-first-aid-kit">新增商品</el-menu-item>
                   </el-submenu>
                   <!--商品管理結束-->
 
                   <!--品牌管理開始-->
-                  <el-submenu index="4">
+                  <el-submenu index="2">
                       <template slot="title">
                           <i class="el-icon-first-aid-kit"></i>
                           <span>品牌管理</span>
                       </template>
-                      <el-menu-item index="/admin/brand/list" class="el-icon-first-aid-kit" >品牌列表</el-menu-item>
-                      <el-menu-item index="/admin/brand/add-new" class="el-icon-first-aid-kit">新增品牌</el-menu-item>
+                      <el-menu-item index="/brand/addNew" class="el-icon-first-aid-kit">新增品牌</el-menu-item>
                   </el-submenu>
                   <!--品牌管理結束-->
 
                   <!--類別管理開始-->
-                  <el-submenu index="5">
+                  <el-submenu index="3">
                       <template slot="title">
                           <i class="el-icon-tickets"></i>
-                          <span>類別管理</span>
+                          <span>類別管理(待完成)</span>
                       </template>
-                      <el-menu-item index="/admin/category/list" class="el-icon-tickets" >類別列表</el-menu-item>
-                      <el-menu-item index="/admin/category/add-new" class="el-icon-tickets">新增類別</el-menu-item>
+                      <el-menu-item index="/category/addNew" class="el-icon-tickets">新增類別</el-menu-item>
                   </el-submenu>
                   <!--類別管理結束-->
               </el-menu>
@@ -113,27 +87,29 @@
     data() {
         return {
             jwt:"",
-            tableData: [],
             role: '' //角色設定(未完成)
         };
     },
     methods: {
-        loadAdmins() {
-            //自動獲取
-            let url = "http://localhost:9080/user/userInfo"
-            this.axios.get(url).then((response) => {
-                let json = response.data
-                if (json.serviceCode === 20000) {
-                    this.tableData = json.data;
-                } else {
-                    this.$message.error(json.message)
-                }
-                console.log(this.tableData)
-            })
-        },
+        //登出
         logout(){
             localStorage.clear()
             location.href = "/"
+        },
+        //解析jwt
+        parseJwt(jwt){
+            if(jwt!==null){
+                //jwt分段
+                let strings = this.jwt.split(".")
+                //分析payload
+                let jsonResult = JSON.parse(decodeURIComponent(escape
+                (window.atob(strings[1].replace(/-/g, "+").replace(/_/g, "/")))));
+                console.log(jsonResult)
+                //將解析後的jsonResult.user從JSON格式還原
+                var userInfo =JSON.parse(jsonResult.user)
+                this.role=userInfo.authorities[0]
+                console.log("role",this.role)
+            }
         }
     },
     created() {
@@ -141,6 +117,7 @@
     },
     mounted() {
         this.jwt=localStorage.getItem("jwt")
+        this.parseJwt(this.jwt)
     }
 }
 </script>

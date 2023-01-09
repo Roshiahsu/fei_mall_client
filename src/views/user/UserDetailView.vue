@@ -103,10 +103,6 @@
 
             //自動獲取用戶資料
             loadUserInfo() {
-                if(this.jwt ===null){
-                    this.open()
-                    return
-                }
                 let url = "http://localhost:9080/user/userInfo"
                 this.axios
                     .create({headers: {'Authorization': this.jwt}})
@@ -123,10 +119,6 @@
                 })
             },
             loadOrderList() {
-                if(this.jwt ===null){
-                    this.open()
-                    return
-                }
                 let url = "http://localhost:9080/order/list"
                 this.axios
                     .create({headers: {'Authorization': this.jwt}})
@@ -150,12 +142,19 @@
                     }
                 });
             },
+            haveJwt(){
+                if(this.jwt ===null){
+                    this.open()
+                    return
+                }
+            }
         },
         created() {
 
         },
         mounted() {
             this.jwt = localStorage.getItem("jwt")
+            this.haveJwt();
             this.loadUserInfo();
             this.loadOrderList();
         }
