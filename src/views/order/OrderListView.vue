@@ -160,6 +160,13 @@
                         location.href = "/login"
                     }
                 });
+            },
+            //判斷是否有包含jwt，如果沒有則跳到登入頁
+            haveJwt(){
+                if(this.jwt ===null){
+                    this.open()
+                    return
+                }
             }
         },
         created() { //已創建 在mounted 顯示頁面之前執行
@@ -167,6 +174,7 @@
         },
         mounted() { //已掛載 在created 顯示頁面之後執行
             this.jwt = localStorage.getItem("jwt")
+            this.haveJwt()
             // let pageSize = location.search.split("&")[1].split("=")[1];
             this.loadCarts();
             this.loadUserInfo();
