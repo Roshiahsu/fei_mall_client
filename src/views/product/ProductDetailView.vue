@@ -4,8 +4,9 @@
         <el-row :gutter="20">
             <!--圖片區-->
             <el-col :span="12">
-                <el-card :body-style="{ padding: '0px' }">
+                <el-card :body-style="{ padding: '0px' }" >
                     <img v-if="url"
+                            :height=400
                             :src="require('@/assets/productImg/'+url)"
                             class="image">
                     <div style="padding: 14px;">
@@ -175,8 +176,8 @@
     .image {
         width: 100%;
         display: block;
+        object-fit:contain;
     }
-
 
 
 </style>

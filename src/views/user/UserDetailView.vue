@@ -113,7 +113,7 @@
                     } else if (json.serviceCode === 40001){
                         this.open()
                     } else {
-                        this.$message.error(json.message)
+                        // this.$message.error(json.message)
                     }
                     console.log("userInfo", this.userInfo)
                 })
@@ -129,7 +129,7 @@
                     } else if (json.serviceCode === 40004){
                         this.open()
                     } else {
-                        this.$message.error(json.message)
+                        // this.$message.error(json.message)
                     }
                     console.log("orderList", this.orderList)
                 })
