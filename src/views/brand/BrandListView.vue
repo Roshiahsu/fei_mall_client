@@ -22,13 +22,16 @@
                 align="center"
              >
             <template slot-scope="scope">
-                <el-button @click="openDeleteConfirm(scope.row.id)" type="info" icon="el-icon-delete" size="mini" circle></el-button>
+                <el-input v-model="scope.row.brandName" size="medium" style="width: 180px"></el-input>
                 <el-button
-                        style="background-color:darkorchid"
+                        style="margin-left: 10px"
                         size="mini"
                         type="info"
                         icon="el-icon-setting"
-                        @click="handleEdit(scope.row.id)" circle></el-button>
+                        @click="handleEdit(scope.row)">確定修改
+                </el-button>
+                <el-button @click="openDeleteConfirm(scope.row.id)" type="danger" icon="el-icon-delete" size="mini" circle></el-button>
+
             </template>
         </el-table-column>
     </el-table>
@@ -44,37 +47,48 @@
             return {
                 brandArr:[],
                 jwt:'',
-                pages:''
+                pages:'',
             };
         },
         methods: {
-            //刪除品牌(待完成)
+            //刪除品牌
             handleDelete(id){
                 console.log(id)
                 //deleteById
                 let url="http://localhost:9080/brands/"+id+"/delete"
-                this.axios.create({
-                    headers:{'Authorization':this.jwt}
-                }).
-                post(url).then((response)=>{
+                this.axios
+                    .create({headers:{'Authorization':this.jwt}})
+                    .get(url).then((response)=>{
                     let json = response.data;
-                    if(json.statusCode==20000){
+                    if(json.serviceCode === 20000){
                         this.$message.success("刪除成功")
                     }else{
                         let message = response.data.message
                         this.$message.error(message);
                     }
-                    this.loadBrands()
+                    this.loadBrands(1)
                 })
             },
             //編輯品牌(待完成)
-            handleEdit(id){
-                console.log(id)
-                //更改數據ByID
+            handleEdit(product){
+                console.log(product)
+                //deleteById
+                let url="http://localhost:9080/brands/update"
+                this.axios
+                    .create({headers:{'Authorization':this.jwt}})
+                    .post(url,product).then((response)=>{
+                    let json = response.data;
+                    if(json.serviceCode === 20000){
+                        this.$message.success("修改成功")
+                    }else{
+                        let message = response.data.message
+                        this.$message.error(message);
+                    }
+                    this.loadBrands(1)
+                })
             },
             //獲取品牌列表
             loadBrands(pageNum){
-                //自動獲取
                 let url="http://localhost:9080/brands/list?pageNum="+pageNum
                 this.axios
                     .create({headers:{'Authorization':this.jwt}})
@@ -91,7 +105,7 @@
             },
             openDeleteConfirm(id) {
                 console.log(id)
-                this.$confirm('此操作將永久删除该品牌, 是否繼續?', '提示', {
+                this.$confirm('此操作將永久删除該品牌, 是否繼續?', '提示', {
                     confirmButtonText: '繼續', //點確認走then
                     cancelButtonText: '取消', //點取消走catch
                     type: 'warning'
@@ -125,6 +139,7 @@
         },
         mounted() { //已掛載 在created 顯示頁面之後執行
             this.jwt=localStorage.getItem("jwt")
+            console.log("jwt",this.jwt)
             this.haveJwt()
             this.loadBrands(1);
         }

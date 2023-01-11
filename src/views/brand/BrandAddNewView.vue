@@ -32,7 +32,7 @@
                 ruleForm: {
                     brandName: '',
                 },
-                jwt: '',
+                jwt:'',
                 rules: {
                     brandName: [
                         {required: true, message: '請輸入品牌名稱', trigger: 'blur'},
@@ -46,15 +46,15 @@
             submitForm(formName) {
                 this.$refs[formName].validate((valid) => {
                     if (valid) {
-                        console.log('data>>>', this.ruleForm)
                         let url = "http://localhost:9080/brands/insert";
-                        this.axios.create({
-                            headers: {'Authorization': this.jwt}
-                        }).post(url, this.ruleForm).then((response) => {
+                        this.axios
+                            .create({headers:{'Authorization':localStorage.getItem("jwt")}})
+                            .post(url, this.ruleForm).then((response) => {
                             let json = response.data
                             if (json.serviceCode === 20000) {
                                 this.$message.success("添加成功")
                                 this.resetForm(formName)
+                                location.href="/brand/addNew/list"
                             } else {
                                 let message = response.data.message
                                 this.$message.error(message);
@@ -72,21 +72,6 @@
             resetForm(formName) {
                 this.$refs[formName].resetFields();
             },
-            //品牌列表請求
-            loadBrands() {
-                let url = "http://localhost:9080/brands/list"
-                this.axios
-                    .create({headers: {'Authorization': this.jwt}})
-                    .get(url).then((response) => {
-                    let json = response.data
-                    console.log("JSON", json)
-                    if (json.serviceCode === 20000) {
-                        this.brandArr = json.data
-                    } else {
-                        this.$message.error(json.message)
-                    }
-                })
-            },
             open() {
                 this.$alert('請先登入', '尚未登入', {
                     confirmButtonText: '確定',
@@ -95,19 +80,11 @@
                     }
                 });
             },
-            //判斷是否有包含jwt，如果沒有則跳到登入頁
-            haveJwt(){
-                if(this.jwt ===null){
-                    this.open()
-                    return
-                }
-            },
             created() {
-                //自動獲取
+
             },
             mounted() {
-                this.jwt = localStorage.getItem("jwt")
-                this.haveJwt()
+
             }
         }
     }
