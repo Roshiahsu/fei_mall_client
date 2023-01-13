@@ -24,7 +24,7 @@
           <el-aside class="layout-side" width="200px">
               預計放置搜索匡與關鍵字快捷
 
-              <!--TODO 根據權限是否為admin顯現 開始-->
+              <!-- 根據權限是否為admin顯現 開始-->
               <el-menu
                       v-if="role === 'ROLE_admin'"
                       router
@@ -37,8 +37,8 @@
                           <i class="el-icon-first-aid-kit"></i>
                           <span>商品管理</span>
                       </template>
-                      <el-menu-item index="/admin/brand/list" class="el-icon-first-aid-kit" >商品列表</el-menu-item>
-                      <el-menu-item index="/admin/brand/addNew" class="el-icon-first-aid-kit">新增商品</el-menu-item>
+                      <el-menu-item index="/product/list" class="el-icon-first-aid-kit" >商品列表</el-menu-item>
+                      <el-menu-item index="/product/addNew" class="el-icon-first-aid-kit">新增商品</el-menu-item>
                   </el-submenu>
                   <!--商品管理結束-->
 
@@ -56,13 +56,13 @@
                   <el-submenu index="3">
                       <template slot="title">
                           <i class="el-icon-tickets"></i>
-                          <span>類別管理(待完成)</span>
+                          <span>類別管理(暫不完成)</span>
                       </template>
                       <el-menu-item index="/category/addNew" class="el-icon-tickets">新增類別</el-menu-item>
                   </el-submenu>
                   <!--類別管理結束-->
               </el-menu>
-              <!--TODO 根據權限是否為admin顯現 結束-->
+              <!-- 根據權限是否為admin顯現 結束-->
 
           </el-aside>
         <el-main>
@@ -102,8 +102,10 @@
                 //jwt分段
                 let strings = this.jwt.split(".")
                 //分析payload
-                let jsonResult = JSON.parse(decodeURIComponent(escape
-                (window.atob(strings[1].replace(/-/g, "+").replace(/_/g, "/")))));
+                let jsonResult = JSON.parse(decodeURIComponent(
+                    escape(window.atob(strings[1]
+                        .replace(/-/g, "+")
+                        .replace(/_/g, "/")))));
                 console.log(jsonResult)
                 //將解析後的jsonResult.user從JSON格式還原
                 var userInfo =JSON.parse(jsonResult.user)

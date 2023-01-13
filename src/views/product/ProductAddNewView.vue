@@ -1,78 +1,113 @@
 <template>
     <div>
-        <!--麵包屑組件-->
-        <el-breadcrumb separator-class="el-icon-arrow-right">
-            <el-breadcrumb-item :to="{ path: '/admin' }">首頁</el-breadcrumb-item>
-            <el-breadcrumb-item><a href="/admin/brand/list">品牌管理</a></el-breadcrumb-item>
-            <el-breadcrumb-item>添加品牌</el-breadcrumb-item>
-        </el-breadcrumb>
-        <!--增加上下邊距-->
-        <h1 style="margin: 20px 0;">添加品牌頁面</h1>
+        <h1>添加品牌頁面</h1>
         <el-card>
-                    <!--form表單組件 驗證表單開始-->
-                    <el-form :model="ruleForm" :rules="rules" ref="ruleForm" label-width="150px" class="demo-ruleForm">
-                        <el-form-item label="品牌名稱" prop="name">
-                            <el-input v-model="ruleForm.name"></el-input>
+            <!--form表單組件 驗證表單開始-->
+            <el-form :model="ruleForm" :rules="rules" ref="ruleForm" label-width="150px" class="demo-ruleForm">
+                <el-row :gutter="10">
+                    <el-col :span="12">
+                        <el-form-item label="商品名稱" prop="productName">
+                            <el-input v-model="ruleForm.productName"></el-input>
                         </el-form-item>
-                        <el-form-item label="品牌名稱拼音" prop="pinyin">
-                            <el-input v-model="ruleForm.pinyin"></el-input>
+                    </el-col>
+                    <el-col :span="12">
+                        <el-form-item label="商品價錢" prop="price">
+                            <el-input v-model="ruleForm.price"></el-input>
                         </el-form-item>
+                    </el-col>
+                </el-row>
+
+                <el-row :gutter="10">
+                    <el-col :span="12">
                         <!--上傳圖片開始-->
-                        <el-form-item label="品牌logo的Url" prop="logo" >
-                            <el-input :disabled="true" v-model="ruleForm.logo"></el-input>
-                            <!--上傳框下移10px-->
+                        <el-form-item label="商品圖片" prop="fileList">
+                            <el-input :disabled="true" v-model="ruleForm.picture"></el-input>
                             <!--action是post請求，後端要用 @PostMapping("/upload")-->
                             <el-upload
                                     ref="upload"
-                                    action="http://localhost:9080/brands/addNew"
+                                    action="http://localhost:9080/upload"
                                     name="picFile"
                                     :limit="1"
-                                    :data="ruleForm"
-                                    accept=".zip,.txt,.jpeg"
+                                    :data="{picture:ruleForm.picture}"
+                                    accept=".jpeg,.png"
                                     :headers="{'Authorization':this.jwt}"
                                     :on-preview="handlePictureCardPreview"
                                     :on-remove="handleRemove"
                                     :on-success="handleSuccess"
+                                    :before-upload="onBeforeUpload"
+                                    :on-change="handleChange"
                                     :file-list="fileList"
                                     :auto-upload="false"
                                     list-type="picture">
-                            <!--                    <i class="el-icon-plus"></i>-->
-                            <el-button slot="trigger" size="small" type="primary">选取文件</el-button>
-                            <div slot="tip" class="el-upload__tip">只能上传jpg/png文件，且不超过500kb</div>
+                                <el-button slot="trigger" size="small" type="primary">選取文件</el-button>
+                                <div slot="tip" class="el-upload__tip">只能上傳jpg/png文件，且不超過500kb</div>
                             </el-upload>
+                            <!--顯示上傳預覽圖-->
                             <el-dialog :visible.sync="dialogVisible">
                                 <img width="100%" :src="dialogImageUrl" alt="">
                             </el-dialog>
                         </el-form-item>
                         <!--上傳圖片結束-->
-                        <el-form-item label="品牌類別" prop="categoryId">
-<!--                            <el-input v-model="ruleForm.categoryId"></el-input>-->
+                    </el-col>
+                    <el-col :span="12">
+
+                    </el-col>
+                </el-row>
+
+
+
+                <el-row>
+                    <el-col :span="7">
+                        <el-form-item label="品牌：" prop="categoryId">
                             <template>
-                                <!--添加選擇標籤，選擇匡母標籤，添加v-model="Product.categoryId"
-                               把 values 的值c.id覆值給Product.categoryId 建立2資料表的關聯性-->
-                                <el-select placeholder="請選擇" v-model="ruleForm.categoryId">
-                                    <!--添加選項，從category獲取分類-->
-                                    <el-option v-for="c in categoryArr" v-bind:key="c.id" :label="c.name" :value="c.id">
+                                <el-select placeholder="請選擇" v-model="ruleForm.brandId">
+                                    <el-option v-for="c in brandArr" v-bind:key="c.id" :label="c.brandName"
+                                               :value="c.id">
                                     </el-option>
                                 </el-select>
                             </template>
                         </el-form-item>
-                        <el-form-item label="品牌簡介" prop="description">
-                            <el-input v-model="ruleForm.description"></el-input>
+                    </el-col>
+                    <el-col :span="7">
+                        <el-form-item label="推播種類" prop="categoryId">
+                            <template>
+                                <el-select placeholder="請選擇" v-model="ruleForm.brandId">
+                                    <el-option v-for="c in brandArr" v-bind:key="c.id" :label="c.brandName"
+                                               :value="c.id">
+                                    </el-option>
+                                </el-select>
+                            </template>
                         </el-form-item>
-                        <el-form-item label="關鍵字" prop="keywords">
-                            <el-input v-model="ruleForm.keywords"></el-input>
-                        </el-form-item>
-                        <el-form-item label="排序" prop="sort">
-                            <el-input v-model="ruleForm.sort"></el-input>
-                        </el-form-item>
+                    </el-col>
+                    <el-col :span="8">
+                        <el-form-item label="有效期限">
+                            <el-date-picker
+                                    align="center"
+                                    v-model="ruleForm.gmtExp"
+                                    type="date"
+                                    placeholder="選擇日期"
+                            >
+                            </el-date-picker>
 
-                        <el-form-item>
-                            <el-button type="primary" @click="submitForm('ruleForm')">立即创建</el-button>
-                            <el-button @click="resetForm('ruleForm')">重置</el-button>
                         </el-form-item>
-                    </el-form>
-                    <!--form表單組件 驗證表單結束-->
+                    </el-col>
+                </el-row>
+
+
+                <el-form-item label="商品簡介" prop="description">
+                    <el-input type="textarea" v-model="ruleForm.description"></el-input>
+                </el-form-item>
+                <el-form-item label="關鍵字" prop="keywords">
+                    <el-input v-model="ruleForm.keywords"></el-input>
+                    <span class="el-upload__tip">請用開空白分隔</span>
+                </el-form-item>
+
+                <el-form-item>
+                    <el-button type="primary" @click="submitForm('ruleForm')">立即创建</el-button>
+                    <el-button @click="resetForm('ruleForm')">重置</el-button>
+                </el-form-item>
+            </el-form>
+            <!--form表單組件 驗證表單結束-->
 
         </el-card>
     </div>
@@ -85,58 +120,59 @@
                 dialogImageUrl: '',
                 dialogVisible: false,
                 ruleForm: {
-                    name: '',
-                    pinyin: '',
-                    logo: '',
-                    categoryId: '',
-                    description: '',
-                    keywords:'',
-                    sort: '',
+                    productName: '',//商品名稱
+                    price: '',      //商品價錢
+                    picture: '',    //商品圖片路徑
+                    brandId: '',    //品牌id
+                    description: '',//商品描述
+                    keywords: '',    //關鍵字
+                    tags: '',        //標籤
+                    stock: '',       //庫存
+                    productTypeId: '',//商品分類
+                    gmtExp: '',      //有效日期
                 },
                 fileList: [],
-                jwt:'',
-                categoryArr:[],
+                jwt: '',
+                brandArr: [],
                 rules: {
-                    name: [
-                        { required: true, message: '請輸入品牌名稱', trigger: 'blur' },
-                        { min: 2, max: 15, message: '長度在 2 到 15 个字符', trigger: 'blur' }
+                    productName: [
+                        {required: true, message: '請輸入品牌名稱', trigger: 'blur'},
+                        {min: 2, max: 30, message: '長度在 2 到 30 個字符', trigger: 'blur'}
                     ],
-                    pinyin: [
-                        { required: true, message: '請輸入品牌拼音', trigger: 'blur' },
-                        { min: 2, max: 25, message: '長度在 2 到 25 个字符', trigger: 'blur' }
+                    price: [
+                        {required: true, message: '請輸入商品價錢', trigger: 'blur'},
+                        {pattern: /^[0-9]+?$/, message: '請輸入正確數值', trigger: 'blur'}
                     ],
-                    sort:[
-                        {pattern:/^[1-9]{1}[0-9]?$/,message:'必須是0-99的值',trigger: 'blur'}
-                    ]
+                    brandId: [
+                        {required: true, message: '請輸入品牌', trigger: 'blur'},
+                    ],
                 }
             };
         },
         methods: {
+            //TODO 傳送
             submitForm(formName) {
+                console.log("rulefrome", this.ruleForm)
                 this.$refs[formName].validate((valid) => {
                     if (valid) {
-                        //分開2行查看結果
-                        //console.log('data>>>'+this.ruleForm)，一行輸出會是Object，無法點開查看
-                        //向服務端發送請求
-                        let url="http://localhost:9080/brands/addNew";
-                        this.axios.create({
-                            headers:{'Authorization':this.jwt}
-                        }).
-                        post(url,this.ruleForm).then((response)=>{
-                            console.log(response.data)
-                            if(response.data.statusCode==20000){
-                                this.$message.success("添加成功")
-                                this.resetForm(formName)
-                                // location.reload()
-                            }else{
-                                let message = response.data.message
-                                this.$message.error(message);
+                        let url = "http://localhost:9080/product/insert"
+                        this.axios
+                            .create({headers: {'Authorization': this.jwt}})
+                            .post(url, this.ruleForm).then((response) => {
+                            let json = response.data
+                            console.log("json", json)
+                            if (json.serviceCode === 20000) {
+                                this.submitUpload()
+                            } else if (json.serviceCode === 40001 || json.serviceCode === 40002) {
+                                this.open()
+                            } else {
+                                this.$message.error(json.message)
                             }
-                        }).catch(function (error) { //響應成功會走then，響應失敗走catch
-                            console.log("響應結果失敗")
+                            console.log("userInfo", this.userInfo)
                         })
+
                     } else {
-                        console.log('error submit!!');
+                        this.$message.error("資料格式有誤，請檢查!")
                         return false;
                     }
                 });
@@ -144,12 +180,10 @@
             resetForm(formName) {
                 this.$refs[formName].resetFields();
             },
-           /*上傳圖片相關代碼開始*/
+            /*上傳圖片相關代碼開始*/
             handleRemove(file, fileList) {
-                /*file 表示要刪除的文件
-                * file.response代表文件上傳成功後，服務器響應的數據(後台return filename所以這邊是filename)*/
                 console.log(file, fileList);
-                let url="http://localhost:9080/remove?name=";
+                let url = "http://localhost:9080/remove?name=";
                 this.axios.get(url + file.response).then(function (response) {
                         alert("服務器圖片，刪除成功!!!")
                     }
@@ -159,27 +193,78 @@
                 this.dialogImageUrl = file.url;
                 this.dialogVisible = true;
             },
+            //上傳成功
             handleSuccess(response, file, fileList) {
-                //response=file.response
-                console.log("file=" + file )
-                console.log("文件上傳成功,圖片名=" + response )
-                this.ruleForm.logo = response;
+                if (response.serviceCode === 20000) {
+                    this.$message.success("添加成功")
+                    // location.reload()
+                } else {
+                    let message = response.data.message
+                    this.$message.error(message);
+                }
+            },
+            //上傳文件
+            submitUpload() {
+                this.$refs.upload.uploadFiles[0].name = "c8763"
+                console.log(this.$refs.upload.uploadFiles[0].name)
+                this.$refs.upload.submit();
+            },
+            //檔案上傳前先判斷大小與種類
+            onBeforeUpload(file) {
+                const isIMAGE = file.type === 'image/jpeg' || 'image/gif' || 'image/png';
+                const isLt500K = file.size / 1024 / 512 < 1;
+
+                if (!isIMAGE) {
+                    this.$message.error('只能上傳圖片!');
+                }
+                if (!isLt500K) {
+                    this.$message.error('上傳文件大小不能超過500KB!');
+                }
+                return isIMAGE && isLt500K;
+            },
+            //生成UUID
+            getUUID() {
+                var d = Date.now();
+                if (typeof performance !== 'undefined' && typeof performance.now === 'function') {
+                    d += performance.now();
+                }
+                return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function (c) {
+                    var r = (d + Math.random() * 16) % 16 | 0;
+                    d = Math.floor(d / 16);
+                    return (c === 'x' ? r : (r & 0x3 | 0x8)).toString(16);
+                });
+            },
+            //圖片上傳狀態改變，生成UUID
+            handleChange(file, fileList) {
+                //獲取副檔名
+                let suffix = file.name.substring(file.name.lastIndexOf('.'))
+                //uuid拼接副檔名
+                this.ruleForm.picture = this.getUUID() + suffix
             },
             /*上傳圖片相關代碼結束*/
+            //獲取品牌列表
+            loadBrands(pageNum) {
+                let url = "http://localhost:9080/brands/list?pageNum=" + pageNum
+                this.axios
+                    .create({headers: {'Authorization': this.jwt}})
+                    .get(url).then((response) => {
+                    let json = response.data
+                    console.log("獲取品牌列表JSON", json)
+                    if (json.serviceCode === 20000) {
+                        this.brandArr = json.data.list
+                    } else {
+                        this.$message.error(json.message)
+                    }
+                })
+            },
         },
         created() {
             //自動獲取
         },
         mounted() {
             this.jwt = localStorage.getItem("jwt")
-            let url="http://localhost:9080/categories"
-            this.axios
-                .create({headers:{'Authorization':this.jwt}})
-                .get(url).then((response)=>{
-                console.log(response.data)
-                this.categoryArr=response.data.data
-            }),
-                this.resetForm('ruleForm')
+            this.loadBrands(1);
+
         }
     }
 </script>
