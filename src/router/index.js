@@ -17,18 +17,8 @@ const routes = [
     children:[
       {
         //待完成
-        path: 'user/list',
-        component: () => import('../views/user/UserListView.vue'),
-      },
-      {
-        //待完成
-        path: 'admin/list',
-        component: () => import('../views/admin/AdminListView.vue'),
-      },
-      {
-        //待完成
-        path: 'admin/addNew',
-        component: () => import('../views/admin/AdminAddNewView.vue'),
+        path: 'user/update',
+        component: () => import('../views/user/UserDetailUpdateView.vue'),
       },
       {
         path: 'brand/addNew',
@@ -86,7 +76,7 @@ const routes = [
         children:[
           {
             path: 'orderDetailInfo',
-            name:'訂單詳情',
+            name:'訂單詳情2',
             component: () => import('../views/order/OrderDetailInfoView')
           },
         ],

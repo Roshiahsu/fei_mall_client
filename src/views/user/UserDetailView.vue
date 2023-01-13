@@ -1,15 +1,17 @@
 <template>
     <div>
-        <!--增加上下邊距-->
         <h1>顧客中心</h1>
         <!--    用戶詳情-->
 
         <el-descriptions title="用戶詳情" direction="vertical" :column="4" border>
             <template slot="extra">
-                <el-button type="primary" size="small">操作</el-button>
+                <a href="/user/update">
+                    <el-button type="primary" size="small">修改詳情</el-button>
+                </a>
             </template>
             <el-descriptions-item label="用戶名">{{userInfo.username}}</el-descriptions-item>
             <el-descriptions-item label="暱稱">{{userInfo.nickname}}</el-descriptions-item>
+            <el-descriptions-item label="生日">{{userInfo.bod}}</el-descriptions-item>
             <el-descriptions-item label="紅利積分">{{userInfo.rewardPoint}}</el-descriptions-item>
             <el-descriptions-item label="電話" :span="2">{{userInfo.phone}}</el-descriptions-item>
             <el-descriptions-item label="mail" :span="2">{{userInfo.email}}</el-descriptions-item>
@@ -24,14 +26,16 @@
 <!--                    </el-switch>-->
 <!--                </template>-->
 <!--            </el-descriptions-item>-->
-            <el-descriptions-item label="備註">
-                <el-tag size="small">待完成</el-tag>
-            </el-descriptions-item>
         </el-descriptions>
 
         <el-divider></el-divider>
         <!--地址詳情-->
         <el-descriptions title="地址詳情" direction="vertical" :column="4" border>
+            <template slot="extra">
+                <a href="/user/update">
+                    <el-button type="primary" size="small">修改地址</el-button>
+                </a>
+            </template>
             <el-descriptions-item label="居住地">{{userInfo.city}}</el-descriptions-item>
             <el-descriptions-item label="鄉鎮區">{{userInfo.zone}}</el-descriptions-item>
             <el-descriptions-item label="郵遞區號">{{userInfo.zipCode}}</el-descriptions-item>
