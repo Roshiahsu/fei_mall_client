@@ -55,7 +55,6 @@
         data() {
             return {
                 productArr:[],
-                jwt:'',
                 url:"http://localhost:9080/product/",
                 pages:'',//分類頁
                 imgWidth:50,
@@ -64,7 +63,6 @@
             };
         },
         methods: {
-
             loadProductList(pageNum){
                 //自動獲取
                 let url = this.url+allProduct+"/listProduct?pageNum="+pageNum+"&pageSize=10"
@@ -82,12 +80,45 @@
             },
             handleEdit(id){
                 location.href = "/product/update?="+id
-            }
+            },
+            //商品刪除確認
+            openDeleteConfirm(id) {
+                this.$confirm('確認移除商品?', '提示', {
+                    confirmButtonText: '繼續', //點確認走then
+                    cancelButtonText: '取消', //點取消走catch
+                    type: 'warning'
+                }).then(() => {
+                    this.handleDelete(id)
+                }).catch(() => {
+                    this.$message({
+                        type: 'info',
+                        message: '已取消删除'
+                    });
+                });
+            },
+            //根據id刪除商品
+            handleDelete(id){
+                console.log(id)
+                let url=this.url+id+"/delete"
+                this.axios
+                    .create({headers:{'Authorization':localStorage.getItem("jwt")}})
+                    .get(url).then((response)=>{
+                    let json = response.data;
+                    if(json.serviceCode===20000){
+                        this.$message.success("刪除成功")
+                    }else{
+                        let message = response.data.message
+                        this.$message.error(message);
+                    }
+                    this.loadProductList(1);
+                })
+            },
         },
         created() { //已創建 在mounted 顯示頁面之前執行
 
         },
         mounted() { //已掛載 在created 顯示頁面之後執行
+
             // let pageNum = location.search.split("&")[0].split("=")[1];
             // let pageSize = location.search.split("&")[1].split("=")[1];
             this.loadProductList(1);
