@@ -80,7 +80,7 @@
             };
         },
         methods: {
-            loadBrands() {
+            loadProduct() {
                 //自動獲取
                 let url = "http://localhost:9080/product/" + this.id + "/details"
                 this.axios
@@ -114,7 +114,7 @@
                             console.log("JSON", json)
                             if (json.serviceCode === 20000) {
                                 this.$message.success("新增成功")
-                            } else if (json.serviceCode === 40004){
+                            } else if (json.serviceCode === 40004 || json.serviceCode === 40002){
                                 this.open()
                             }else{
                                 this.$message.error(json.message)
@@ -136,12 +136,12 @@
             }
         },
         created() { //已創建 在mounted 顯示頁面之前執行
-            this.id = location.search.split("=")[1];
-            this.loadBrands();
+
         },
         mounted() { //已掛載 在created 顯示頁面之後執行
             this.jwt = localStorage.getItem("jwt")
-
+            this.id = location.search.split("=")[1];
+            this.loadProduct();
         }
     }
 </script>

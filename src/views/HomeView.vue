@@ -7,7 +7,7 @@
           <div style="width: 1200px;margin:0 auto; background-color: #42b983">
               <span style="position: absolute;left:38%">
                   <a href="/index">首頁</a><el-divider direction="vertical"></el-divider>
-                  <a href="/product/list?page=1">商品介紹</a><el-divider direction="vertical"></el-divider>
+                  <a href="/product/list">商品介紹</a><el-divider direction="vertical"></el-divider>
                   <a href="/cart/list">購物車</a><el-divider direction="vertical"></el-divider>
                   <a href="/customerCenter">顧客中心</a><el-divider direction="vertical"></el-divider>
 
@@ -37,7 +37,7 @@
                           <i class="el-icon-first-aid-kit"></i>
                           <span>商品管理</span>
                       </template>
-                      <el-menu-item index="/product/list" class="el-icon-first-aid-kit" >商品列表</el-menu-item>
+                      <el-menu-item index="/product/admin/list" class="el-icon-first-aid-kit" >商品列表</el-menu-item>
                       <el-menu-item index="/product/addNew" class="el-icon-first-aid-kit">新增商品</el-menu-item>
                   </el-submenu>
                   <!--商品管理結束-->

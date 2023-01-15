@@ -114,7 +114,8 @@
                     let json = response.data
                     if (json.serviceCode === 20000) {
                         this.userInfo = json.data;
-                    } else if (json.serviceCode === 40001){
+                    } else if (json.serviceCode === 40001 || json.serviceCode === 40002){
+                        localStorage.clear()
                         this.open()
                     } else {
                         // this.$message.error(json.message)

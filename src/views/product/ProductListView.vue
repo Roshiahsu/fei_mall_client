@@ -3,7 +3,7 @@
     <h1 >商品介紹</h1>
     <div  style="width: 150px;margin: 0 auto">
         <span v-for=" i in pages" :key="i">
-            <a :href="'/product/list?pageNum=' + i">{{i}}</a><el-divider direction="vertical"></el-divider>
+            <a href="javascript:void(0)" @click="loadProductList(i)">{{i}}</a><el-divider direction="vertical"></el-divider>
         </span>
     </div>
     <el-divider></el-divider>
@@ -48,7 +48,7 @@
             productDetails(id){
                 location.href = "/product/details?="+id
             },
-            loadBrands(pageNum){
+            loadProductList(pageNum){
                 //自動獲取
                 let url = this.url+allProduct+"/listProduct?pageNum="+pageNum+"&pageSize=8"
                 this.axios
@@ -68,9 +68,9 @@
 
         },
         mounted() { //已掛載 在created 顯示頁面之後執行
-            let pageNum = location.search.split("&")[0].split("=")[1];
+            // let pageNum = location.search.split("&")[0].split("=")[1];
             // let pageSize = location.search.split("&")[1].split("=")[1];
-            this.loadBrands(pageNum);
+            this.loadProductList(1); //預設分頁第一頁
         }
     }
 </script>

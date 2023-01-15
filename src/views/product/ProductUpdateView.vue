@@ -1,6 +1,6 @@
 <template>
     <div>
-        <h1>添加品牌頁面</h1>
+        <h1>修改品牌頁面(管理員)</h1>
         <el-card>
             <!--form表單組件 驗證表單開始-->
             <el-form :model="ruleForm" :rules="rules" ref="ruleForm" label-width="150px" class="demo-ruleForm">
@@ -26,7 +26,7 @@
                                     action="http://localhost:9080/upload"
                                     name="picFile"
                                     :limit="1"
-                                    :data="{picture:ruleForm.picture}"
+                                    :data="{picture:ruleForm.picture,oldPicture:this.oldPicture}"
                                     accept=".jpeg,.png"
                                     :headers="{'Authorization':this.jwt}"
                                     :on-preview="handlePictureCardPreview"
@@ -56,7 +56,7 @@
                     <el-col :span="12">
                         <el-form-item label="品牌:" prop="brandId">
                             <template>
-                                <el-select placeholder="請選擇" v-model="ruleForm.brandId">
+                                <el-select placeholder="請選擇" v-model="ruleForm.brandName">
                                     <el-option v-for="c in brandArr" v-bind:key="c.id" :label="c.brandName"
                                                :value="c.id">
                                     </el-option>
@@ -67,7 +67,7 @@
                     <el-col :span="12">
                         <el-form-item label="推播種類:" prop="productTypeId">
                             <template>
-                                <el-select placeholder="請選擇" v-model="ruleForm.productTypeId">
+                                <el-select placeholder="請選擇" v-model="ruleForm.productTypeName">
                                     <el-option v-for="c in productTypeList" v-bind:key="c.id" :label="c.name"
                                                :value="c.id">
                                     </el-option>
@@ -106,7 +106,7 @@
 
 
                 <el-form-item>
-                    <el-button type="primary" @click="submitForm('ruleForm')">立即創建</el-button>
+                    <el-button type="primary" @click="submitForm('ruleForm')">確認修改</el-button>
                     <el-button @click="resetForm('ruleForm')">重置</el-button>
                 </el-form-item>
             </el-form>
@@ -122,7 +122,9 @@
             return {
                 dialogImageUrl: '',
                 dialogVisible: false,
+                oldPicture:'',//舊的圖片名稱
                 ruleForm: {
+                    id:'',
                     productName: '',//商品名稱
                     price: '',      //商品價錢
                     picture: '',    //商品圖片路徑
@@ -131,13 +133,15 @@
                     keywords: '',    //關鍵字
                     tags: '',        //標籤
                     stock: '',       //庫存
-                    productTypeId: '',//商品分類
+                    productTypeId: '',//推播ID
+                    productTypeName:'',//推播名稱
                     gmtExp: '',      //有效日期
                 },
                 fileList: [],
                 jwt: '',
                 productTypeList:[],
                 brandArr: [],
+                id:'',
                 rules: {
                     productName: [
                         {required: true, message: '請輸入品牌名稱', trigger: 'blur'},
@@ -169,20 +173,29 @@
                 console.log("ruleForm", this.ruleForm)
                 this.$refs[formName].validate((valid) => {
                     if (valid) {
-                        let url = "http://localhost:9080/product/insert"
+                        let url = "http://localhost:9080/product/update"
                         this.axios
                             .create({headers: {'Authorization': this.jwt}})
                             .post(url, this.ruleForm).then((response) => {
                             let json = response.data
                             console.log("json", json)
                             if (json.serviceCode === 20000) {
-                                this.submitUpload()
+                                console.log("成功", json)
+                                console.log("ruleForm.picture", this.ruleForm.picture)
+                                console.log("oldPicture", this.oldPicture)
+
+                                //判斷傳送表單內的圖片路徑與獲取的商品詳情圖片是否相等
+                                if(this.ruleForm.picture != this.oldPicture){
+                                    console.log("更換圖片", json)
+                                    this.submitUpload()
+                                }
+                                this.$message.success("修改成功")
+                                // location.reload()
                             } else if (json.serviceCode === 40001 || json.serviceCode === 40002) {
                                 this.open()
                             } else {
                                 this.$message.error(json.message)
                             }
-                            console.log("userInfo", this.userInfo)
                         })
 
                     } else {
@@ -203,8 +216,7 @@
             //上傳成功
             handleSuccess(response, file, fileList) {
                 if (response.serviceCode === 20000) {
-                    this.$message.success("添加成功")
-                    location.reload()
+
                 } else {
                     let message = response.data.message
                     this.$message.error(message);
@@ -212,7 +224,6 @@
             },
             //上傳文件
             submitUpload() {
-                // this.$refs.upload.uploadFiles[0].name = "c8763"
                 // console.log(this.$refs.upload.uploadFiles[0].name)
                 this.$refs.upload.submit();
             },
@@ -277,15 +288,34 @@
                     }
                 })
             },
+            //獲取商品詳情
+            loadProduct() {
+                let url = "http://localhost:9080/product/" + this.id + "/details"
+                this.axios
+                    .get(url).then((response) => {
+                    let json = response.data
+                    console.log("商品詳情JSON", json)
+                    if (json.serviceCode === 20000) {
+                        this.ruleForm = json.data
+                        this.oldPicture = json.data.picture
+                    } else {
+                        this.$message.error(json.message)
+                    }
+                })
+            },
         },
         created() {
             //自動獲取
         },
         mounted() {
             this.jwt = localStorage.getItem("jwt")
+            this.id = location.search.split("=")[1];
+            //獲取品牌列表
             this.loadBrands(1);
+            //獲取推播種類
             this.loadProductTypeList();
-
+            //獲取商品詳情
+            this.loadProduct()
         }
     }
 </script>
