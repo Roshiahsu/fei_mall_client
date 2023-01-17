@@ -145,7 +145,7 @@
                 rules: {
                     productName: [
                         {required: true, message: '請輸入品牌名稱', trigger: 'blur'},
-                        {min: 2, max: 30, message: '長度在 2 到 30 個字符', trigger: 'blur'}
+                        {min: 2, max: 40, message: '長度在 2 到 30 個字符', trigger: 'blur'}
                     ],
                     price: [
                         {required: true, message: '請輸入商品價錢', trigger: 'blur'},
@@ -163,6 +163,9 @@
                     ],
                     picture: [
                         {required: true, message: '請上傳圖片', trigger: 'blur'},
+                    ],
+                    productTypeId: [
+                        {required: true, message: '請選擇推播種類', trigger: 'blur'},
                     ],
                 },
                 url:"http://localhost:9080"

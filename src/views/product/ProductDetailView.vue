@@ -7,7 +7,7 @@
                 <el-card :body-style="{ padding: '0px' }" >
                     <img v-if="picture"
                             :height=400
-                            :src="require('@/assets/productImg/'+url)"
+                            :src="require('@/assets/productImg/'+picture)"
                             class="image">
                     <div style="padding: 14px;">
                         <span>{{product.productName}}</span>

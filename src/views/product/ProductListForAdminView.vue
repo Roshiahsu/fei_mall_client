@@ -72,7 +72,7 @@
                     console.log("商品列表JSON",json)
                     if(json.serviceCode===20000){
                         this.productArr=json.data.list
-                        this.pages = json.data.pages
+                        this.pages = json.data.totalPage
                     }else {
                         this.$message.error(json.message)
                     }

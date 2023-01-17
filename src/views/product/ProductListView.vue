@@ -57,7 +57,7 @@
                     console.log("JSON",json)
                     if(json.serviceCode===20000){
                         this.brandArr=json.data.list
-                        this.pages = json.data.pages
+                        this.pages = json.data.totalPage
                     }else {
                         this.$message.error(json.message)
                     }
