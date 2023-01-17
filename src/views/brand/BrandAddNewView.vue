@@ -32,6 +32,7 @@
                 ruleForm: {
                     brandName: '',
                 },
+                url:"http://localhost:9080",
                 jwt:'',
                 rules: {
                     brandName: [
@@ -46,7 +47,7 @@
             submitForm(formName) {
                 this.$refs[formName].validate((valid) => {
                     if (valid) {
-                        let url = "http://localhost:9080/brands/insert";
+                        let url = this.url+"/brands/insert";
                         this.axios
                             .create({headers:{'Authorization':localStorage.getItem("jwt")}})
                             .post(url, this.ruleForm).then((response) => {

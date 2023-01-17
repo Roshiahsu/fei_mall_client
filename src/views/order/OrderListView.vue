@@ -68,7 +68,7 @@
                 cartArr:[],
                 userInfo:{},
                 jwt:"",
-                url:"http://localhost:9080/cart/",
+                url:"http://localhost:9080",
                 subtotal:"",
                 pages:'',
                 totalPrice:'',
@@ -77,7 +77,7 @@
         methods: {
             //自動獲取購物車
             loadCarts(){
-                let url=this.url+"list"
+                let url=this.url+"/cart/list"
                 this.axios
                     .create({headers:{'Authorization':this.jwt}})
                     .get(url).then((response)=>{
@@ -117,7 +117,7 @@
                     recipientPhone:this.userInfo.phone,
                     recipientAddress:this.userInfo.detailedAddress
                 }
-                let url ='http://localhost:9080/order/insert'
+                let url =this.url+'/order/insert'
                 this.axios
                     .create({headers:{'Authorization':this.jwt}})
                     .post(url,OrderAddNerDTO).then((response)=>{
@@ -140,7 +140,7 @@
             },
             //自動獲取用戶資料
             loadUserInfo(){
-                let url="http://localhost:9080/user/userInfo"
+                let url=this.url+"/user/userInfo"
                 this.axios
                     .create({headers:{'Authorization':this.jwt}})
                     .get(url).then((response)=>{

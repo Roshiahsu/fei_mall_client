@@ -5,7 +5,7 @@
             <!--圖片區-->
             <el-col :span="12">
                 <el-card :body-style="{ padding: '0px' }" >
-                    <img v-if="url"
+                    <img v-if="picture"
                             :height=400
                             :src="require('@/assets/productImg/'+url)"
                             class="image">
@@ -65,9 +65,10 @@
             };
             return {
                 product: [],
-                url: '',
+                picture: '',
                 jwt: '',
                 id: '',
+                url:'http://localhost:9080',
                 ruleForm: {
                     quantity:''
                 },
@@ -82,14 +83,14 @@
         methods: {
             loadProduct() {
                 //自動獲取
-                let url = "http://localhost:9080/product/" + this.id + "/details"
+                let url = this.url+"/product/" + this.id + "/details"
                 this.axios
                     .get(url).then((response) => {
                     let json = response.data
                     console.log("JSON", json)
                     if (json.serviceCode === 20000) {
                         this.product = json.data
-                        this.url = json.data.picture
+                        this.picture = json.data.picture
                     } else {
                         this.$message.error(json.message)
                     }
@@ -106,7 +107,7 @@
                         }
 
                         console.log(productAddNewDTO)
-                        let url = "http://localhost:9080/cart/insert"
+                        let url = this.url+"/cart/insert"
                         this.axios
                             .create({headers:{'Authorization':this.jwt}})
                             .post(url, productAddNewDTO).then((response) => {

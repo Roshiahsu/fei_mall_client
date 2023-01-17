@@ -164,7 +164,8 @@
                     picture: [
                         {required: true, message: '請上傳圖片', trigger: 'blur'},
                     ],
-                }
+                },
+                url:"http://localhost:9080"
             };
         },
         methods: {
@@ -173,7 +174,7 @@
                 console.log("ruleForm", this.ruleForm)
                 this.$refs[formName].validate((valid) => {
                     if (valid) {
-                        let url = "http://localhost:9080/product/update"
+                        let url = this.url+"/product/update"
                         this.axios
                             .create({headers: {'Authorization': this.jwt}})
                             .post(url, this.ruleForm).then((response) => {
@@ -261,7 +262,7 @@
             /*上傳圖片相關代碼結束*/
             //獲取品牌列表
             loadBrands(pageNum) {
-                let url = "http://localhost:9080/brands/list?pageNum=" + pageNum
+                let url = this.url+"/brands/list?pageNum=" + pageNum
                 this.axios
                     .create({headers: {'Authorization': this.jwt}})
                     .get(url).then((response) => {
@@ -275,7 +276,7 @@
                 })
             },
             loadProductTypeList() {
-                let url = "http://localhost:9080/product/productTypeList"
+                let url = this.url+"/product/productTypeList"
                 this.axios
                     .create({headers: {'Authorization': this.jwt}})
                     .get(url).then((response) => {
@@ -290,7 +291,7 @@
             },
             //獲取商品詳情
             loadProduct() {
-                let url = "http://localhost:9080/product/" + this.id + "/details"
+                let url = this.url+"/product/" + this.id + "/details"
                 this.axios
                     .get(url).then((response) => {
                     let json = response.data

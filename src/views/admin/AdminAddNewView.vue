@@ -1,4 +1,6 @@
 <template>
+
+<!--    沒功能，暫不完成-->
     <div>
         <!--麵包屑組件-->
         <el-breadcrumb separator-class="el-icon-arrow-right">

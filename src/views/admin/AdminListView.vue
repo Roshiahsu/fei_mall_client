@@ -1,4 +1,5 @@
 <template>
+    <!--    沒功能，暫不完成-->
     <div>
         <el-breadcrumb separator-class="el-icon-arrow-right">
             <el-breadcrumb-item :to="{ path: '/admin' }">首頁</el-breadcrumb-item>

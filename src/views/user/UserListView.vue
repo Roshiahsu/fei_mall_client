@@ -54,7 +54,8 @@
     export default {
         data() {
             return {
-                tableData:[]
+                tableData:[],
+                utl:'http://localhost:9080'
             };
         },
         methods: {
@@ -65,7 +66,7 @@
             },
             loadAdmins(){
                 //自動獲取
-                let url="http://localhost:9080/user/userInfo"
+                let url=this.url+"/user/userInfo"
                 this.axios.get(url).then((response)=>{
                     let json=response.data
                     console.log(json)

@@ -51,13 +51,14 @@
                 orderInfo:{},
                 orderItemList:[],
                 jwt:"",
+                url:'http://localhost:9080',
             };
         },
         methods: {
             //獲取訂單詳情
             loadOrderDetail(){
                 let id=location.search.split("=")[1]
-                let url="http://localhost:9080/order/"+id+"/orderDetail"
+                let url=this.url+"/order/"+id+"/orderDetail"
                 this.axios
                     .create({headers:{'Authorization':this.jwt}})
                     .get(url).then((response)=>{
@@ -73,7 +74,7 @@
                 })
             },
             loadOrderItemList(sn){
-                let url="http://localhost:9080/order/"+sn+"/orderItemList"
+                let url=this.url+"/order/"+sn+"/orderItemList"
                 this.axios
                     .create({headers:{'Authorization':this.jwt}})
                     .get(url).then((response)=>{

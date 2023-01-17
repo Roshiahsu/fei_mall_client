@@ -97,7 +97,8 @@
         data() {
             return {
                 userInfo: {},
-                orderList: []
+                orderList: [],
+                url:"http://localhost:9080"
             };
         },
         methods: {
@@ -107,7 +108,7 @@
 
             //自動獲取用戶資料
             loadUserInfo() {
-                let url = "http://localhost:9080/user/userInfo"
+                let url = this.url+"/user/userInfo"
                 this.axios
                     .create({headers: {'Authorization': this.jwt}})
                     .get(url).then((response) => {
@@ -124,7 +125,7 @@
                 })
             },
             loadOrderList() {
-                let url = "http://localhost:9080/order/list"
+                let url = this.url+"/order/list"
                 this.axios
                     .create({headers: {'Authorization': this.jwt}})
                     .get(url).then((response) => {

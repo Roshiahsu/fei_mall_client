@@ -90,12 +90,13 @@
                     zipCode:'',
                     detailedAddress:'',
                 },
+                url:'http://localhost:9080',
             };
         },
         methods: {
             //自動獲取用戶資料
             loadUserInfo() {
-                let url = "http://localhost:9080/user/userInfo"
+                let url = this.url+"/user/userInfo"
                 this.axios
                     .create({headers: {'Authorization': this.jwt}})
                     .get(url).then((response) => {
@@ -112,7 +113,7 @@
                 })
             },
             userUpdate() {
-                let url = "http://localhost:9080/user/update"
+                let url = this.url+"/user/update"
                 this.axios
                     .create({headers: {'Authorization': this.jwt}})
                     .post(url,this.userInfo).then((response) => {
@@ -130,7 +131,7 @@
                 })
             },
             userUpdate() {
-                let url = "http://localhost:9080/user/updateAddress"
+                let url = this.url+"/user/updateAddress"
                 this.axios
                     .create({headers: {'Authorization': this.jwt}})
                     .post(url,this.userInfo).then((response) => {

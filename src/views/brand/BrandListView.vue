@@ -48,6 +48,7 @@
                 brandArr:[],
                 jwt:'',
                 pages:'',
+                url:"http://localhost:9080"
             };
         },
         methods: {
@@ -55,7 +56,7 @@
             handleDelete(id){
                 console.log(id)
                 //deleteById
-                let url="http://localhost:9080/brands/"+id+"/delete"
+                let url=this.url+"/brands/"+id+"/delete"
                 this.axios
                     .create({headers:{'Authorization':this.jwt}})
                     .get(url).then((response)=>{
@@ -69,11 +70,10 @@
                     this.loadBrands(1)
                 })
             },
-            //編輯品牌(待完成)
             handleEdit(product){
                 console.log(product)
                 //deleteById
-                let url="http://localhost:9080/brands/update"
+                let url=this.url+"/brands/update"
                 this.axios
                     .create({headers:{'Authorization':this.jwt}})
                     .post(url,product).then((response)=>{
@@ -89,7 +89,7 @@
             },
             //獲取品牌列表
             loadBrands(pageNum){
-                let url="http://localhost:9080/brands/list?pageNum="+pageNum
+                let url=this.url+"/brands/list?pageNum="+pageNum
                 this.axios
                     .create({headers:{'Authorization':this.jwt}})
                     .get(url).then((response)=>{

@@ -134,6 +134,7 @@
                     productTypeId: '',//商品分類
                     gmtExp: '',      //有效日期
                 },
+                url:"http://localhost:9080",
                 fileList: [],
                 jwt: '',
                 productTypeList:[],
@@ -160,6 +161,9 @@
                     picture: [
                         {required: true, message: '請上傳圖片', trigger: 'blur'},
                     ],
+                    productTypeId: [
+                        {required: true, message: '請選擇推播種類', trigger: 'blur'},
+                    ],
                 }
             };
         },
@@ -169,7 +173,7 @@
                 console.log("ruleForm", this.ruleForm)
                 this.$refs[formName].validate((valid) => {
                     if (valid) {
-                        let url = "http://localhost:9080/product/insert"
+                        let url = this.url+"/product/insert"
                         this.axios
                             .create({headers: {'Authorization': this.jwt}})
                             .post(url, this.ruleForm).then((response) => {
@@ -249,7 +253,7 @@
             /*上傳圖片相關代碼結束*/
             //獲取品牌列表
             loadBrands(pageNum) {
-                let url = "http://localhost:9080/brands/list?pageNum=" + pageNum
+                let url = this.url+"/brands/list?pageNum=" + pageNum
                 this.axios
                     .create({headers: {'Authorization': this.jwt}})
                     .get(url).then((response) => {
@@ -263,7 +267,7 @@
                 })
             },
             loadProductTypeList() {
-                let url = "http://localhost:9080/product/productTypeList"
+                let url = this.url+"/product/productTypeList"
                 this.axios
                     .create({headers: {'Authorization': this.jwt}})
                     .get(url).then((response) => {
