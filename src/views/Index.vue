@@ -3,7 +3,7 @@
         <h1 >新品推薦</h1>
         <!--   新品推薦輪播圖開始     -->
         <div style="width: 700px;margin: 0 auto" >
-            <el-carousel trigger="click" height="270px" type="card"  >
+            <el-carousel trigger="click" height="180px" type="card"  >
                 <el-carousel-item v-for="item in newProductArr" >
                     <img width="100%" height="100%"
                          :src="require('@/assets/productImg/'+ item.picture)"
@@ -79,8 +79,8 @@
                 newProductArr:[],
                 hotProductArr:[],
                 discountedProductArr:[],
-                imgWidth:250,
-                imgHeight:250,
+                imgWidth:200,
+                imgHeight:200,
             };
         },
         methods: {

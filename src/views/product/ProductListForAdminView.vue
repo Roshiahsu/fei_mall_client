@@ -106,6 +106,7 @@
                     let json = response.data;
                     if(json.serviceCode===20000){
                         this.$message.success("刪除成功")
+                        this.loadProductList(1);
                     }else{
                         let message = response.data.message
                         this.$message.error(message);

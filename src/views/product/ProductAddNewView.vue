@@ -182,7 +182,6 @@
                             } else {
                                 this.$message.error(json.message)
                             }
-                            console.log("userInfo", this.userInfo)
                         })
 
                     } else {

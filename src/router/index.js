@@ -55,9 +55,19 @@ const routes = [
         component: () => import('../views/product/ProductListView.vue')
       },
       {
+        path: '/product/admin/list',
+        name:'商品介紹(管理員)',
+        component: () => import('../views/product/ProductListForAdminView')
+      },
+      {
         path: 'product/details',
         name:'商品詳情',
         component: () => import('../views/product/ProductDetailView.vue')
+      },
+      {
+        path: 'product/update',
+        name:'商品詳情',
+        component: () => import('../views/product/ProductUpdateView.vue')
       },
       {
         path: 'cart/list',

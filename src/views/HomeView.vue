@@ -3,7 +3,7 @@
     <el-container>
       <el-header class="layout-header">
           <img src="/au.png"
-               style="width: 150px;display:block; margin:0 auto; "alt="">
+               style="width: 100px;display:block; margin:0 auto; "alt="">
           <div style="width: 1200px;margin:0 auto; background-color: #42b983">
               <span style="position: absolute;left:38%">
                   <a href="/index">首頁</a><el-divider direction="vertical"></el-divider>
@@ -71,7 +71,7 @@
         </el-main>
 
           <!--        右邊欄位-->
-          <el-aside class="layout-side" width="200px">
+          <el-aside class="layout-side" width="200px" >
              先空出來
 
           </el-aside>
@@ -132,7 +132,7 @@
 
     .layout-body{
         position: absolute;
-        top:150px;
+        top:120px;
         right: 0;
         left: 0;
         bottom: 0;

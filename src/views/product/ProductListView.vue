@@ -1,5 +1,5 @@
 <template>
-<div>
+<div >
     <h1 >商品介紹</h1>
     <div  style="width: 150px;margin: 0 auto">
         <span v-for=" i in pages" :key="i">
@@ -39,8 +39,8 @@
                 jwt:'',
                 url:"http://localhost:9080/product/",
                 pages:'',//分類頁
-                imgWidth:250,
-                imgHeight:250,
+                imgWidth:200,
+                imgHeight:200,
 
             };
         },
