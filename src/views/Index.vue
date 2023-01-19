@@ -2,7 +2,7 @@
     <div class="block">
         <h1 >新品推薦</h1>
         <!--   新品推薦輪播圖開始     -->
-        <div style="width: 700px;margin: 0 auto" >
+        <div style="width: 800px;margin: 0 auto" >
             <el-carousel trigger="click" height="180px" type="card"  >
                 <el-carousel-item v-for="item in newProductArr" >
                     <img width="100%" height="100%"
@@ -81,6 +81,7 @@
                 discountedProductArr:[],
                 imgWidth:200,
                 imgHeight:200,
+                url:'http://localhost:9080',
             };
         },
         methods: {
@@ -100,7 +101,7 @@
         //TODO 冗余代碼提取成方法
         mounted() {
 
-            let url = "http://localhost:9080/product/"+newProduct+"/listProduct?pageNum=1&pageSize=4"
+            let url = this.url+"/product/"+newProduct+"/listProduct?pageNum=1&pageSize=6"
             this.axios
                 .get(url).then((response) => {
                 if (response.data.serviceCode === 20000) {
@@ -112,7 +113,7 @@
             }).catch(function (error) { //響應成功會走then，響應失敗走catch
                     console.log("響應結果失敗")
             }),
-                url = "http://localhost:9080/product/"+hotProduct+"/listProduct?pageNum=1&pageSize=6"
+                url = this.url+"/product/"+hotProduct+"/listProduct?pageNum=1&pageSize=6"
             this.axios
                 .get(url).then((response) => {
                 console.log("獲取的資料",response.data)
@@ -125,7 +126,7 @@
             }).catch(function (error) { //響應成功會走then，響應失敗走catch
                 console.log("響應結果失敗")
             }),
-            url = "http://localhost:9080/product/"+discountedProduct+"/listProduct?pageNum=1&pageSize=6"
+            url = this.url+"/product/"+discountedProduct+"/listProduct?pageNum=1&pageSize=6"
             this.axios
                 .get(url).then((response) => {
                 if (response.data.serviceCode === 20000) {
@@ -142,16 +143,7 @@
 </script>
 <style>
 
-    /*跑馬燈開始*/
-    .el-carousel__item h3 {
-        color: #475669;
-        font-size: 14px;
-        opacity: 0.75;
-        line-height: 150px;
-        margin: 0;
-    }
 
-    /*跑馬燈結束*/
 
 
     /*card開始*/

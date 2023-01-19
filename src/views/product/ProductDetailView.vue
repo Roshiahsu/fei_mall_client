@@ -12,7 +12,7 @@
                     <div style="padding: 14px;">
                         <span>{{product.productName}}</span>
                         <div class="bottom">
-                            <el-button type="text" class="button" @click="addNewCart()">加入購物車</el-button>
+<!--                            <el-button type="text" class="button" @click="addNewCart()">加入購物車</el-button>-->
                         </div>
                     </div>
                 </el-card>

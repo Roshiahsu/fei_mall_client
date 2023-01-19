@@ -21,8 +21,8 @@
 
       <el-container class="layout-body">
           <!--        左邊欄位-->
-          <el-aside class="layout-side" width="200px">
-              預計放置搜索匡與關鍵字快捷
+          <el-aside class="layout-side" :width="elAsideWidth">
+
 
               <!-- 根據權限是否為admin顯現 開始-->
               <el-menu
@@ -63,7 +63,27 @@
                   <!--類別管理結束-->
               </el-menu>
               <!-- 根據權限是否為admin顯現 結束-->
+              <div style="margin-top: 30px">
+                  <el-form
+                          @keyup.enter.native= "search(keyword)">
+                      <el-form-item style="width: 140px;display: block;margin: 0 auto">
+                          <el-input v-model="keyword" placeholder="全站搜索"></el-input>
+                      </el-form-item>
+                  </el-form>
+              </div>
+              <el-divider></el-divider>
+<!--              TODO 建立關鍵字表搜集用戶輸入的關鍵字
+                       如果關鍵字已存在則count+1，不存在則insert-->
 
+              <div class="parent">
+                  <h3>熱門搜索</h3>
+                  <div>
+                        <span v-for=" keyword in keywordArr" :key="keyword">
+                     <a href="javascript:void(0)" @click="search(keyword)">{{keyword}}</a><el-divider direction="vertical"></el-divider>
+                 </span>
+                  </div>
+
+              </div>
           </el-aside>
         <el-main>
           <!--主體-->
@@ -71,7 +91,7 @@
         </el-main>
 
           <!--        右邊欄位-->
-          <el-aside class="layout-side" width="200px" >
+          <el-aside class="layout-side" :width="elAsideWidth" >
              先空出來
 
           </el-aside>
@@ -87,7 +107,11 @@
     data() {
         return {
             jwt:"",
-            role: '' //角色設定(未完成)
+            role: '',
+            keyword:'',
+            keywordArr:[],
+            url:"http://localhost:9080",
+            elAsideWidth:"200px",
         };
     },
     methods: {
@@ -112,7 +136,28 @@
                 this.role=userInfo.authorities[0]
                 console.log("role",this.role)
             }
-        }
+        },
+        //搜尋頁面
+        search(keyword){
+          location.href ="/search?keyword="+keyword
+        },
+        loadKeyword(){
+            let url = this.url+"/keyword/"
+            this.axios
+                .get(url).then((response) => {
+                    let json = response.data
+                if (response.data.serviceCode === 20000) {
+                    this.keywordArr = json.data
+                    console.log("獲取到的Keyword",json)
+                } else {
+                    let message = response.data.message
+                    this.$message.error(message);
+                }
+            }).catch(function (error) { //響應成功會走then，響應失敗走catch
+                console.log("響應結果失敗")
+            })
+        },
+
     },
     created() {
 
@@ -120,6 +165,7 @@
     mounted() {
         this.jwt=localStorage.getItem("jwt")
         this.parseJwt(this.jwt)
+        this.loadKeyword()
     }
 }
 </script>
@@ -136,23 +182,34 @@
         right: 0;
         left: 0;
         bottom: 0;
+
     }
 
     /*側邊欄背景顏色*/
     .el-aside{
-        background-color: #ecaf94;
+        background-color: rgba(156, 158, 142, 0.52);
+        /*background-color: #ecaf94;*/
+
     }
 
     body{
         font: 18px "Microsoft YaHei UI";
         margin: 0;
     }
-    header a{
+    a{
         text-decoration: none;
         color: #6c6c6c;
     }
     header a:hover{
         color: #0aa1ed;
+    }
+    .parent{
+        display: flex;
+        /* 水平置中 */
+        justify-content: center;
+        /* 垂直置中 */
+        align-content: center;
+        flex-wrap: wrap;
     }
 
 </style>

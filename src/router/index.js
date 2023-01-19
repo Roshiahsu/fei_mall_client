@@ -66,7 +66,7 @@ const routes = [
       },
       {
         path: 'product/update',
-        name:'商品詳情',
+        name:'修改商品詳情',
         component: () => import('../views/product/ProductUpdateView.vue')
       },
       {
@@ -100,6 +100,11 @@ const routes = [
         path: 'customerCenter',
         name:'顧客中心',
         component: () => import('../views/user/UserDetailView')
+      },
+      {
+        path: 'search',
+        name:'商品搜尋',
+        component: () => import('../views/search/SearchListView')
       },
       {
         path: 'index',
