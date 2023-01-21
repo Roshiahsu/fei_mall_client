@@ -70,9 +70,11 @@
                 .get(url).then((response)=>{
                     let json=response.data
                     console.log("商品列表JSON",json)
-                    if(json.serviceCode===20000){
-                        this.productArr=json.data.list
+                    if(json.serviceCode===20000) {
+                        this.productArr = json.data.list
                         this.pages = json.data.totalPage
+                    }else if (json.serviceCode === 40001 || json.serviceCode === 40002){
+                            this.open()
                     }else {
                         this.$message.error(json.message)
                     }
@@ -113,6 +115,14 @@
                     }
                     this.loadProductList(1);
                 })
+            },
+            open() {
+                this.$alert('請先登入', '尚未登入', {
+                    confirmButtonText: '確定',
+                    callback: action => {
+                        location.href = "/login"
+                    }
+                });
             },
         },
         created() { //已創建 在mounted 顯示頁面之前執行

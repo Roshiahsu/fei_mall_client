@@ -181,8 +181,6 @@
                             console.log("json", json)
                             if (json.serviceCode === 20000) {
                                 this.submitUpload()
-                            } else if (json.serviceCode === 40001 || json.serviceCode === 40002) {
-                                this.open()
                             } else {
                                 this.$message.error(json.message)
                             }
@@ -275,10 +273,20 @@
                     console.log("獲取推播列表JSON", json)
                     if (json.serviceCode === 20000) {
                         this.productTypeList = json.data
+                    } else if (json.serviceCode === 40001 || json.serviceCode === 40002) {
+                        this.open()
                     } else {
                         this.$message.error(json.message)
                     }
                 })
+            },
+            open() {
+                this.$alert('請先登入', '尚未登入', {
+                    confirmButtonText: '確定',
+                    callback: action => {
+                        location.href = "/login"
+                    }
+                });
             },
         },
         created() {
