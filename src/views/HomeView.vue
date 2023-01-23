@@ -65,16 +65,14 @@
               <!-- 根據權限是否為admin顯現 結束-->
               <div style="margin-top: 30px">
                   <el-form
-                          @keyup.enter.native= "search(keyword)">
+                          @keyup.enter.native="search(keyword)" >
                       <el-form-item style="width: 140px;display: block;margin: 0 auto">
                           <el-input v-model="keyword" placeholder="全站搜索"></el-input>
                       </el-form-item>
+                      <el-button type="primary"  @click= "search(keyword)">buttonCont</el-button>
                   </el-form>
               </div>
               <el-divider></el-divider>
-<!--              TODO 建立關鍵字表搜集用戶輸入的關鍵字
-                       如果關鍵字已存在則count+1，不存在則insert-->
-
               <div class="parent">
                   <h3>熱門搜索</h3>
                   <div>

@@ -1,9 +1,9 @@
 <template>
 <div >
-    <h1 >搜尋列表</h1>
+    <h1 >搜尋列表{{"【"+keyword+"】"}}</h1>
     <div  style="width: 150px;margin: 0 auto">
         <span v-for=" i in pages" :key="i">
-            <a href="javascript:void(0)" @click="loadSearchList(i)">{{i}}</a><el-divider direction="vertical"></el-divider>
+            <a href="javascript:void(0)" @click="loadSearchList(this.keyword,i)">{{i}}</a><el-divider direction="vertical"></el-divider>
         </span>
     </div>
     <el-divider></el-divider>
@@ -40,7 +40,7 @@
                 pages:'',//分類頁
                 imgWidth:200,
                 imgHeight:200,
-
+                keyword:''
             };
         },
         methods: {
@@ -67,6 +67,7 @@
         },
         mounted() { //已掛載 在created 顯示頁面之後執行
             let keyword = location.search.split("=")[1];
+            this.keyword =decodeURI(keyword)//UTF-8轉成中文
             this.loadSearchList(keyword,1); //預設分頁第一頁
         }
     }

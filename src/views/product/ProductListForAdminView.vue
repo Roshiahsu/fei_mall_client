@@ -23,7 +23,11 @@
         <el-table-column prop="price" label="商品價錢"  align="center"></el-table-column>
         <el-table-column prop="keywords" label="關鍵字"  align="center" show-overflow-tooltip></el-table-column>
         <el-table-column prop="description" label="商品描述"  align="center" show-overflow-tooltip ></el-table-column>
-        <el-table-column prop="gmtExp" label="保存期限"  align="center"></el-table-column>
+        <el-table-column prop="gmtExp" label="保存期限"  align="center">
+            <template slot-scope="scope">
+                {{scope.row.gmtExp.substring(0,0+10)}}
+            </template>
+        </el-table-column>
 
         <el-table-column
                 label="操作"
