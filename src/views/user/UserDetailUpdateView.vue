@@ -51,7 +51,7 @@
         <!--地址詳情-->
         <el-descriptions title="地址詳情" direction="vertical" :column="4" border>
             <template slot="extra">
-                <el-button type="primary" size="small" @click="userUpdate()">確認修改</el-button>
+                <el-button type="primary" size="small" @click="userAddressUpdate()">確認修改</el-button>
             </template>
             <el-descriptions-item label="居住地">
                 <el-input v-model="userInfo.city"></el-input>
@@ -130,7 +130,7 @@
                     }
                 })
             },
-            userUpdate() {
+            userAddressUpdate() {
                 let url = this.url+"/user/updateAddress"
                 this.axios
                     .create({headers: {'Authorization': this.jwt}})

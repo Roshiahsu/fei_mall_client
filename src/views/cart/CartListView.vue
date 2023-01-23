@@ -141,7 +141,7 @@
                     console.log("JSON", json)
                     if (json.serviceCode === 20000) {
                         location.href="/order/list"
-                    } else if (json.serviceCode === 40004){
+                    } else if (json.serviceCode === 40004 ||json.serviceCode === 40001 ||json.serviceCode === 40002){
                         this.open()
                     }else{
                         this.$message.error(json.message)
