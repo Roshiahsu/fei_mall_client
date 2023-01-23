@@ -21,6 +21,9 @@
             <el-col :span="12">
                 <span class="font-size" style="font-weight:bold">{{product.productName}}</span>
                 <p>
+                    <span class="font-size" v-if="product.gmtExp != null">有效期限：{{product.gmtExp.substring(0,0+10)}}</span>
+                </p>
+                <p>
                     <span class="font-size" style="color: red;">NT$：{{product.price}}NT</span>
                 </p>
                 <template>

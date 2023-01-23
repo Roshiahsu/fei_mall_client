@@ -51,16 +51,16 @@
                 <el-button type="primary" size="small" @click="userAddressUpdate()">確認修改</el-button>
             </template>
             <el-descriptions-item label="居住地">
-                <el-input v-model="userInfo.city"></el-input>
+                <el-input v-model="addressInfo.city"></el-input>
             </el-descriptions-item>
             <el-descriptions-item label="鄉鎮區">
-                <el-input v-model="userInfo.zone"></el-input>
+                <el-input v-model="addressInfo.zone"></el-input>
             </el-descriptions-item>
             <el-descriptions-item label="郵遞區號">
-                <el-input v-model="userInfo.zipCode"></el-input>
+                <el-input v-model="addressInfo.zipCode"></el-input>
             </el-descriptions-item>
             <el-descriptions-item label="詳細地址" :span="2">
-                <el-input v-model="userInfo.detailedAddress"></el-input>
+                <el-input v-model="addressInfo.detailedAddress"></el-input>
             </el-descriptions-item>
             <el-descriptions-item label="備註">
                 <el-tag size="small">待完成</el-tag>
@@ -82,6 +82,9 @@
                     rewardPoint: '',
                     phone: '',
                     email: '',
+                },
+                addressInfo:{
+                    id:'',
                     city: '',
                     zone: '',
                     zipCode: '',
@@ -91,7 +94,7 @@
             };
         },
         methods: {
-            //自動獲取用戶資料
+            //獲取用戶資料
             loadUserInfo() {
                 let url = this.url + "/user/userInfo"
                 this.axios
@@ -107,6 +110,24 @@
                         // this.$message.error(json.message)
                     }
                     console.log("userInfo", this.userInfo)
+                })
+            },
+            //獲取地址詳情
+            loadAddressInfo() {
+                let url = this.url + "/address/addressInfo"
+                this.axios
+                    .create({headers: {'Authorization': this.jwt}})
+                    .get(url).then((response) => {
+                    let json = response.data
+                    console.log("地址詳情json", json)
+                    if (json.serviceCode === 20000) {
+                        this.addressInfo = json.data;
+                    } else if (json.serviceCode === 40001 || json.serviceCode === 40002) {
+                        this.open()
+                    } else {
+                        // this.$message.error(json.message)
+                    }
+                    console.log("userInfo", this.addressInfo)
                 })
             },
             userUpdate() {
@@ -167,6 +188,7 @@
             this.jwt = localStorage.getItem("jwt")
             this.haveJwt();
             this.loadUserInfo();
+            this.loadAddressInfo()
         }
     }
 </script>

@@ -30,20 +30,29 @@
 
         <el-divider></el-divider>
         <!--地址詳情-->
-        <el-descriptions title="地址詳情" direction="vertical" :column="4" border>
-            <template slot="extra">
-                <a href="/user/update">
-                    <el-button type="primary" size="small">修改地址</el-button>
-                </a>
-            </template>
-            <el-descriptions-item label="居住地">{{userInfo.city}}</el-descriptions-item>
-            <el-descriptions-item label="鄉鎮區">{{userInfo.zone}}</el-descriptions-item>
-            <el-descriptions-item label="郵遞區號">{{userInfo.zipCode}}</el-descriptions-item>
-            <el-descriptions-item label="詳細地址" :span="2">{{userInfo.detailedAddress}}</el-descriptions-item>
-            <el-descriptions-item label="備註">
-                <el-tag size="small">待完成</el-tag>
-            </el-descriptions-item>
-        </el-descriptions>
+
+        <div >
+            <el-descriptions title="地址詳情" direction="vertical"
+                             :column="4" border
+                             v-for="add in addressList"
+                             style="margin-top: 10px"
+            >
+                <template slot="extra">
+                    <a href="/user/update">
+                        <el-button type="primary" size="small">修改地址</el-button>
+                    </a>
+                </template>
+                <el-descriptions-item label="居住地" :content-class-name="add.isDefault===1?'my-content':null">{{add.city}}</el-descriptions-item>
+                <el-descriptions-item label="鄉鎮區" :content-class-name="add.isDefault===1?'my-content':null">{{add.zone}}</el-descriptions-item>
+                <el-descriptions-item label="郵遞區號" :content-class-name="add.isDefault===1?'my-content':null">{{add.zipCode}}</el-descriptions-item>
+                <el-descriptions-item label="詳細地址" :span="2" :content-class-name="add.isDefault===1?'my-content':null">{{add.detailedAddress}}</el-descriptions-item>
+                <el-descriptions-item label="備註">
+                    <el-tag size="small">待完成</el-tag>
+                </el-descriptions-item>
+            </el-descriptions>
+
+        </div>
+
 
 
         <el-divider></el-divider>
@@ -96,8 +105,23 @@
     export default {
         data() {
             return {
-                userInfo: {},
+                userInfo: {
+                    username: '',
+                    nickname: '',
+                    bod: '',
+                    rewardPoint: '',
+                    phone: '',
+                    email: '',
+                },
                 orderList: [],
+                addressList:[
+                    {
+                        city:'',
+                        zone:'',
+                        zipCode:'',
+                        detailedAddress:'',
+                    }
+                ],
                 url:"http://localhost:9080"
             };
         },
@@ -122,6 +146,23 @@
                         // this.$message.error(json.message)
                     }
                     console.log("userInfo", this.userInfo)
+                })
+            },
+            loadAddressList() {
+                let url = this.url+"/address/addressList"
+                this.axios
+                    .create({headers: {'Authorization': this.jwt}})
+                    .get(url).then((response) => {
+                    let json = response.data
+                    if (json.serviceCode === 20000) {
+                        this.addressList = json.data;
+                    } else if (json.serviceCode === 40001 || json.serviceCode === 40002){
+                        localStorage.clear()
+                        this.open()
+                    } else {
+                        // this.$message.error(json.message)
+                    }
+                    console.log("addressList", this.addressList)
                 })
             },
             loadOrderList() {
@@ -163,6 +204,12 @@
             this.haveJwt();
             this.loadUserInfo();
             this.loadOrderList();
+            this.loadAddressList()
         }
     }
 </script>
+<style>
+    .my-content {
+        background: #FDE2E2;
+    }
+</style>

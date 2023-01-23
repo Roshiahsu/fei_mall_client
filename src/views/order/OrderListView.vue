@@ -40,9 +40,9 @@
             <el-descriptions-item label="收件地址" >
                 <el-input v-model="userInfo.detailedAddress"></el-input>
             </el-descriptions-item>
-            <el-descriptions-item label="備註"  >
-                <el-tag size="small" >待完成</el-tag>
-            </el-descriptions-item>
+<!--            <el-descriptions-item label="備註"  >-->
+<!--                <el-tag size="small" >待完成</el-tag>-->
+<!--            </el-descriptions-item>-->
         </el-descriptions>
 <!--            描述列表：收件人訊息結束-->
 
