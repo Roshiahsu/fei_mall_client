@@ -16,9 +16,16 @@ const routes = [
     * 添加children 並用 陣列方式呈現*/
     children:[
       {
-        //待完成
         path: 'user/update',
         component: () => import('../views/user/UserDetailUpdateView.vue'),
+      },
+      {
+        path: 'user/addressUpdate',
+        component: () => import('../views/user/UserAddressUpdateView.vue'),
+      },
+      {
+        path: 'user/addressAddNew',
+        component: () => import('../views/user/UserAddressAddNewView'),
       },
       {
         path: 'brand/addNew',

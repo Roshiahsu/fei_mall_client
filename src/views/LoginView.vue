@@ -90,7 +90,7 @@
                 console.log("jwt:",jwt)
                 localStorage.setItem('jwt',jwt)
                 //點擊確定後跳轉
-                this.$alert('登入成功', '準備跳轉', {
+                this.$alert('準備跳轉', '登入成功', {
                   confirmButtonText: '確定',
                   callback: action => {
                     location.href = "/index"
@@ -120,7 +120,7 @@
               console.log(json.data)
               if(json.serviceCode===20000){
                 //點擊確定後跳轉
-                this.$alert('註冊成功', '請重新登入', {
+                this.$alert('請重新登入', '註冊成功', {
                   confirmButtonText: '確定',
                   callback: action => {
                     location.href = ""
