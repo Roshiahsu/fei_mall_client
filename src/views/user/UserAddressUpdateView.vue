@@ -90,7 +90,10 @@
                     console.log(json)
                     if (json.serviceCode === 20000) {
                         this.$message.success("修改完成")
-                    } else if (json.serviceCode === 40004) {
+                        setTimeout(() => {
+                            location.href="/customerCenter"
+                        }, 500);
+                    } else if (json.serviceCode === 40002) {
                         this.open()
                     } else if (json.serviceCode === 40003) {
                         this.$message.warning(json.message)

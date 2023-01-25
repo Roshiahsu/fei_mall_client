@@ -38,7 +38,13 @@
                 <el-input v-model="userInfo.phone"></el-input>
             </el-descriptions-item>
             <el-descriptions-item label="收件地址" >
-                <el-input v-model="userInfo.detailedAddress"></el-input>
+                <el-select v-model="userInfo.detailedAddress" placeholder="請選擇配送地址" style="width: 300px">
+                    <el-option v-for="c in addressArr" v-bind:key="c.id" :label="c.detailedAddress"
+                               :value="c.detailedAddress">
+                    </el-option>
+                </el-select>
+
+<!--                <el-input v-model="userInfo.detailedAddress"></el-input>-->
             </el-descriptions-item>
 <!--            <el-descriptions-item label="備註"  >-->
 <!--                <el-tag size="small" >待完成</el-tag>-->
@@ -67,6 +73,7 @@
             return {
                 cartArr:[],
                 userInfo:{},
+                addressArr:[],
                 jwt:"",
                 url:"http://localhost:9080",
                 subtotal:"",
@@ -75,7 +82,7 @@
             };
         },
         methods: {
-            //自動獲取購物車
+            //獲取購物車
             loadCarts(){
                 let url=this.url+"/cart/list"
                 this.axios
@@ -86,6 +93,21 @@
                     if(json.serviceCode===20000){
                         this.cartArr=json.data
                         this.total()
+                    }else {
+                        this.$message.error(json.message)
+                    }
+                })
+            },
+            //獲取地址列表
+            loadAddressList(){
+                let url=this.url+"/address/addressList"
+                this.axios
+                    .create({headers:{'Authorization':this.jwt}})
+                    .get(url).then((response)=>{
+                    let json=response.data
+                    console.log("地址列表",json)
+                    if(json.serviceCode===20000){
+                        this.addressArr=json.data
                     }else {
                         this.$message.error(json.message)
                     }
@@ -178,6 +200,7 @@
             // let pageSize = location.search.split("&")[1].split("=")[1];
             this.loadCarts();
             this.loadUserInfo();
+            this.loadAddressList();
 
         }
     }
