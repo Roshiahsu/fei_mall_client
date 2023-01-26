@@ -56,6 +56,7 @@
                                 this.$message.success("添加成功")
                                 this.resetForm(formName)
                                 location.href="/brand/addNew/list"
+                                // this.$router.push({path: '/brand/addNew/list'})
                             } else {
                                 let message = response.data.message
                                 this.$message.error(message);
@@ -77,7 +78,9 @@
                 this.$alert('請先登入', '尚未登入', {
                     confirmButtonText: '確定',
                     callback: action => {
-                        location.href = "/login"
+                        // location.href = "/login"
+                        this.$router.push({path: '/login'})
+
                     }
                 });
             },

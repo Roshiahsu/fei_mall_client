@@ -87,6 +87,8 @@
                     let json = response.data;
                     if(json.serviceCode===20000){
                         this.$message.success("刪除成功")
+                    } else if (json.serviceCode === 40002) {
+                        this.open()
                     }else{
                         let message = response.data.message
                         this.$message.error(message);
@@ -105,7 +107,7 @@
                     if(json.serviceCode===20000){
                         this.cartArr=json.data
                         this.total()
-                    } else if (json.serviceCode === 40001){
+                    } else if (json.serviceCode === 40002){
                         this.open()
                     }else {
                         this.$message.error(json.message)
@@ -152,7 +154,8 @@
                 this.$alert('請先登入', '尚未登入', {
                     confirmButtonText: '確定',
                     callback: action => {
-                        location.href = "/login"
+                        // location.href = "/login"
+                        this.$router.push({path: '/login'})
                     }
                 });
             },
@@ -162,7 +165,7 @@
                     this.open()
                     return
                 }
-            }
+            },
         },
         created() { //已創建 在mounted 顯示頁面之前執行
 

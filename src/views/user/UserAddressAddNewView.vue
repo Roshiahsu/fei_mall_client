@@ -108,7 +108,8 @@
                                 this.$message.success("新增完成")
                                 setTimeout(() => {
                                     this.fullscreenLoading = false;
-                                    location.href="/customerCenter"
+                                    // location.href="/customerCenter"
+                                    this.$router.push({path: '/customerCenter'})
                                 }, 500);
                             } else if (json.serviceCode === 40004) {
                                 this.open()
@@ -128,7 +129,8 @@
                 this.$alert('請先登入', '尚未登入', {
                     confirmButtonText: '確定',
                     callback: action => {
-                        location.href = "/login"
+                        // location.href = "/login"
+                        this.$router.push({path: '/login'})
                     }
                 });
             },

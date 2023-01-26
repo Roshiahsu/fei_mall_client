@@ -60,12 +60,14 @@
             </el-col>
             <!--   優惠商品結束     -->
         </el-row>
-
     </div>
 
 </template>
 
 <script>
+
+
+
     const newProduct =2
     const hotProduct =3
     const discountedProduct =4

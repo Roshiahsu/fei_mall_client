@@ -91,7 +91,8 @@
                     if (json.serviceCode === 20000) {
                         this.$message.success("修改完成")
                         setTimeout(() => {
-                            location.href="/customerCenter"
+                            // location.href="/customerCenter"
+                            this.$router.push({path: '/customerCenter'})
                         }, 500);
                     } else if (json.serviceCode === 40002) {
                         this.open()
@@ -106,7 +107,8 @@
                 this.$alert('請先登入', '尚未登入', {
                     confirmButtonText: '確定',
                     callback: action => {
-                        location.href = "/login"
+                        // location.href = "/login"
+                        this.$router.push({path: '/login'})
                     }
                 });
             },

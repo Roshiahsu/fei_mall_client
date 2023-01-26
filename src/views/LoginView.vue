@@ -93,7 +93,8 @@
                 this.$alert('準備跳轉', '登入成功', {
                   confirmButtonText: '確定',
                   callback: action => {
-                    location.href = "/index"
+                    // location.href = "/index"
+                    this.$router.push({path: '/index'})
                   }
                 });
               }else{
@@ -123,7 +124,8 @@
                 this.$alert('請重新登入', '註冊成功', {
                   confirmButtonText: '確定',
                   callback: action => {
-                    location.href = ""
+                    // location.href = ""
+                    this.$router.push({path: '/'})
                   }
                 });
               }else{

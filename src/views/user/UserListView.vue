@@ -55,7 +55,8 @@
         data() {
             return {
                 tableData:[],
-                utl:'http://localhost:9080'
+                utl:'http://localhost:9080',
+                jwt:''
             };
         },
         methods: {
@@ -98,7 +99,7 @@
 
         },
         mounted() {
-            var jwt=localStorage.getItem("jwt")
+            this.jwt=localStorage.getItem("jwt")
             this.loadAdmins();
         }
     }
