@@ -8,6 +8,9 @@ import ElementUI from 'element-ui'
 import 'element-ui/lib/theme-chalk/index.css'
 /*添加axios*/
 import axios from "axios";
+/*添加jquery*/
+import JQuery from 'jquery'
+window.$ = JQuery
 
 
 Vue.use(ElementUI)
