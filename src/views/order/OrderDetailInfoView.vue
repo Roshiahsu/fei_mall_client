@@ -1,6 +1,7 @@
 <template>
-    <div>
+    <div id="download">
         <h1>訂單詳情</h1>
+        <el-button type="primary" @click="getPDF()">buttonCont</el-button>
         <el-descriptions title="" direction="vertical" :column="6" border>
             <el-descriptions-item label="訂單編號" :span="2">{{orderInfo.sn}}</el-descriptions-item>
             <el-descriptions-item label="訂單金額" :span="2">{{orderInfo.amountOfActualPay}}</el-descriptions-item>
@@ -15,7 +16,7 @@
         <el-table
                 :data="orderItemList"
                 style="width: 100%"
-                border="true">
+                border>
             <el-table-column
                     align="center"
                     type="index"
@@ -45,6 +46,10 @@
 
 
 <script>
+    import * as rasterizeHTML from 'rasterizehtml'
+    const { jsPDF } = require("jspdf");
+    import html2canvas from 'html2canvas';
+    import ExcelJs from "exceljs";
     export default {
         data() {
             return {
@@ -56,37 +61,37 @@
         },
         methods: {
             //獲取訂單詳情
-            loadOrderDetail(){
-                let id=location.search.split("=")[1]
-                let url=this.url+"/order/"+id+"/orderDetail"
+            loadOrderDetail() {
+                let id = location.search.split("=")[1]
+                let url = this.url + "/order/" + id + "/orderDetail"
                 this.axios
-                    .create({headers:{'Authorization':this.jwt}})
-                    .get(url).then((response)=>{
-                    let json=response.data
-                    if(json.serviceCode===20000){
-                        this.orderInfo=json.data;
+                    .create({headers: {'Authorization': this.jwt}})
+                    .get(url).then((response) => {
+                    let json = response.data
+                    if (json.serviceCode === 20000) {
+                        this.orderInfo = json.data;
                         this.loadOrderItemList(json.data.sn)
-                    } else if (json.serviceCode === 40004){
+                    } else if (json.serviceCode === 40004) {
                         this.open()
-                    }else{
+                    } else {
                         this.$message.error(json.message)
                     }
                 })
             },
-            loadOrderItemList(sn){
-                let url=this.url+"/order/"+sn+"/orderItemList"
+            loadOrderItemList(sn) {
+                let url = this.url + "/order/" + sn + "/orderItemList"
                 this.axios
-                    .create({headers:{'Authorization':this.jwt}})
-                    .get(url).then((response)=>{
-                    let json=response.data
-                    if(json.serviceCode===20000){
-                        this.orderItemList=json.data;
-                    } else if (json.serviceCode === 40004){
+                    .create({headers: {'Authorization': this.jwt}})
+                    .get(url).then((response) => {
+                    let json = response.data
+                    if (json.serviceCode === 20000) {
+                        this.orderItemList = json.data;
+                    } else if (json.serviceCode === 40004) {
                         this.open()
-                    }else{
+                    } else {
                         this.$message.error(json.message)
                     }
-                    console.log("orderItemList",this.orderItemList)
+                    console.log("orderItemList", this.orderItemList)
                 })
             },
             open() {
@@ -99,12 +104,24 @@
                 });
             },
             //判斷是否有包含jwt，如果沒有則跳到登入頁
-            haveJwt(){
-                if(this.jwt ===null){
+            haveJwt() {
+                if (this.jwt === null) {
                     this.open()
                     return
                 }
             },
+            getPDF(){
+                var doc = new jsPDF();
+                let el =document.querySelector("#download")
+                html2canvas(el).then(function (canvas) {
+                    let a =document.createElement('a');
+                    a.href = canvas.toDataURL("image/jpeg", 0.92)
+                        .replace("image/jpeg", "image/octet-stream");
+                    doc.addImage(a.href, 'JPEG', 0, 0, canvas.width, canvas.height);
+                    a.download = 'image.jpg';
+                    a.click();
+                });
+            }
         },
         created() { //已創建 在mounted 顯示頁面之前執行
 

@@ -190,7 +190,7 @@
                     this.open()
                     return
                 }
-            }
+            },
         },
         created() { //已創建 在mounted 顯示頁面之前執行
 
