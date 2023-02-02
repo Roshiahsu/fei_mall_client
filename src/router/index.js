@@ -87,6 +87,11 @@ const routes = [
         component: () => import('../views/order/OrderListView')
       },
       {
+        path: 'order/admin/list',
+        name:'訂單列表',
+        component: () => import('../views/order/OrderListForAdminView')
+      },
+      {
         path: 'order/success',
         name:'訂單完成',
         component: () => import('../views/order/OrderSuccessView'),

@@ -107,6 +107,7 @@
           }
         });
       },
+      //發送註冊請求
       submitReg(formName) {
         this.$refs[formName].validate((valid) => {
           if (valid) {

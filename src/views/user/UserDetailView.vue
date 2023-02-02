@@ -1,7 +1,6 @@
 <template>
     <div>
         <h1>顧客中心</h1>
-<el-button type="primary" @click="getPDF">buttonCont</el-button>
         <!--    用戶詳情-->
         <el-descriptions title="用戶詳情" direction="vertical" :column="4" border>
             <template slot="extra">
@@ -109,17 +108,11 @@
                 </el-table-column>
             </el-table>
         </div>
-        <canvas id="canvas" width="595" height="842" style="border: 1px solid black;"></canvas>
-
     </div>
 </template>
 
 
 <script>
-    const { jsPDF } = require("jspdf"); // will automatically load the node version
-    import html2canvas from 'html2canvas';
-    import * as rasterizeHTML from 'rasterizehtml'
-
     export default {
         data() {
             return {
@@ -263,77 +256,6 @@
                     return
                 }
             },
-            getExcel(){
-                const workbook = new ExcelJs.Workbook(); // 創建試算表檔案
-                const sheet = workbook.addWorksheet('工作表範例1',
-                    {views:[{state: 'frozen', xSplit: 1, ySplit:1}]}); //在檔案中新增工作表 參數放自訂名稱
-                sheet.addTable({ // 在工作表裡面指定位置、格式並用columsn與rows屬性填寫內容
-                    name: 'test1',  // 表格內看不到的，讓你之後想要針對這個table去做額外設定的時候，可以指定到這個table
-                    ref: 'A1', // 從A1開始
-                    style: {
-                        // theme: 'TableStyleMedium2',
-                        // showRowStripes: true,
-                    },
-                    columns: [
-                        {name:'訂單編號'},
-                        {name:'支付金額'},
-                        {name:'訂單創建時間'},
-                        {name:'訂單狀態'}],
-                    rows:[],
-                });
-                sheet.getColumn(1).width=25 //訂單編號
-                sheet.getColumn(2).width=10 //支付金額
-                sheet.getColumn(3).width=12 //訂單創建時間
-                sheet.getColumn(4).width=15 //訂單狀態
-
-                sheet.getRow(1).height=20
-                /*添加資料到table中*/
-                const table = sheet.getTable("test1");
-                for (let i = 0; i <this.orderList.length ; i++) {
-                    sheet.getRow(i+2).height=20 //設定每一行高度
-
-                    table.addRow(
-                        [
-                            this.orderList[i].sn,
-                            this.orderList[i].amountOfActualPay,
-                            this.orderList[i].gmtCreate,
-                            this.orderList[i].statusName,
-                        ]
-                    )
-                }
-                table.commit()
-                // 表格裡面的資料都填寫完成之後，訂出下載的callback function
-                // 異步的等待他處理完之後，創建url與連結，觸發下載
-                workbook.xlsx.writeBuffer().then((content) => {
-                    const link = document.createElement("a");
-                    const blobData = new Blob([content], {
-                        type: "application/vnd.ms-excel;charset=utf-8;"
-                    });
-                    link.download = '測試的試算表.xlsx';
-                    link.href = URL.createObjectURL(blobData);
-                    link.click();
-                });
-            },
-
-            getPDF(){
-                var canvas = document.getElementById("canvas");
-                    var context = canvas.getContext('2d')
-                    var fileContent = document.getElementById("download").outerHTML;
-                    var options = {
-                        width: 595,
-                        height: 842
-                    };
-                    rasterizeHTML.drawHTML(fileContent, canvas, options).then(function (renderResult) {
-                        context.drawImage(renderResult.image, 0, 0);
-                        console.log(canvas.toDataURL("image/png"));
-                        var imgData = canvas.toDataURL("image/png");
-                        var pdf = new jsPDF(); //2.X版的寫法 var pdf = new jspdf.jsPDF()
-                        pdf.addImage(imgData, 'JPEG', 0, 0);
-                        //console.log(pdf);
-                        pdf.save("download.pdf");
-                    });
-            }
-
         },
 
         created() {

@@ -52,25 +52,23 @@
                   </el-submenu>
                   <!--品牌管理結束-->
 
-                  <!--類別管理開始-->
+                  <!--訂單管理開始-->
                   <el-submenu index="3">
                       <template slot="title">
                           <i class="el-icon-tickets"></i>
-                          <span>類別管理(暫不完成)</span>
+                          <span>訂單管理</span>
                       </template>
-                      <el-menu-item index="/category/addNew" class="el-icon-tickets">新增類別</el-menu-item>
+                      <el-menu-item index="/order/admin/list" class="el-icon-tickets">訂單列表</el-menu-item>
                   </el-submenu>
-                  <!--類別管理結束-->
+                  <!--訂單管理結束-->
               </el-menu>
               <!-- 根據權限是否為admin顯現 結束-->
-              <div style="margin-top: 30px">
-                  <el-form
-                          @keyup.enter.native="search(keyword)" >
-                      <el-form-item style="width: 140px;display: block;margin: 0 auto">
-                          <el-input v-model="keyword" placeholder="全站搜索"></el-input>
-                      </el-form-item>
-                      <el-button type="primary"  @click= "search(keyword)">buttonCont</el-button>
-                  </el-form>
+              <div style="margin-top: 30px;">
+                          <el-input size="small" style="width: 140px;left: 8px" v-model="keyword" placeholder="全站搜索" clearable></el-input>
+                          <el-button type="primary" @click= "search(keyword)"
+                                     icon="el-icon-search" size="small"
+                                     style="position: relative;left:10px"></el-button>
+
               </div>
               <el-divider></el-divider>
               <div class="parent">
@@ -128,11 +126,13 @@
                     escape(window.atob(strings[1]
                         .replace(/-/g, "+")
                         .replace(/_/g, "/")))));
-                console.log(jsonResult)
+                console.log("解析過的jwt",jsonResult)
                 //將解析後的jsonResult.user從JSON格式還原
                 var userInfo =JSON.parse(jsonResult.user)
+                //獲取權限
                 this.role=userInfo.authorities[0]
                 console.log("role",this.role)
+                return jsonResult.exp
             }
         },
         //搜尋頁面
@@ -155,15 +155,22 @@
                 console.log("響應結果失敗")
             })
         },
-
+        isExpired(jwt){
+            let exp = this.parseJwt(jwt);
+            console.log("解析過的exp",exp)
+            //當前時間大於exp則將用戶登出
+            if(Date.now()/1000>exp){
+              this.logout()
+            }
+        }
     },
     created() {
-
+        this.jwt=localStorage.getItem("jwt")
+        this.isExpired(this.jwt)
+        this.loadKeyword()
     },
     mounted() {
-        this.jwt=localStorage.getItem("jwt")
-        this.parseJwt(this.jwt)
-        this.loadKeyword()
+
     }
 }
 </script>
