@@ -54,7 +54,7 @@
             return {
                 cartArr:[],
                 jwt:"",
-                url:"http://localhost:9080/cart/",
+                url:"http://localhost:9080",
                 subtotal:"",
                 pages:'',
                 totalPrice:'',
@@ -80,7 +80,7 @@
             //根據id刪除購物車商品
             handleDelete(id){
                 console.log(id)
-                let url=this.url+id+"/delete"
+                let url=this.url+"/cart/"+id+"/delete"
                 this.axios
                     .create({headers:{'Authorization':this.jwt}})
                     .get(url).then((response)=>{
@@ -98,7 +98,7 @@
             },
             //獲取購物車列表
             loadCarts(){
-                let url=this.url+"list"
+                let url=this.url+"/cart/list"
                 this.axios
                     .create({headers:{'Authorization':this.jwt}})
                     .get(url).then((response)=>{
