@@ -52,6 +52,8 @@
 
 
 <script>
+// js-cookie
+  import {setSupport,getSupport,setCookie,getCookie} from '@/utils/support';
   export default {
     data() {
       return {
@@ -89,6 +91,7 @@
                 let jwt = response.data.data;
                 console.log("jwt:",jwt)
                 localStorage.setItem('jwt',jwt)
+                setCookie("jwt",jwt,1);
                 //點擊確定後跳轉
                 this.$alert('準備跳轉', '登入成功', {
                   confirmButtonText: '確定',
