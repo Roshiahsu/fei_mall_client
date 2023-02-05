@@ -1,7 +1,6 @@
 <template>
     <div id="download">
         <h1>訂單詳情</h1>
-        <el-button type="primary" @click="getPDF()">buttonCont</el-button>
         <el-descriptions title="" direction="vertical" :column="6" border>
             <el-descriptions-item label="訂單編號" :span="2">{{orderInfo.sn}}</el-descriptions-item>
             <el-descriptions-item label="訂單金額" :span="2">{{orderInfo.amountOfActualPay}}</el-descriptions-item>
