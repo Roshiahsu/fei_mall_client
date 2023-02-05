@@ -131,18 +131,20 @@
             //修改購物車購買數量
             updateCart(){
                 //判斷購物車中有無商品
-                if(this.cartArr.length == 0){
+                if(this.cartArr.length === 0){
                     this.$message.error("沒有商品")
                     return
                 }
-                let url =this.url+'update'
+                console.log("updataCart")
+                let url =this.url+'/cart/update'
                 this.axios
                     .create({headers:{'Authorization':this.jwt}})
                     .post(url,this.cartArr).then((response)=>{
                     let json = response.data
                     console.log("JSON", json)
                     if (json.serviceCode === 20000) {
-                        location.href="/order/list"
+                        // location.href="/order/list"
+                        this.$router.push({path: '/order/list'})
                     } else if (json.serviceCode === 40004 ||json.serviceCode === 40001 ||json.serviceCode === 40002){
                         this.open()
                     }else{
