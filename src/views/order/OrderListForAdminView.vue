@@ -1,11 +1,57 @@
 <template>
     <div>
         <h1>管理員訂單列表管理</h1>
+        <el-card class="filter-container" shadow="never">
+            <div>
+                <i class="el-icon-search"></i>
+                <span>快速搜尋</span>
+                <el-button
+                        style="float:right"
+                        type="primary"
+                        @click="handleCurrentChange()"
+                        size="small">
+                    快速搜尋
+                </el-button>
+                <el-button
+                        style="float:right;margin-right: 15px"
+                        @click="handleResetSearch()"
+                        size="small">
+                    重置
+                </el-button>
+            </div>
+
+            <div style="margin-top: 15px">
+                <el-form :inline="true" :model="orderQueryDTO" size="small" label-width="140px">
+                    <el-form-item label="輸入搜尋條件：">
+                        <el-input v-model="orderQueryDTO.sn" class="input-width" placeholder="訂單編號" clearable></el-input>
+                    </el-form-item>
+
+                    <el-form-item label="收件人：">
+                        <el-input v-model="orderQueryDTO.receiverKeyword" class="input-width" placeholder="收件人姓名/手機號碼" clearable></el-input>
+                    </el-form-item>
+
+                    <el-form-item label="訂單創建時間：">
+                        <el-date-picker
+                                align="center"
+                                class="input-width"
+                                v-model="orderQueryDTO.gmtCreate"
+                                type="date"
+                                placeholder="請選擇時間">
+                        </el-date-picker>
+                    </el-form-item>
+                </el-form>
+            </div>
+        </el-card>
+        <!--    Pagination分頁開始-->
         <div  style="width: 150px;margin: 0 auto">
-        <span v-for=" i in pages" :key="i">
-            <a href="javascript:void(0)" @click="loadOrderList(i)">{{i}}</a><el-divider direction="vertical"></el-divider>
-        </span>
+            <el-pagination
+                    @current-change="handleCurrentChange"
+                    :page-size="1"
+                    layout="prev, pager, next, jumper"
+                    :total="pages">
+            </el-pagination>
         </div>
+        <!--    Pagination分頁結束-->
         <!--地址詳情結束-->
         <el-divider></el-divider>
         <div id="download">
@@ -59,11 +105,19 @@
 
 
 <script>
+    const orderQueryDTO = {
+        pageNum: 1,
+        pageSize: 10,
+        sn: null,
+        receiverKeyword: null,
+        gmtCreate: null,
+    };
     export default {
         data() {
             return {
                 multipleSelection:[],
-                pages:"",
+                pages:1,
+                orderQueryDTO:Object.assign({}, orderQueryDTO),
                 orderList: [
                     {
                         amountOfActualPay:"", //實際支付金額
@@ -83,15 +137,19 @@
             },
             //獲取訂單列表
             loadOrderList(pageNum) {
-                let url = this.url +"/order/"+pageNum+"/admin/list"
+                if(pageNum != null){
+                    this.orderQueryDTO.pageNum=pageNum
+                }
+                let url = this.url +"/order/admin/list"
                 this.axios
                     .create({headers: {'Authorization': this.jwt}})
-                    .get(url).then((response) => {
+                    .post(url,this.orderQueryDTO).then((response) => {
                     let json = response.data
                     console.log(json)
                     if (json.serviceCode === 20000) {
                         this.orderList = json.data.list;
                         this.pages = json.data.totalPage
+                        this.orderQueryDTO=Object.assign({}, orderQueryDTO)
                     } else if (json.serviceCode === 40004 ||json.serviceCode === 40002) {
                         this.open()
                     } else {
@@ -159,6 +217,15 @@
                 this.multipleSelection = val;
                 console.log(this.multipleSelection)
             },
+            //分頁
+            handleCurrentChange(val) {
+                console.log(val)
+                this.loadOrderList(val)
+            },
+            //表單重置
+            handleResetSearch() {
+                this.orderQueryDTO=Object.assign({}, orderQueryDTO)
+            }
         },
 
         created() {
