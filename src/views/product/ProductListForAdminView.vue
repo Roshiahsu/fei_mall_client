@@ -19,7 +19,13 @@
             style="width: 100%">
         <el-table-column prop="picture" label="商品圖片"  align="center">
             <template   slot-scope="scope">
-                <img  :src="require('@/assets/productImg/'+ scope.row.picture)" :width=imgWidth :height=imgHeight class="image" />
+                <el-image style="width: 70px; height: 70px"
+                          :src="require('@/assets/productImg/'+ scope.row.picture)"
+                          fit="contain"></el-image>
+<!--                <img  :src="require('@/assets/productImg/'+ scope.row.picture)"-->
+<!--                      :width=imgWidth :height=imgHeight-->
+<!--                      class="image"-->
+<!--                >-->
             </template>
         </el-table-column>
         <el-table-column prop="productName" label="商品名稱"  align="center"></el-table-column>
