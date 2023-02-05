@@ -1,12 +1,16 @@
 <template>
 <div>
     <h1 >商品列表(管理員)</h1>
-
+    <!--    Pagination分頁開始-->
     <div  style="width: 150px;margin: 0 auto">
-        <span v-for=" i in pages" :key="i">
-            <a href="javascript:void(0)" @click="loadProductList(i)">{{i}}</a><el-divider direction="vertical"></el-divider>
-        </span>
+        <el-pagination
+                @current-change="handleCurrentChange"
+                :page-size="1"
+                layout="prev, pager, next, jumper"
+                :total="pages">
+        </el-pagination>
     </div>
+    <!--    Pagination分頁結束-->
     <el-divider></el-divider>
 
     <el-table
@@ -60,7 +64,7 @@
             return {
                 productArr:[],
                 url:"http://localhost:9080/product/",
-                pages:'',//分類頁
+                pages:1,//分類頁
                 imgWidth:50,
                 imgHeight:50,
 
@@ -129,6 +133,9 @@
                     }
                 });
             },
+            handleCurrentChange(val) {
+                this.loadProductList(val)
+            }
         },
         created() { //已創建 在mounted 顯示頁面之前執行
 
