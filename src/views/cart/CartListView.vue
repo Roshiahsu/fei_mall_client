@@ -49,6 +49,7 @@
 
 
 <script>
+    import Cookies from 'js-cookie'
     export default {
         data() {
             return {
@@ -143,8 +144,10 @@
                     let json = response.data
                     console.log("JSON", json)
                     if (json.serviceCode === 20000) {
+                        //跳轉到付款頁面
+                        location.href = this.url
                         // location.href="/order/list"
-                        this.$router.push({path: '/order/list'})
+                        // this.$router.push({path: '/order/list'})
                     } else if (json.serviceCode === 40004 ||json.serviceCode === 40001 ||json.serviceCode === 40002){
                         this.open()
                     }else{
