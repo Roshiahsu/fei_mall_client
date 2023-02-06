@@ -57,14 +57,18 @@
 
         <form method="post" action="http://localhost:9080/paypal/pay">
             <input type="hidden" name="AmountOfActualPay" v-model="totalPrice">
-            <button type="submit" style="margin:0 auto;display: block;width: 160px">
+            <input type="hidden" name="amountOfOriginalPrice" v-model="totalPrice">
+            <input type="hidden" name="recipientName" v-model="userInfo.username">
+            <input type="hidden" name="recipientPhone" v-model="userInfo.phone">
+            <input type="hidden" name="recipientAddress" v-model="userInfo.detailedAddress">
+            <input type="hidden" name="userId" v-model="userInfo.id">
+            <button type="submit" style="display: block;margin: 0 auto">
                 <!-- PayPal Logo --><table border="0" cellpadding="10" cellspacing="0" align="center"><tr><td align="center"></td></tr><tr><td align="center">
-                <img src="https://www.paypalobjects.com/webstatic/en_US/i/buttons/PP_logo_h_200x51.png"
-                     alt="使用 PayPal 立即購"
-                     style="width: 120px"/></td></tr></table><!-- PayPal Logo -->
+                <img src="https://www.paypalobjects.com/webstatic/en_US/i/buttons/PP_logo_h_200x51.png" alt="使用 PayPal 立即購" /></td></tr></table><!-- PayPal Logo -->
             </button>
         </form>
 
+<!--        改成Paypal已後無作用-->
 <!--        <el-button  style="display: block;margin: 0 auto"-->
 <!--                    icon="el-icon-shopping-cart-2"-->
 <!--                    type="danger"-->
@@ -99,7 +103,7 @@
                     .create({headers:{'Authorization':this.jwt}})
                     .get(url).then((response)=>{
                     let json=response.data
-                    console.log("JSON",json)
+                    console.log("cartArrJSON",json)
                     if(json.serviceCode===20000){
                         this.cartArr=json.data
                         this.total()
