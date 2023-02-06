@@ -55,12 +55,22 @@
 
         <br>
 
-        <el-button  style="display: block;margin: 0 auto"
-                    icon="el-icon-shopping-cart-2"
-                    type="danger"
-                    class="button"
-                    @click="createOrder"
-        >前往結賬</el-button>
+        <form method="post" action="http://localhost:9080/paypal/pay">
+            <input type="hidden" name="AmountOfActualPay" v-model="totalPrice">
+            <button type="submit" style="margin:0 auto;display: block;width: 160px">
+                <!-- PayPal Logo --><table border="0" cellpadding="10" cellspacing="0" align="center"><tr><td align="center"></td></tr><tr><td align="center">
+                <img src="https://www.paypalobjects.com/webstatic/en_US/i/buttons/PP_logo_h_200x51.png"
+                     alt="使用 PayPal 立即購"
+                     style="width: 120px"/></td></tr></table><!-- PayPal Logo -->
+            </button>
+        </form>
+
+<!--        <el-button  style="display: block;margin: 0 auto"-->
+<!--                    icon="el-icon-shopping-cart-2"-->
+<!--                    type="danger"-->
+<!--                    class="button"-->
+<!--                    @click="createOrder"-->
+<!--        >前往結賬</el-button>-->
 
     </div>
 </template>
@@ -122,6 +132,7 @@
                 this.totalPrice = totalPrice
             },
             //建立訂單
+            //使用Paypal後無作用
             createOrder(){
                 if(this.cartArr.length == 0){
                     this.$message.error("沒有商品")
