@@ -68,6 +68,7 @@
                     .get(url).then((response) => {
                     let json = response.data
                     if (json.serviceCode === 20000) {
+                        this.$message.success("付款完成")
                         this.orderInfo = json.data;
                         this.loadOrderItemList(json.data.sn)
                     } else if (json.serviceCode === 40004) {
