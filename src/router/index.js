@@ -114,6 +114,21 @@ const routes = [
         component: () => import('../views/user/UserDetailView')
       },
       {
+        path: 'paypal',
+        name:'paypal',
+        component: () => import('../views/paypal/PaypalView')
+      },
+      {
+        path: 'cancel',
+        name:'paypal交易取消',
+        component: () => import('../views/paypal/CancelView')
+      },
+      {
+        path: 'failed',
+        name:'paypal交易失敗',
+        component: () => import('../views/paypal/FailedView')
+      },
+      {
         path: 'search',
         name:'商品搜尋',
         component: () => import('../views/search/SearchListView')
@@ -121,7 +136,12 @@ const routes = [
       {
         path: 'index',
         component: () => import('../views/Index')
-      }
+      },
+      {
+        path: 'test',
+        name:'測試',
+        component: () => import('../views/test/TestPage')
+      },
     ],
   },
   {
@@ -142,5 +162,7 @@ router.beforeEach((to, from, next) => {
     document.title=to.meta.title ? to.meta.title:"澳洲代購";
   next();
 })
+
+
 
 export default router
