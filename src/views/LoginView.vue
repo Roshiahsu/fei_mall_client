@@ -2,7 +2,7 @@
   <div class="login">
     <h1 style="text-align: center">登入頁面</h1>
 
-    <el-card class="box-card" style="width: 600px;height: 400px;
+    <el-card class="box-card" style="width: 600px;height: 430px;
     margin: 0 auto;background-color: rgba(255,255,255,0.3)">
       <img
               style="width: 100px; height: 100px;margin:auto;display:block"
@@ -22,7 +22,9 @@
             <el-input v-model="ruleForm.username"></el-input>
           </el-form-item>
           <el-form-item label="用戶密碼" prop="password">
-            <el-input v-model="ruleForm.password"></el-input>
+            <el-input :type="isActive?'text':'password'" v-model="ruleForm.password"></el-input>
+            <el-checkbox label="顯示密碼" name="type" v-model="isActive"></el-checkbox>
+
           </el-form-item>
 
           <el-button style="float:left;position: relative;left:225px" type="primary" @click="submitLogin('ruleForm')">登入</el-button>
@@ -57,6 +59,7 @@
   export default {
     data() {
       return {
+        isActive:false,
         activeName: 'login',
         ruleForm: {
           username: '',

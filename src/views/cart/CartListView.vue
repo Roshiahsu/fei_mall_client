@@ -108,8 +108,6 @@
                     if(json.serviceCode===20000){
                         this.cartArr=json.data
                         this.total()
-                    } else if (json.serviceCode === 40002){
-                        this.open()
                     }else {
                         this.$message.error(json.message)
                     }

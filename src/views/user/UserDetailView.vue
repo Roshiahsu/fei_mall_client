@@ -160,7 +160,6 @@
                         this.userInfo = json.data;
                     } else if (json.serviceCode === 40001 || json.serviceCode === 40002) {
                         localStorage.clear()
-                        this.open()
                     } else {
                         // this.$message.error(json.message)
                     }
@@ -178,7 +177,6 @@
                         this.addressList = json.data;
                     } else if (json.serviceCode === 40001 || json.serviceCode === 40002) {
                         localStorage.clear()
-                        this.open()
                     } else {
                         this.$message.error(json.message)
                     }
@@ -194,8 +192,6 @@
                     let json = response.data
                     if (json.serviceCode === 20000) {
                         this.orderList = json.data;
-                    } else if (json.serviceCode === 40004) {
-                        this.open()
                     } else {
                         // this.$message.error(json.message)
                     }
