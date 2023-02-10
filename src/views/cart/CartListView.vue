@@ -42,6 +42,12 @@
                 class="button"
                 @click="updateCart"
                 >前往結賬</el-button>
+    <br>
+    <div>
+        <span>Paypal測試帳號：sb-66yhi15332170@business.example.com</span>
+        <br>
+        <span>Paypal測試密碼：12345678</span>
+    </div>
 
 </div>
 </template>

@@ -150,6 +150,7 @@
                     console.log(json)
                     if (json.serviceCode === 20000) {
                         console.log("驗證完成")
+                        this.$message.success("修改完成")
                     } else if (json.serviceCode === 40004) {
                         this.open()
                     } else if (json.serviceCode === 40003) {
