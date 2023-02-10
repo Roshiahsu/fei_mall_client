@@ -5,7 +5,7 @@
 
         <el-descriptions title="用戶詳情" direction="vertical" :column="4" border>
             <template slot="extra">
-                <el-button type="primary" size="small" @click="userUpdate()">確認修改</el-button>
+                <el-button type="primary" size="small" @click="userUpdate()" style="position: relative;right:20px">確認修改</el-button>
             </template>
             <el-descriptions-item label="用戶名">
                 <el-input v-model="userInfo.username" disabled></el-input>
@@ -42,7 +42,41 @@
             <!--                    </el-switch>-->
             <!--                </template>-->
             <!--            </el-descriptions-item>-->
+
         </el-descriptions>
+        <el-divider></el-divider>
+
+            <el-card class="filter-container" shadow="never" style="width: 400px;margin: 0 auto">
+                <div>
+                    <i class="el-icon-edit-outline"></i>
+                    <span>修改密碼</span>
+
+                </div>
+
+                <div style="margin-top: 15px">
+                    <el-form :inline="true" :model="passwordDTO" size="small" label-width="140px">
+                        <el-form-item label="原始密碼：">
+                            <el-input class="password-input" v-model="passwordDTO.oldPassword" placeholder="請輸入原始密碼" clearable></el-input>
+                        </el-form-item>
+
+                        <el-form-item label="新密碼：">
+                            <el-input class="password-input" v-model="passwordDTO.newPassword"  placeholder="請輸入密碼(大小寫有分別)" clearable></el-input>
+                        </el-form-item>
+
+                        <el-form-item label="密碼再確認：">
+                            <el-input class="password-input" v-model="passwordDTO.checkPassword"  placeholder="請再輸入一次新密碼" clearable></el-input>
+                        </el-form-item>
+                    </el-form>
+                </div>
+                <el-button
+                        style="margin: 0 auto;display: block"
+                        type="primary"
+                        size="small"
+                        @click="matchesPassword()">
+                    修改密碼
+                </el-button>
+            </el-card>
+
 
     </div>
 </template>
@@ -59,6 +93,11 @@
                     rewardPoint: '',
                     phone: '',
                     email: '',
+                },
+                passwordDTO:{
+                    oldPassword:'',
+                    newPassword:'',
+                    checkPassword:'',
                 },
                 url: 'http://localhost:9080',
             };
@@ -82,6 +121,7 @@
                     console.log("userInfo", this.userInfo)
                 })
             },
+            //用戶更新
             userUpdate() {
                 let url = this.url + "/user/update"
                 this.axios
@@ -91,6 +131,25 @@
                     console.log(json)
                     if (json.serviceCode === 20000) {
                         this.$message.success("修改完成")
+                    } else if (json.serviceCode === 40004) {
+                        this.open()
+                    } else if (json.serviceCode === 40003) {
+                        this.$message.warning(json.message)
+                    } else {
+                        // this.$message.error(json.message)
+                    }
+                })
+            },
+            //驗證密碼&更新密碼
+            matchesPassword() {
+                let url = this.url + "/password/matches"
+                this.axios
+                    .create({headers: {'Authorization': this.jwt}})
+                    .post(url, this.passwordDTO).then((response) => {
+                    let json = response.data
+                    console.log(json)
+                    if (json.serviceCode === 20000) {
+                        console.log("驗證完成")
                     } else if (json.serviceCode === 40004) {
                         this.open()
                     } else if (json.serviceCode === 40003) {
@@ -126,3 +185,8 @@
         }
     }
 </script>
+<style>
+    .password-input{
+        width: 200px;
+    }
+</style>

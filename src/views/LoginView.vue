@@ -12,6 +12,7 @@
         <el-tabs v-model="activeName">
           <el-tab-pane label="用戶登入" name="login">用戶登入</el-tab-pane>
           <el-tab-pane label="快速註冊" name="reg">快速註冊</el-tab-pane>
+          <el-tab-pane label="忘記密碼" name="initPassword">忘記密碼</el-tab-pane>
         </el-tabs>
       </template>
       <!--      標籤頁結束-->
@@ -46,6 +47,17 @@
         </el-form>
       </div>
       <!--      用戶登入表單結束-->
+      <!--      用戶重置密碼開始-->
+      <div v-if="activeName==='initPassword'">
+        <el-form :model="ruleForm" :rules="rules" ref="ruleForm" label-width="100px" class="demo-ruleForm">
+          <el-form-item label="用戶名稱" prop="username">
+            <el-input v-model="ruleForm.username"></el-input>
+          </el-form-item>
+          <el-button style="float:left;position: relative;left:225px" type="primary" @click="initPassword('ruleForm')" v-loading.fullscreen.lock="fullscreenLoading">重置密碼</el-button>
+          <el-button style="float:left;position: relative;left:225px" @click="resetForm('ruleForm')">重置</el-button>
+        </el-form>
+      </div>
+      <!--      用戶重置密碼結束-->
 
 
     </el-card>
@@ -60,7 +72,9 @@
     data() {
       return {
         isActive:false,
+        url:'http://localhost:9080',
         activeName: 'login',
+        fullscreenLoading: false,
         ruleForm: {
           username: '',
           password: '',
@@ -82,8 +96,7 @@
       submitLogin(formName) {
         this.$refs[formName].validate((valid) => {
           if (valid) {
-            let url="http://localhost:9080/user/login";
-
+            let url=this.url+"/user/login";
             let formData={
                 username:this.ruleForm.username,
                 password:this.ruleForm.password
@@ -117,7 +130,7 @@
       submitReg(formName) {
         this.$refs[formName].validate((valid) => {
           if (valid) {
-            let url="http://localhost:9080/user/reg";
+            let url=this.url+"/user/reg";
 
             let formData={
               username:this.ruleForm.username,
@@ -145,8 +158,44 @@
           }
         });
       },
+      //重置密碼
+      initPassword(formName) {
+        this.openFullScreen()
+        this.$refs[formName].validate((valid) => {
+          if (valid) {
+            let username = this.ruleForm.username;
+            let url=this.url+"/password/reset";
+            this.axios
+                    .post(url,{username:username}).then((response)=>{
+              console.log(response.data)
+              if(response.data.serviceCode===20000){
+                //點擊確定後跳轉
+                this.$alert('準備跳轉', '登入成功', {
+                  confirmButtonText: '確定',
+                  callback: action => {
+                    // location.href = "/index"
+                    this.$router.push({path: '/index'})
+                  }
+                });
+              }else{
+                this.$message.error(response.data.message)
+              }
+            })
+          } else {
+            console.log('error submit!!');
+            return false;
+          }
+        });
+      },
       resetForm(formName) {
         this.$refs[formName].resetFields();
+      },
+      //loading
+      openFullScreen() {
+        this.fullscreenLoading = true;
+        setTimeout(() => {
+          this.fullscreenLoading = false;
+        }, 2000);
       },
     }
   }

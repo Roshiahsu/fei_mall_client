@@ -1,6 +1,7 @@
 <template>
     <div>
         <h1>管理員訂單列表管理</h1>
+<!--        搜尋功能開始-->
         <el-card class="filter-container" shadow="never">
             <div>
                 <i class="el-icon-search"></i>
@@ -42,6 +43,7 @@
                 </el-form>
             </div>
         </el-card>
+<!--        搜尋功能結束-->
         <!--    Pagination分頁開始-->
         <div  style="width: 150px;margin: 0 auto">
             <el-pagination
