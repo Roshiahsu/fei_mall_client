@@ -52,11 +52,13 @@
 
 
 <script>
+    import {getUrl} from '@/utils/Utils';
+
     export default {
         data() {
             return {
                 tableData:[],
-                utl:'http://localhost:9080',
+                utl:getUrl(),
                 jwt:''
             };
         },

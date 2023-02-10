@@ -83,6 +83,8 @@
 
 
 <script>
+    import {getUrl} from '@/utils/Utils';
+
     export default {
         data() {
             return {
@@ -99,7 +101,7 @@
                     newPassword:'',
                     checkPassword:'',
                 },
-                url: 'http://localhost:9080',
+                url: getUrl(),
             };
         },
         methods: {

@@ -65,12 +65,10 @@
 </template>
 
 <script>
-
-
-
     const newProduct =2
     const hotProduct =3
     const discountedProduct =4
+    import {getUrl} from '@/utils/Utils';
 
     export default {
         data() {
@@ -83,7 +81,7 @@
                 discountedProductArr:[],
                 imgWidth:200,
                 imgHeight:200,
-                url:'http://localhost:9080',
+                url:getUrl(),
             };
         },
         methods: {

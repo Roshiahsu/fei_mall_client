@@ -45,6 +45,7 @@
 
 
 <script>
+    import {getUrl} from '@/utils/Utils';
     import * as rasterizeHTML from 'rasterizehtml'
     const { jsPDF } = require("jspdf");
     import html2canvas from 'html2canvas';
@@ -55,7 +56,7 @@
                 orderInfo:{},
                 orderItemList:[],
                 jwt:"",
-                url:'http://localhost:9080',
+                url:getUrl(),
             };
         },
         methods: {

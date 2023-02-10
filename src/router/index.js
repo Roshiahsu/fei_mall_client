@@ -88,7 +88,7 @@ const routes = [
       },
       {
         path: 'order/admin/list',
-        name:'訂單列表',
+        name:'管理員訂單列表',
         component: () => import('../views/order/OrderListForAdminView')
       },
       {

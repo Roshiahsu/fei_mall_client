@@ -55,6 +55,8 @@
 
 
 <script>
+    import {getUrl} from '@/utils/Utils';
+
     export default {
         data() {
             //自定義驗證規則
@@ -71,7 +73,7 @@
                 picture: '',
                 jwt: '',
                 id: '',
-                url:'http://localhost:9080',
+                url:getUrl(),
                 ruleForm: {
                     quantity:''
                 },

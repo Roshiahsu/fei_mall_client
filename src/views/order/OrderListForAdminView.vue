@@ -107,6 +107,8 @@
 
 
 <script>
+    import {getUrl} from '@/utils/Utils';
+
     const orderQueryDTO = {
         pageNum: 1,
         pageSize: 10,
@@ -129,7 +131,7 @@
                         statusName:"",//訂單狀態
                     }
                 ],
-                url: "http://localhost:9080",
+                url: getUrl(),
             };
         },
         methods: {

@@ -36,13 +36,14 @@
 
 
 <script>
+    import {getUrl} from '@/utils/Utils';
     const allProduct =1
     export default {
         data() {
             return {
                 brandArr:[],
                 jwt:'',
-                url:"http://localhost:9080/product/",
+                url:getUrl()+"/product/",
                 pages:100,//分類頁
                 pageSize:1,
                 imgWidth:200,

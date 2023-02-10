@@ -117,6 +117,8 @@
 </template>
 
 <script>
+    import {getUrl} from '@/utils/Utils';
+
     export default {
         data() {
             return {
@@ -134,7 +136,7 @@
                     productTypeId: '',//商品分類
                     gmtExp: '',      //有效日期
                 },
-                url:"http://localhost:9080",
+                url:getUrl(),
                 fileList: [],
                 jwt: '',
                 productTypeList:[],

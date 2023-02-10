@@ -64,12 +64,14 @@
 
 
 <script>
+    import {getUrl} from '@/utils/Utils';
+
     const allProduct =1
     export default {
         data() {
             return {
                 productArr:[],
-                url:"http://localhost:9080/product/",
+                url:getUrl()+"/product/",
                 pages:1,//分類頁
                 imgWidth:50,
                 imgHeight:50,

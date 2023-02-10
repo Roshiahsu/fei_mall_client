@@ -55,13 +55,14 @@
 
 
 <script>
+    import {getUrl} from '@/utils/Utils';
     import Cookies from 'js-cookie'
     export default {
         data() {
             return {
                 cartArr:[],
                 jwt:"",
-                url:"http://localhost:9080",
+                url:getUrl(),
                 subtotal:"",
                 pages:'',
                 totalPrice:'',

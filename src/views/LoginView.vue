@@ -68,11 +68,13 @@
 <script>
 // js-cookie
   import {setSupport,getSupport,setCookie,getCookie} from '@/utils/support';
-  export default {
+  import {getUrl} from '@/utils/Utils';
+
+export default {
     data() {
       return {
         isActive:false,
-        url:'http://localhost:9080',
+        url:getUrl(),
         activeName: 'login',
         fullscreenLoading: false,
         ruleForm: {

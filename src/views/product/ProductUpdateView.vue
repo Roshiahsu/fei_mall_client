@@ -117,6 +117,8 @@
 </template>
 
 <script>
+    import {getUrl} from '@/utils/Utils';
+
     export default {
         data() {
             return {
@@ -168,7 +170,7 @@
                         {required: true, message: '請選擇推播種類', trigger: 'blur'},
                     ],
                 },
-                url:"http://localhost:9080"
+                url:getUrl()
             };
         },
         methods: {

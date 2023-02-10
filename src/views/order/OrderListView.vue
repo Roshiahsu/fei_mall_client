@@ -82,6 +82,8 @@
 
 
 <script>
+    import {getUrl} from '@/utils/Utils';
+
     export default {
         data() {
             return {
@@ -89,7 +91,7 @@
                 userInfo:{},
                 addressArr:[],
                 jwt:"",
-                url:"http://localhost:9080",
+                url:getUrl(),
                 subtotal:"",
                 pages:'',
                 totalPrice:'',

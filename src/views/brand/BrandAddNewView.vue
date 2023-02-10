@@ -24,6 +24,8 @@
 </template>
 
 <script>
+    import {getUrl} from '@/utils/Utils';
+
     export default {
         data() {
             return {
@@ -32,7 +34,7 @@
                 ruleForm: {
                     brandName: '',
                 },
-                url:"http://localhost:9080",
+                url:getUrl(),
                 jwt:'',
                 rules: {
                     brandName: [
