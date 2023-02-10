@@ -19,7 +19,7 @@
             <el-table-column prop="price" label="單價" width="100"  align="center"></el-table-column>
             <el-table-column prop="quantity" label="購買數量" align="center" >
                 <template slot-scope="scope">
-                    <el-input-number size="mini" :min="0" :max="scope.row.quantity+10" @change="handleChange(scope.row)"  v-model="scope.row.quantity" ></el-input-number>
+                    <el-input-number size="mini" :min="0" :max="scope.row.stock" @change="handleChange(scope.row)"  v-model="scope.row.quantity" ></el-input-number>
                 </template>
             </el-table-column>
             <el-table-column prop="subtotal" label="小計" width="150" align="center"></el-table-column>
@@ -104,7 +104,7 @@
                     .create({headers:{'Authorization':this.jwt}})
                     .get(url).then((response)=>{
                     let json=response.data
-                    console.log("JSON",json)
+                    console.log("CartJSON",json)
                     if(json.serviceCode===20000){
                         this.cartArr=json.data
                         this.total()

@@ -139,6 +139,7 @@
         search(keyword){
           location.href ="/search?keyword="+keyword
         },
+        //獲取關鍵字
         loadKeyword(){
             let url = this.url+"/keyword/"
             this.axios
