@@ -162,7 +162,7 @@
         },
         created() {
             this.jwt = localStorage.getItem("jwt")
-            // this.isExpired(this.jwt)
+            this.isExpired(this.jwt)
             this.loadKeyword()
         },
         mounted() {
