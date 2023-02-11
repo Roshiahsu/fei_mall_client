@@ -102,7 +102,7 @@
 
 <script>
     import {getUrl} from '@/utils/Utils';
-    // const getUrl = require("@/utils/Utils");
+    import {getList} from "@/utils/api";
     export default {
         data() {
             return {
@@ -145,20 +145,10 @@
             },
             //獲取關鍵字
             loadKeyword() {
-                let url = this.url + "/keyword/"
-                this.axios
-                    .get(url).then((response) => {
-                    let json = response.data
-                    if (response.data.serviceCode === 20000) {
-                        this.keywordArr = json.data
-                        console.log("獲取到的Keyword", json)
-                    } else {
-                        let message = response.data.message
-                        this.$message.error(message);
-                    }
-                }).catch(function (error) { //響應成功會走then，響應失敗走catch
-                    console.log("響應結果失敗")
-                })
+                getList("/keyword/").then(response=>{
+                    let json=response.data
+                    this.keywordArr = json.data
+                });
             },
             isExpired(jwt) {
                 let exp = this.parseJwt(jwt);

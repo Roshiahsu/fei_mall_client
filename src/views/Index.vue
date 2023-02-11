@@ -69,6 +69,8 @@
     const hotProduct =3
     const discountedProduct =4
     import {getUrl} from '@/utils/Utils';
+    import {getList} from "@/utils/api";
+
 
     export default {
         data() {
@@ -88,6 +90,25 @@
             productDetails(id){
                 location.href = "/product/details?id="+id
             },
+            newProductList(){
+                getList("/product/"+newProduct+"/listProduct?pageNum=1&pageSize=6")
+                    .then(response => {
+                        this.newProductArr = response.data.data.list
+                    });
+            },
+            hotProductList(){
+                getList("/product/"+hotProduct+"/listProduct?pageNum=1&pageSize=6")
+                    .then(response => {
+                        this.hotProductArr = response.data.data.list
+                    });
+            },
+            discountedProductList(){
+                getList("/product/"+discountedProduct+"/listProduct?pageNum=1&pageSize=6")
+                    .then(response => {
+                        this.discountedProductArr = response.data.data.list
+                    });
+            }
+
         },
         created() {
             //自動獲取
@@ -98,54 +119,14 @@
             hotProduct = 熱門商品
             discountedProduct = 優惠商品
          */
-        //TODO 冗余代碼提取成方法
         mounted() {
-
-            let url = this.url+"/product/"+newProduct+"/listProduct?pageNum=1&pageSize=6"
-            this.axios
-                .get(url).then((response) => {
-                if (response.data.serviceCode === 20000) {
-                   this.newProductArr = response.data.data.list
-                } else {
-                    let message = response.data.message
-                    this.$message.error(message);
-                }
-            }).catch(function (error) { //響應成功會走then，響應失敗走catch
-                    console.log("響應結果失敗")
-            }),
-                url = this.url+"/product/"+hotProduct+"/listProduct?pageNum=1&pageSize=6"
-            this.axios
-                .get(url).then((response) => {
-                console.log("獲取的資料",response.data)
-                if (response.data.serviceCode === 20000) {
-                    this.hotProductArr = response.data.data.list
-                } else {
-                    let message = response.data.message
-                    this.$message.error(message);
-                }
-            }).catch(function (error) { //響應成功會走then，響應失敗走catch
-                console.log("響應結果失敗")
-            }),
-            url = this.url+"/product/"+discountedProduct+"/listProduct?pageNum=1&pageSize=6"
-            this.axios
-                .get(url).then((response) => {
-                if (response.data.serviceCode === 20000) {
-                    this.discountedProductArr = response.data.data.list
-                } else {
-                    let message = response.data.message
-                    this.$message.error(message);
-                }
-            }).catch(function (error) { //響應成功會走then，響應失敗走catch
-                console.log("響應結果失敗")
-            })
+            this.newProductList()
+            this.hotProductList()
+            this.discountedProductList()
         }
     }
 </script>
 <style>
-
-
-
-
     /*card開始*/
     .bottom {
         margin-top: 10px;
