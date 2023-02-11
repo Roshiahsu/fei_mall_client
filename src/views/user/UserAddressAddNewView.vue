@@ -82,7 +82,7 @@
                         {required: true, message: '請輸入所在城市', trigger: 'blur'},
                     ],
                     zone: [
-                        {required: true, message: '請輸入商品價錢', trigger: 'blur'},
+                        {required: true, message: '請輸入所在地(鄉、鎮、區)', trigger: 'blur'},
                     ],
                     zipCode: [
                         {required: true, message: '請輸入郵遞區號', trigger: 'blur'},

@@ -54,16 +54,16 @@
                 </div>
 
                 <div style="margin-top: 15px">
-                    <el-form :inline="true" :model="passwordDTO" size="small" label-width="140px">
-                        <el-form-item label="原始密碼：">
+                    <el-form :inline="true" :model="passwordDTO" :rules="rules" ref="passwordDTO" size="small" label-width="140px" class="demo-ruleForm">
+                        <el-form-item label="原始密碼：" prop="oldPassword">
                             <el-input class="password-input" v-model="passwordDTO.oldPassword" placeholder="請輸入原始密碼" clearable></el-input>
                         </el-form-item>
 
-                        <el-form-item label="新密碼：">
+                        <el-form-item label="新密碼：" prop="newPassword">
                             <el-input class="password-input" v-model="passwordDTO.newPassword"  placeholder="請輸入密碼(大小寫有分別)" clearable></el-input>
                         </el-form-item>
 
-                        <el-form-item label="密碼再確認：">
+                        <el-form-item label="密碼再確認：" prop="checkPassword">
                             <el-input class="password-input" v-model="passwordDTO.checkPassword"  placeholder="請再輸入一次新密碼" clearable></el-input>
                         </el-form-item>
                     </el-form>
@@ -72,7 +72,7 @@
                         style="margin: 0 auto;display: block"
                         type="primary"
                         size="small"
-                        @click="matchesPassword()">
+                        @click="matchesPassword('passwordDTO')">
                     修改密碼
                 </el-button>
             </el-card>
@@ -85,8 +85,28 @@
 <script>
     import {getUrl} from '@/utils/Utils';
 
+
     export default {
         data() {
+            const validatePass = (rule, value, callback) => {
+                if (value === this.passwordDTO.oldPassword) {
+                    callback(new Error('不能跟舊密碼相同！'));
+                } else {
+                    if (this.passwordDTO.checkPassword !== '') {
+                        this.$refs.passwordDTO.validateField('checkPassword');
+                    }
+                    callback();
+                }
+            };
+            const validatePass2 = (rule, value, callback) => {
+                if (value === '') {
+                    callback(new Error('請再次輸入密碼'));
+                } else if (value !== this.passwordDTO.newPassword) {
+                    callback(new Error('兩次輸入密碼不一致!'));
+                } else {
+                    callback();
+                }
+            };
             return {
                 userInfo: {
                     username: '',
@@ -102,6 +122,21 @@
                     checkPassword:'',
                 },
                 url: getUrl(),
+                rules: {
+                    oldPassword: [
+                        { required: true, message: '請輸入舊密碼', trigger: 'blur' },
+                    ],
+                    newPassword: [
+                        { required: true, message: '請輸入新密碼', trigger: 'blur' },
+                        { min: 4, max: 15, message: '長度在 4 到 15 個字符', trigger: 'blur' },
+                        { type:"string" ,validator: validatePass, trigger: 'blur' }
+                    ],
+                    checkPassword: [
+                        { required: true, message: '請確認新密碼', trigger: 'blur' },
+                        { min: 4, max: 15, message: '長度在 4 到 15 個字符', trigger: 'blur' },
+                        { type:"string",validator: validatePass2, trigger: 'blur' }
+                    ],
+                }
             };
         },
         methods: {
@@ -143,24 +178,31 @@
                 })
             },
             //驗證密碼&更新密碼
-            matchesPassword() {
-                let url = this.url + "/password/matches"
-                this.axios
-                    .create({headers: {'Authorization': this.jwt}})
-                    .post(url, this.passwordDTO).then((response) => {
-                    let json = response.data
-                    console.log(json)
-                    if (json.serviceCode === 20000) {
-                        console.log("驗證完成")
-                        this.$message.success("修改完成")
-                    } else if (json.serviceCode === 40004) {
-                        this.open()
-                    } else if (json.serviceCode === 40003) {
-                        this.$message.warning(json.message)
+            matchesPassword(formName) {
+                this.$refs[formName].validate((valid) => {
+                    if (valid) {
+                        let url = this.url + "/password/matches"
+                        this.axios
+                            .create({headers: {'Authorization': this.jwt}})
+                            .post(url, this.passwordDTO).then((response) => {
+                            let json = response.data
+                            console.log(json)
+                            if (json.serviceCode === 20000) {
+                                console.log("驗證完成")
+                                this.$message.success("修改完成")
+                            } else if (json.serviceCode === 40004) {
+                                this.open()
+                            } else if (json.serviceCode === 40003) {
+                                this.$message.warning(json.message)
+                            } else {
+                                // this.$message.error(json.message)
+                            }
+                        })
                     } else {
-                        // this.$message.error(json.message)
+                        console.log('error submit!!');
+                        return false;
                     }
-                })
+                });
             },
             open() {
                 this.$alert('請先登入', '尚未登入', {
