@@ -17,20 +17,18 @@ service.interceptors.request.use(config => {
 })
 
 
-// respone攔截器
-axios.interceptors.response.use(
+// response攔截器
+service.interceptors.response.use(
     response => {
         if (response.data.serviceCode === 20000) {
-            console.log("oops")
-            return response
-        } else if (response.data.serviceCode === 59999){
-            console.log("ＱＱ")
-            return Promise.reject(response)
+            return response.data
+        } else{
+            console.log("response錯誤")
+            return response.data
         }
     },
     error => {
-        console.log("ＱＱ")
-        return Promise.reject(error)
+        console.log("response攔截器error")
     }
 )
 export default service
