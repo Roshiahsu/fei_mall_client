@@ -146,8 +146,9 @@
             //獲取關鍵字
             loadKeyword() {
                 getRequest("/keyword/").then(response=>{
+                    console.log("/keyword/",response)
                     let json=response.data
-                    this.keywordArr = json.data
+                    this.keywordArr = json
                 });
             },
             isExpired(jwt) {
@@ -161,7 +162,7 @@
         },
         created() {
             this.jwt = localStorage.getItem("jwt")
-            this.isExpired(this.jwt)
+            // this.isExpired(this.jwt)
             this.loadKeyword()
         },
         mounted() {

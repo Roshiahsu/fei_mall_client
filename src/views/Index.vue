@@ -93,19 +93,19 @@
             newProductList(){
                 getRequest("/product/"+newProduct+"/listProduct?pageNum=1&pageSize=6")
                     .then(response => {
-                        this.newProductArr = response.data.data.list
+                        this.newProductArr = response.data.list
                     });
             },
             hotProductList(){
                 getRequest("/product/"+hotProduct+"/listProduct?pageNum=1&pageSize=6")
                     .then(response => {
-                        this.hotProductArr = response.data.data.list
+                        this.hotProductArr = response.data.list
                     });
             },
             discountedProductList(){
                 getRequest("/product/"+discountedProduct+"/listProduct?pageNum=1&pageSize=6")
                     .then(response => {
-                        this.discountedProductArr = response.data.data.list
+                        this.discountedProductArr = response.data.list
                     });
             }
 
