@@ -69,7 +69,7 @@
     const hotProduct =3
     const discountedProduct =4
     import {getUrl} from '@/utils/Utils';
-    import {getList} from "@/utils/api";
+    import {getRequest} from "@/utils/api";
 
 
     export default {
@@ -91,19 +91,19 @@
                 location.href = "/product/details?id="+id
             },
             newProductList(){
-                getList("/product/"+newProduct+"/listProduct?pageNum=1&pageSize=6")
+                getRequest("/product/"+newProduct+"/listProduct?pageNum=1&pageSize=6")
                     .then(response => {
                         this.newProductArr = response.data.data.list
                     });
             },
             hotProductList(){
-                getList("/product/"+hotProduct+"/listProduct?pageNum=1&pageSize=6")
+                getRequest("/product/"+hotProduct+"/listProduct?pageNum=1&pageSize=6")
                     .then(response => {
                         this.hotProductArr = response.data.data.list
                     });
             },
             discountedProductList(){
-                getList("/product/"+discountedProduct+"/listProduct?pageNum=1&pageSize=6")
+                getRequest("/product/"+discountedProduct+"/listProduct?pageNum=1&pageSize=6")
                     .then(response => {
                         this.discountedProductArr = response.data.data.list
                     });

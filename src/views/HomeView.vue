@@ -102,7 +102,7 @@
 
 <script>
     import {getUrl} from '@/utils/Utils';
-    import {getList} from "@/utils/api";
+    import {getRequest} from "@/utils/api";
     export default {
         data() {
             return {
@@ -145,7 +145,7 @@
             },
             //獲取關鍵字
             loadKeyword() {
-                getList("/keyword/").then(response=>{
+                getRequest("/keyword/").then(response=>{
                     let json=response.data
                     this.keywordArr = json.data
                 });
