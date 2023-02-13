@@ -1,6 +1,9 @@
 import axios from 'axios'
-import { Message, MessageBox } from 'element-ui'
-import store from '../store'
+import {reLogin} from "@/utils/Utils";
+import {getCookie} from '@/utils/support';
+
+const Token = 'Authorization'
+const jwt = getCookie("jwt")
 
 // 创建axios实例
 const service = axios.create({
@@ -10,6 +13,10 @@ const service = axios.create({
 
 // request攔截器
 service.interceptors.request.use(config => {
+    if(jwt){
+        console.log("從cookie中獲取到jwt")
+        config.headers[Token] = jwt
+    }
     return config
 }, error => {
     console.error("request error",error) // for debug
@@ -22,8 +29,10 @@ service.interceptors.response.use(
     response => {
         if (response.data.serviceCode === 20000) {
             return response.data
+        }else if(response.serviceCode === 40001){
+            reLogin()
         } else{
-            console.log("response錯誤")
+            console.log("response錯誤>>>",response.data)
             return response.data
         }
     },
