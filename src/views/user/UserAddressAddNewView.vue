@@ -97,9 +97,9 @@
         },
         methods: {
             userAddressAddNew(formName) {
-                this.fullscreenLoading = true;
                 this.$refs[formName].validate((valid) => {
                     if (valid) {
+                        this.fullscreenLoading = true;
                         let url = this.url + "/address/insert"
                         this.axios
                             .create({headers: {'Authorization': this.jwt}})
