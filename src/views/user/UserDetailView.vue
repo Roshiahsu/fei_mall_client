@@ -10,7 +10,7 @@
             </template>
             <el-descriptions-item label="用戶名">{{userInfo.username}}</el-descriptions-item>
             <el-descriptions-item label="暱稱">{{userInfo.nickname}}</el-descriptions-item>
-            <el-descriptions-item label="生日">{{userInfo.bod}}</el-descriptions-item>
+            <el-descriptions-item label="生日">{{userInfo.bod.substring(0,0+10)}}</el-descriptions-item>
             <el-descriptions-item label="紅利積分">{{userInfo.rewardPoint}}</el-descriptions-item>
             <el-descriptions-item label="電話" :span="2">{{userInfo.phone}}</el-descriptions-item>
             <el-descriptions-item label="mail" :span="2">{{userInfo.email}}</el-descriptions-item>
