@@ -38,11 +38,12 @@
                 <el-input v-model="userInfo.phone"></el-input>
             </el-descriptions-item>
             <el-descriptions-item label="收件地址" >
-                <el-select v-model="userInfo.detailedAddress" placeholder="請選擇配送地址" style="width: 300px">
+                <el-select v-if=addressArr.length>0 v-model="userInfo.detailedAddress" placeholder="請選擇配送地址" style="width: 300px">
                     <el-option v-for="c in addressArr" v-bind:key="c.id" :label="c.detailedAddress"
                                :value="c.detailedAddress">
                     </el-option>
                 </el-select>
+                <el-input v-else v-model="userInfo.detailedAddress" placeholder="placeholder"></el-input>
 
 <!--                <el-input v-model="userInfo.detailedAddress"></el-input>-->
             </el-descriptions-item>
@@ -54,7 +55,7 @@
 
 
         <br>
-
+<!--    paypal-->
         <form method="post" action="http://localhost:9080/paypal/pay">
             <input type="hidden" name="AmountOfActualPay" v-model="totalPrice">
             <input type="hidden" name="amountOfOriginalPrice" v-model="totalPrice">
@@ -124,6 +125,9 @@
                     console.log("地址列表",json)
                     if(json.serviceCode===20000){
                         this.addressArr=json.data
+                        if(json.data.length===0){
+                            this.userInfo.detailedAddress=" "
+                        }
                     }else {
                         this.$message.error(json.message)
                     }
