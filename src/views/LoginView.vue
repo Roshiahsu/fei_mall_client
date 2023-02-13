@@ -43,7 +43,8 @@
                         <el-input v-model="ruleForm.username"></el-input>
                     </el-form-item>
                     <el-form-item label="用戶密碼" prop="password">
-                        <el-input v-model="ruleForm.password"></el-input>
+                        <el-input :type="isActive?'text':'password'" v-model="ruleForm.password"></el-input>
+                        <el-checkbox label="顯示密碼" name="type" v-model="isActive"></el-checkbox>
                     </el-form-item>
                     <el-button style="float:left;position: relative;left:225px" type="primary"
                                @click="submitReg('ruleForm')">快速註冊
@@ -62,7 +63,7 @@
                     <el-button style="float:left;position: relative;left:225px" type="primary"
                                @click="initPassword('ruleForm')" v-loading.fullscreen.lock="fullscreenLoading">重置密碼
                     </el-button>
-                    <el-button style="float:left;position: relative;left:225px" @click="resetForm('ruleForm')">重置
+                    <el-button style="float:left;position: relative;left:225px" @click="resetForm()">重置
                     </el-button>
                 </el-form>
             </div>
@@ -78,17 +79,18 @@
     // js-cookie
     import {setSupport, getSupport, setCookie, getCookie} from '@/utils/support';
     import {getRequest, postRequest} from '@/utils/api'
-
+    const userDTO = {
+        username: null,
+        password: null,
+    };
     export default {
+
         data() {
             return {
                 isActive: false,
                 activeName: 'login',
                 fullscreenLoading: false,
-                ruleForm: {
-                    username: '',
-                    password: '',
-                },
+                ruleForm: Object.assign({}, userDTO),
                 rules: {
                     username: [
                         {required: true, message: '請輸入用戶名', trigger: 'blur'},
@@ -166,8 +168,8 @@
                 });
             },
             //清空表格
-            resetForm(formName) {
-                this.$refs[formName].resetFields();
+            resetForm() {
+                this.ruleForm=Object.assign({}, userDTO)
             },
             //loading
             openFullScreen() {
