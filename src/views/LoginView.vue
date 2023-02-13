@@ -115,6 +115,7 @@
                                 console.log("response", response.data)
                                 let jwt = response.data
                                 localStorage.setItem('jwt', jwt)
+                                setCookie("jwt",jwt)
                                 this.checkToConfirm('準備跳轉', '登入成功','/index')
                             }
                         })
