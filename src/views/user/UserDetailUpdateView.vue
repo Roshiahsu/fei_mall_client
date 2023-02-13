@@ -83,8 +83,9 @@
 
 
 <script>
-    import {getUrl} from '@/utils/Utils';
-
+    import {haveJwt} from '@/utils/Utils';
+    import {getCookie} from "@/utils/support";
+    import {getRequest,postRequest} from "@/utils/api";
 
     export default {
         data() {
@@ -121,7 +122,6 @@
                     newPassword:'',
                     checkPassword:'',
                 },
-                url: getUrl(),
                 rules: {
                     oldPassword: [
                         { required: true, message: '請輸入舊密碼', trigger: 'blur' },
@@ -142,38 +142,23 @@
         methods: {
             //獲取用戶資料
             loadUserInfo() {
-                let url = this.url + "/user/userInfo"
-                this.axios
-                    .create({headers: {'Authorization': this.jwt}})
-                    .get(url).then((response) => {
-                    let json = response.data
-                    console.log("json", json)
-                    if (json.serviceCode === 20000) {
-                        this.userInfo = json.data;
-                    } else if (json.serviceCode === 40001 || json.serviceCode === 40002) {
-                        this.open()
+                let url = "/user/userInfo"
+                getRequest(url).then(response=>{
+                    if (response.serviceCode === 20000) {
+                        this.userInfo = response.data;
                     } else {
-                        // this.$message.error(json.message)
+                        this.$message.error(response.message)
                     }
-                    console.log("userInfo", this.userInfo)
                 })
             },
             //用戶更新
             userUpdate() {
-                let url = this.url + "/user/update"
-                this.axios
-                    .create({headers: {'Authorization': this.jwt}})
-                    .post(url, this.userInfo).then((response) => {
-                    let json = response.data
-                    console.log(json)
-                    if (json.serviceCode === 20000) {
+                let url = "/user/update"
+                postRequest(url,this.userInfo).then(response=>{
+                    if (response.serviceCode === 20000) {
                         this.$message.success("修改完成")
-                    } else if (json.serviceCode === 40004) {
-                        this.open()
-                    } else if (json.serviceCode === 40003) {
-                        this.$message.warning(json.message)
                     } else {
-                        // this.$message.error(json.message)
+                        this.$message.error(response.message)
                     }
                 })
             },
@@ -181,21 +166,12 @@
             matchesPassword(formName) {
                 this.$refs[formName].validate((valid) => {
                     if (valid) {
-                        let url = this.url + "/password/matches"
-                        this.axios
-                            .create({headers: {'Authorization': this.jwt}})
-                            .post(url, this.passwordDTO).then((response) => {
-                            let json = response.data
-                            console.log(json)
-                            if (json.serviceCode === 20000) {
-                                console.log("驗證完成")
+                        let url = "/password/matches"
+                        postRequest(url,this.passwordDTO).then(response=>{
+                            if (response.serviceCode === 20000) {
                                 this.$message.success("修改完成")
-                            } else if (json.serviceCode === 40004) {
-                                this.open()
-                            } else if (json.serviceCode === 40003) {
-                                this.$message.warning(json.message)
                             } else {
-                                // this.$message.error(json.message)
+                                this.$message.error(response.message)
                             }
                         })
                     } else {
@@ -204,28 +180,12 @@
                     }
                 });
             },
-            open() {
-                this.$alert('請先登入', '尚未登入', {
-                    confirmButtonText: '確定',
-                    callback: action => {
-                        // location.href = "/login"
-                        this.$router.push({path: '/login'})
-                    }
-                });
-            },
-            haveJwt() {
-                if (this.jwt === null) {
-                    this.open()
-                    return
-                }
-            }
         },
         created() {
 
         },
         mounted() {
-            this.jwt = localStorage.getItem("jwt")
-            this.haveJwt();
+            haveJwt(getCookie("jwt"));
             this.loadUserInfo();
         }
     }

@@ -12,7 +12,8 @@
                     <template slot="extra">
                         <el-button type="primary" size="small"
                                    @click="userAddressAddNew('ruleForm')"
-                                   v-loading.fullscreen.lock="fullscreenLoading">確認新增</el-button>
+                                   v-loading.fullscreen.lock="fullscreenLoading">確認新增
+                        </el-button>
                     </template>
 
                     <el-descriptions-item label="居住地" span="1">
@@ -63,7 +64,9 @@
 
 
 <script>
-    import {getUrl} from '@/utils/Utils';
+    import {getRequest, postRequest} from '@/utils/api'
+    import {setSupport, getSupport, setCookie, getCookie} from '@/utils/support';
+    import {haveJwt} from "@/utils/Utils";
 
     export default {
         data() {
@@ -92,33 +95,24 @@
                         {required: true, message: '請輸入地址', trigger: 'blur'},
                     ],
                 },
-                url: getUrl(),
             };
         },
         methods: {
             userAddressAddNew(formName) {
-                this.fullscreenLoading = true;
                 this.$refs[formName].validate((valid) => {
                     if (valid) {
-                        let url = this.url + "/address/insert"
-                        this.axios
-                            .create({headers: {'Authorization': this.jwt}})
-                            .post(url, this.ruleForm).then((response) => {
-                            let json = response.data
-                            console.log(json)
-                            if (json.serviceCode === 20000) {
+                        let url = "/address/insert"
+                        postRequest(url, this.ruleForm).then(response => {
+                            if (response.serviceCode === 20000) {
+                                this.fullscreenLoading = true;
                                 this.$message.success("新增完成")
                                 setTimeout(() => {
                                     this.fullscreenLoading = false;
                                     // location.href="/customerCenter"
                                     this.$router.push({path: '/customerCenter'})
                                 }, 500);
-                            } else if (json.serviceCode === 40004) {
-                                this.open()
-                            } else if (json.serviceCode === 40003) {
-                                this.$message.warning(json.message)
-                            } else {
-                                this.$message.error(json.message)
+                            }else{
+                                this.$message.error(response.message)
                             }
                         })
                     } else {
@@ -127,28 +121,14 @@
                     }
                 });
             },
-            open() {
-                this.$alert('請先登入', '尚未登入', {
-                    confirmButtonText: '確定',
-                    callback: action => {
-                        // location.href = "/login"
-                        this.$router.push({path: '/login'})
-                    }
-                });
-            },
-            haveJwt() {
-                if (this.jwt === null) {
-                    this.open()
-                    return
-                }
-            },
         },
         created() {
 
         },
         mounted() {
-            this.jwt = localStorage.getItem("jwt")
-            this.haveJwt();
+            //從cookie獲取jwt
+            //haveJwt()為 utils包下的方法
+            haveJwt(getCookie("jwt"))
         }
     }
 </script>

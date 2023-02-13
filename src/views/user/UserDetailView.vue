@@ -113,7 +113,9 @@
 
 
 <script>
-    import {getUrl} from '@/utils/Utils';
+    import {haveJwt} from '@/utils/Utils';
+    import {getCookie} from "@/utils/support";
+    import {getRequest,postRequest} from "@/utils/api";
 
     export default {
         data() {
@@ -143,65 +145,50 @@
                         detailedAddress: '',
                     }
                 ],
-                url: getUrl(),
             };
         },
         methods: {
             //跳轉到訂單詳情
             getOrderDetail(id) {
-                location.href = "/orderDetailInfo?id=" + id
+                this.$router.push({path: "/orderDetailInfo?id=" + id});
+                // location.href = "/orderDetailInfo?id=" + id
             },
             //自動獲取用戶資料
             loadUserInfo() {
-                let url = this.url + "/user/userInfo"
-                this.axios
-                    .create({headers: {'Authorization': this.jwt}})
-                    .get(url).then((response) => {
-                    let json = response.data
-                    if (json.serviceCode === 20000) {
-                        this.userInfo = json.data;
-                    } else if (json.serviceCode === 40001 || json.serviceCode === 40002) {
-                        localStorage.clear()
+                let url = "/user/userInfo"
+                getRequest(url).then(response=>{
+                    if (response.serviceCode === 20000) {
+                        this.userInfo = response.data;
                     } else {
-                        // this.$message.error(json.message)
+                        this.$message.error(response.message)
                     }
-                    console.log("userInfo", this.userInfo)
                 })
             },
             //獲取地址詳情
             loadAddressList() {
-                let url = this.url + "/address/addressList"
-                this.axios
-                    .create({headers: {'Authorization': this.jwt}})
-                    .get(url).then((response) => {
-                    let json = response.data
-                    if (json.serviceCode === 20000) {
-                        this.addressList = json.data;
-                    } else if (json.serviceCode === 40001 || json.serviceCode === 40002) {
-                        localStorage.clear()
+                let url ="/address/addressList"
+                getRequest(url).then(response=>{
+                    if (response.serviceCode === 20000) {
+                        this.addressList = response.data;
                     } else {
-                        this.$message.error(json.message)
+                        this.$message.error(response.message)
                     }
-                    console.log("addressList", this.addressList)
                 })
             },
             //獲取訂單列表
             loadOrderList() {
-                let url = this.url + "/order/list"
-                this.axios
-                    .create({headers: {'Authorization': this.jwt}})
-                    .get(url).then((response) => {
-                    let json = response.data
-                    if (json.serviceCode === 20000) {
-                        this.orderList = json.data;
+                let url = "/order/list"
+                getRequest(url).then(response=>{
+                    if (response.serviceCode === 20000) {
+                        this.orderList = response.data;
                     } else {
-                        // this.$message.error(json.message)
+                        this.$message.error(response.message)
                     }
-                    console.log("orderList", this.orderList)
                 })
             },
             handleEdit(id){
-                location.href = "/user/addressUpdate?id="+id
+                this.$router.push({path: "/user/addressUpdate?id="+id});
+                // location.href = "/user/addressUpdate?id="+id
             },
             //商品刪除確認
             openDeleteConfirm(id) {
@@ -220,51 +207,29 @@
             },
             //根據id刪除地址
             handleDelete(id){
-                console.log(id)
-                let url=this.url+"/address/"+id+"/delete"
-                this.axios
-                    .create({headers:{'Authorization':localStorage.getItem("jwt")}})
-                    .get(url).then((response)=>{
-                    let json = response.data;
-                    if(json.serviceCode===20000){
+                let url="/address/"+id+"/delete"
+                getRequest(url).then(response=>{
+                    if (response.serviceCode === 20000) {
                         this.$message.success("刪除成功")
-                    }else{
-                        let message = response.data.message
-                        this.$message.error(message);
+                        setTimeout(() => {
+                            location.reload()
+                            // this.$router.push({path: '/customerCenter'})
+                        }, 500);
+                    } else {
+                        this.$message.error(response.message)
                     }
-                    setTimeout(() => {
-                        location.href=''
-                        // this.$router.push({path: '/customerCenter'})
-                    }, 500);
-
                 })
-            },
-            open() {
-                this.$alert('請先登入', '尚未登入', {
-                    confirmButtonText: '確定',
-                    callback: action => {
-                        // location.href = "/login"
-                        this.$router.push({path: '/login'})
-                    }
-                });
-            },
-            haveJwt() {
-                if (this.jwt === null) {
-                    this.open()
-                    return
-                }
+
             },
         },
-
         created() {
 
         },
         mounted() {
-            this.jwt = localStorage.getItem("jwt")
+            haveJwt(getCookie('jwt'));
             this.loadUserInfo();
             this.loadOrderList();
             this.loadAddressList()
-            this.haveJwt();
 
         }
     }

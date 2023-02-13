@@ -10,7 +10,9 @@
                              border
             >
                 <template slot="extra">
-                    <el-button type="primary" size="small" @click="userAddressUpdate()">確認修改</el-button>
+                    <el-button type="primary" size="small"
+                               @click="userAddressUpdate()"
+                               v-loading.fullscreen.lock="fullscreenLoading">確認修改</el-button>
                 </template>
                 <el-descriptions-item label="居住地" span="1" >
                     <el-input v-model="addressInfo.city"></el-input>
@@ -47,11 +49,14 @@
 
 
 <script>
-    import {getUrl} from '@/utils/Utils';
+    import {haveJwt} from '@/utils/Utils';
+    import {getCookie} from "@/utils/support";
+    import {getRequest,postRequest} from "@/utils/api";
 
     export default {
         data() {
             return {
+                fullscreenLoading: false,
                 addressInfo:
                     {
                         city:'',
@@ -61,78 +66,43 @@
                         isDefault:'',
                         tag:''
                     },
-                url: getUrl(),
             };
         },
         methods: {
             //獲取地址詳情
             loadAddressInfo(id) {
-                let url = this.url + "/address/addressInfo?id="+id
-                this.axios
-                    .create({headers: {'Authorization': this.jwt}})
-                    .get(url).then((response) => {
-                    let json = response.data
-                    console.log("地址詳情json", json)
-                    if (json.serviceCode === 20000) {
-                        this.addressInfo = json.data;
-                    } else if (json.serviceCode === 40001 || json.serviceCode === 40002) {
-                        this.open()
-                    } else {
-                        // this.$message.error(json.message)
+                let url = "/address/addressInfo?id="+id
+                getRequest(url).then(response => {
+                    if (response.serviceCode === 20000) {
+                        this.addressInfo = response.data;
+                    }else{
+                        this.$message.error(response.message)
                     }
-                    console.log("addressInfo", this.addressInfo)
                 })
             },
             userAddressUpdate() {
-                let url = this.url + "/address/updateAddress"
-                this.axios
-                    .create({headers: {'Authorization': this.jwt}})
-                    .post(url, this.addressInfo).then((response) => {
-                    let json = response.data
-                    console.log(json)
-                    if (json.serviceCode === 20000) {
+                let url = "/address/updateAddress"
+                postRequest(url,this.addressInfo).then(response=>{
+                    if (response.serviceCode === 20000) {
+                        this.fullscreenLoading = true;
                         this.$message.success("修改完成")
                         setTimeout(() => {
                             // location.href="/customerCenter"
                             this.$router.push({path: '/customerCenter'})
                         }, 500);
-                    } else if (json.serviceCode === 40002) {
-                        this.open()
-                    } else if (json.serviceCode === 40003) {
-                        this.$message.warning(json.message)
-                    } else {
-                        // this.$message.error(json.message)
+                    }else{
+                        this.$message.warning(response.message)
                     }
                 })
             },
-            open() {
-                this.$alert('請先登入', '尚未登入', {
-                    confirmButtonText: '確定',
-                    callback: action => {
-                        // location.href = "/login"
-                        this.$router.push({path: '/login'})
-                    }
-                });
-            },
-            haveJwt() {
-                if (this.jwt === null) {
-                    this.open()
-                    return
-                }
-            }
         },
         created() {
 
         },
         mounted() {
-            this.jwt = localStorage.getItem("jwt")
             let id =location.search.split("=")[1]
-            this.haveJwt();
+            haveJwt(getCookie('jwt'));
             this.loadAddressInfo(id)
         }
     }
 </script>
-<style>
-
-
-</style>
