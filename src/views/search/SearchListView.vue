@@ -28,17 +28,13 @@
 </div>
 </template>
 
-
-
 <script>
-    import {getUrl} from '@/utils/Utils';
-
+    import {getCookie} from '@/utils/support';
+    import {getRequest, postRequest} from '@/utils/api'
     export default {
         data() {
             return {
                 brandArr:[],
-                jwt:'',
-                url:getUrl(),
                 pages:'',//分類頁
                 imgWidth:200,
                 imgHeight:200,
@@ -47,19 +43,17 @@
         },
         methods: {
             productDetails(id){
-                location.href = "/product/details?="+id
+                this.$router.push({path: "/product/details?="+id});
+                // location.href = "/product/details?="+id
             },
             loadSearchList(keyword,pageNum){
-                let url = this.url+"/search/?pageNum="+pageNum+"&pageSize=8&keywords="+keyword
-                this.axios
-                .get(url).then((response)=>{
-                    let json=response.data
-                    console.log("JSON",json)
-                    if(json.serviceCode===20000){
-                        this.brandArr=json.data.list
-                        this.pages = json.data.totalPage
+                let url = "/search/?pageNum="+pageNum+"&pageSize=8&keywords="+keyword
+                getRequest(url).then(response=>{
+                    if(response.serviceCode===20000){
+                        this.brandArr=response.data.list
+                        this.pages = response.data.totalPage
                     }else {
-                        this.$message.error(json.message)
+                        this.$message.error(response.message)
                     }
                 })
             },
