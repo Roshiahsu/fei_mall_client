@@ -38,14 +38,13 @@
                 <el-input v-model="userInfo.phone"></el-input>
             </el-descriptions-item>
             <el-descriptions-item label="收件地址" >
-                <el-select v-if=addressArr.length>0 v-model="userInfo.detailedAddress" placeholder="請選擇配送地址" style="width: 300px">
-                    <el-option v-for="c in addressArr" v-bind:key="c.id" :label="c.detailedAddress"
-                               :value="c.detailedAddress">
+                <el-checkbox label="使用預設：" name="type" v-model="isActive" v-if="addressArr.length>0"></el-checkbox>
+                <el-input style="width: 300px" v-if="!isActive" v-model="inputAddress" placeholder="請選擇配送地址"></el-input>
+                <el-select v-else v-model="userInfo.detailedAddress" placeholder="請選擇配送地址" style="width: 300px">
+                    <el-option  v-for="c in addressArr" v-bind:key="c.id" :label="c.detailedAddress"
+                                :value="c.detailedAddress">
                     </el-option>
                 </el-select>
-                <el-input v-else v-model="userInfo.detailedAddress" placeholder="placeholder"></el-input>
-
-<!--                <el-input v-model="userInfo.detailedAddress"></el-input>-->
             </el-descriptions-item>
 <!--            <el-descriptions-item label="備註"  >-->
 <!--                <el-tag size="small" >待完成</el-tag>-->
@@ -88,6 +87,8 @@
     export default {
         data() {
             return {
+                inputAddress:'',
+                isActive:false,
                 cartArr:[],
                 userInfo:{},
                 addressArr:[],
@@ -124,10 +125,7 @@
                     let json=response.data
                     console.log("地址列表",json)
                     if(json.serviceCode===20000){
-                        this.addressArr=json.data
-                        if(json.data.length===0){
-                            this.userInfo.detailedAddress=" "
-                        }
+                        this.addressArr = json.data
                     }else {
                         this.$message.error(json.message)
                     }
