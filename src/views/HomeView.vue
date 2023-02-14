@@ -101,8 +101,10 @@
 </template>
 
 <script>
-    import {getUrl} from '@/utils/Utils';
     import {getRequest} from "@/utils/api";
+    import {getCookie} from "@/utils/support";
+    import Cookies from "js-cookie";
+
     export default {
         data() {
             return {
@@ -110,7 +112,6 @@
                 role: '',
                 keyword: '',
                 keywordArr: [],
-                url: getUrl(),
                 elAsideWidth: "200px",
             };
         },
@@ -118,7 +119,8 @@
             //登出
             logout() {
                 localStorage.clear()
-                location.href = "/"
+                Cookies.remove('jwt')
+                this.$router.push({path: '/'})
             },
             //解析jwt
             parseJwt(jwt) {
@@ -161,7 +163,7 @@
             }
         },
         created() {
-            this.jwt = localStorage.getItem("jwt")
+            this.jwt = getCookie('jwt')
             this.isExpired(this.jwt)
             this.loadKeyword()
         },
