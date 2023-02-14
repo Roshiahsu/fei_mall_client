@@ -119,7 +119,6 @@
             //登出
             logout() {
                 localStorage.clear()
-                Cookies.remove('jwt')
                 this.$router.push({path: '/'})
             },
             //解析jwt
@@ -163,7 +162,7 @@
             }
         },
         created() {
-            this.jwt = getCookie('jwt')
+            this.jwt = localStorage.getItem('jwt')
             this.isExpired(this.jwt)
             this.loadKeyword()
         },

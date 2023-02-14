@@ -68,7 +68,6 @@
     const newProduct =2
     const hotProduct =3
     const discountedProduct =4
-    import {getUrl} from '@/utils/Utils';
     import {getRequest} from "@/utils/api";
 
 
@@ -76,14 +75,12 @@
         data() {
             return {
                 gutter:15,
-                jwt: '',
                 categoryArr: [],
                 newProductArr:[],
                 hotProductArr:[],
                 discountedProductArr:[],
                 imgWidth:200,
                 imgHeight:200,
-                url:getUrl(),
             };
         },
         methods: {
