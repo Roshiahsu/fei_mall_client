@@ -119,7 +119,7 @@
             //登出
             logout() {
                 localStorage.clear()
-                this.$router.push({path: '/'})
+                location.href = '/'
             },
             //解析jwt
             parseJwt(jwt) {
