@@ -50,7 +50,6 @@
 
 <script>
     import {haveJwt} from '@/utils/Utils';
-    import {getCookie} from "@/utils/support";
     import {getRequest,postRequest} from "@/utils/api";
 
     export default {
@@ -101,7 +100,7 @@
         },
         mounted() {
             let id =location.search.split("=")[1]
-            haveJwt(getCookie('jwt'));
+            haveJwt(localStorage.getItem('jwt'));
             this.loadAddressInfo(id)
         }
     }

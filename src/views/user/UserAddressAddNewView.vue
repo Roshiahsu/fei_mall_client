@@ -65,7 +65,6 @@
 
 <script>
     import {getRequest, postRequest} from '@/utils/api'
-    import {setSupport, getSupport, setCookie, getCookie} from '@/utils/support';
     import {haveJwt} from "@/utils/Utils";
 
     export default {
@@ -126,9 +125,8 @@
 
         },
         mounted() {
-            //從cookie獲取jwt
             //haveJwt()為 utils包下的方法
-            haveJwt(getCookie("jwt"))
+            haveJwt(localStorage.getItem('jwt'))
         }
     }
 </script>

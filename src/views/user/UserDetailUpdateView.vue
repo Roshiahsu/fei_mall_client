@@ -185,7 +185,7 @@
 
         },
         mounted() {
-            haveJwt(getCookie("jwt"));
+            haveJwt(localStorage.getItem('jwt'));
             this.loadUserInfo();
         }
     }

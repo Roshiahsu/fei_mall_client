@@ -114,7 +114,6 @@
 
 <script>
     import {haveJwt} from '@/utils/Utils';
-    import {getCookie} from "@/utils/support";
     import {getRequest,postRequest} from "@/utils/api";
 
     export default {
@@ -159,8 +158,6 @@
                 getRequest(url).then(response=>{
                     if (response.serviceCode === 20000) {
                         this.userInfo = response.data;
-                    } else {
-                        this.$message.error(response.message)
                     }
                 })
             },
@@ -170,8 +167,6 @@
                 getRequest(url).then(response=>{
                     if (response.serviceCode === 20000) {
                         this.addressList = response.data;
-                    } else {
-                        this.$message.error(response.message)
                     }
                 })
             },
@@ -181,8 +176,6 @@
                 getRequest(url).then(response=>{
                     if (response.serviceCode === 20000) {
                         this.orderList = response.data;
-                    } else {
-                        this.$message.error(response.message)
                     }
                 })
             },
@@ -226,7 +219,7 @@
 
         },
         mounted() {
-            haveJwt(getCookie('jwt'));
+            haveJwt(localStorage.getItem('jwt'));
             this.loadUserInfo();
             this.loadOrderList();
             this.loadAddressList()

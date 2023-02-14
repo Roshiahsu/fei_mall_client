@@ -3,7 +3,7 @@ import {reLogin} from "@/utils/Utils";
 import {getCookie} from '@/utils/support';
 
 const Token = 'Authorization'
-const jwt = getCookie("jwt")
+const jwt = localStorage.getItem('jwt')
 
 // 创建axios实例
 const service = axios.create({
@@ -29,7 +29,7 @@ service.interceptors.response.use(
     response => {
         if (response.data.serviceCode === 20000) {
             return response.data
-        }else if(response.serviceCode === 40001){
+        }else if(response.serviceCode === 40001 ||response.serviceCode === 40001 ){
             reLogin()
         } else{
             console.log("response錯誤>>>",response.data)
