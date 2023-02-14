@@ -29,7 +29,6 @@
 </template>
 
 <script>
-    import {getCookie} from '@/utils/support';
     import {getRequest, postRequest} from '@/utils/api'
     export default {
         data() {
