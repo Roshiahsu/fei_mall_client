@@ -39,7 +39,7 @@
             </el-descriptions-item>
             <el-descriptions-item label="收件地址" >
                 <el-checkbox label="使用預設：" name="type" v-model="isActive" v-if="addressArr.length>0"></el-checkbox>
-                <el-input style="width: 300px" v-if="!isActive" v-model="inputAddress" placeholder="請選擇配送地址"></el-input>
+                <el-input style="width: 300px" v-if="!isActive" v-model="userInfo.detailedAddress" placeholder="請選擇配送地址"></el-input>
                 <el-select v-else v-model="userInfo.detailedAddress" placeholder="請選擇配送地址" style="width: 300px">
                     <el-option  v-for="c in addressArr" v-bind:key="c.id" :label="c.detailedAddress"
                                 :value="c.detailedAddress">
@@ -82,7 +82,8 @@
 
 
 <script>
-    import {getUrl} from '@/utils/Utils';
+    import {haveJwt} from '@/utils/Utils';
+    import {getRequest,postRequest} from "@/utils/api";
 
     export default {
         data() {
@@ -93,7 +94,6 @@
                 userInfo:{},
                 addressArr:[],
                 jwt:"",
-                url:getUrl(),
                 subtotal:"",
                 pages:'',
                 totalPrice:'',
@@ -102,32 +102,26 @@
         methods: {
             //獲取購物車
             loadCarts(){
-                let url=this.url+"/cart/list"
-                this.axios
-                    .create({headers:{'Authorization':this.jwt}})
-                    .get(url).then((response)=>{
-                    let json=response.data
-                    console.log("cartArrJSON",json)
-                    if(json.serviceCode===20000){
-                        this.cartArr=json.data
+                let url="/cart/list"
+                getRequest(url).then(response=>{
+                    console.log("cartArrJSON",response)
+                    if(response.serviceCode===20000){
+                        this.cartArr=response.data
                         this.total()
                     }else {
-                        this.$message.error(json.message)
+                        this.$message.error(response.message)
                     }
                 })
             },
             //獲取地址列表
             loadAddressList(){
-                let url=this.url+"/address/addressList"
-                this.axios
-                    .create({headers:{'Authorization':this.jwt}})
-                    .get(url).then((response)=>{
-                    let json=response.data
-                    console.log("地址列表",json)
-                    if(json.serviceCode===20000){
-                        this.addressArr = json.data
+                let url="/address/addressList"
+                getRequest(url).then(response=>{
+                    console.log("地址列表",response)
+                    if(response.serviceCode===20000){
+                        this.addressArr = response.data
                     }else {
-                        this.$message.error(json.message)
+                        this.$message.error(response.message)
                     }
                 })
             },
@@ -179,36 +173,17 @@
                     }
                 })
             },
-            //自動獲取用戶資料
+            //獲取用戶資料
             loadUserInfo(){
-                let url=this.url+"/user/userInfo"
-                this.axios
-                    .create({headers:{'Authorization':this.jwt}})
-                    .get(url).then((response)=>{
-                    let json=response.data
-                    if(json.serviceCode===20000){
-                        this.userInfo=json.data;
+                let url="/user/userInfo"
+                getRequest(url).then(response=>{
+                    if(response.serviceCode===20000){
+                        this.userInfo=response.data;
                     }else{
-                        this.$message.error(json.message)
+                        this.$message.error(response.message)
                     }
                     console.log("userInfo",this.userInfo)
                 })
-            },
-            open() {
-                this.$alert('請先登入', '尚未登入', {
-                    confirmButtonText: '確定',
-                    callback: action => {
-                        // location.href = "/login"
-                        this.$router.push({path: '/login'})
-                    }
-                });
-            },
-            //判斷是否有包含jwt，如果沒有則跳到登入頁
-            haveJwt(){
-                if(this.jwt ===null){
-                    this.open()
-                    return
-                }
             },
         },
         created() { //已創建 在mounted 顯示頁面之前執行
@@ -216,7 +191,7 @@
         },
         mounted() { //已掛載 在created 顯示頁面之後執行
             this.jwt = localStorage.getItem("jwt")
-            this.haveJwt()
+            haveJwt(this.jwt)
             // let pageSize = location.search.split("&")[1].split("=")[1];
             this.loadCarts();
             this.loadUserInfo();
