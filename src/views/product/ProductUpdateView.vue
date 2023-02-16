@@ -118,6 +118,8 @@
 
 <script>
     import {getUrl} from '@/utils/Utils';
+    import {getRequest,postRequest} from "@/utils/api";
+    import {haveJwt} from "@/utils/Utils";
 
     export default {
         data() {
@@ -179,31 +181,22 @@
                 console.log("ruleForm", this.ruleForm)
                 this.$refs[formName].validate((valid) => {
                     if (valid) {
-                        let url = this.url+"/product/update"
-                        this.axios
-                            .create({headers: {'Authorization': this.jwt}})
-                            .post(url, this.ruleForm).then((response) => {
-                            let json = response.data
-                            console.log("json", json)
-                            if (json.serviceCode === 20000) {
-                                console.log("成功", json)
-                                console.log("ruleForm.picture", this.ruleForm.picture)
-                                console.log("oldPicture", this.oldPicture)
-
+                        let url = "/product/update"
+                        postRequest(url, this.ruleForm).then(response =>{
+                            console.log("傳送json", response)
+                            if (response.serviceCode === 20000) {
                                 //判斷傳送表單內的圖片路徑與獲取的商品詳情圖片是否相等
                                 if(this.ruleForm.picture != this.oldPicture){
-                                    console.log("更換圖片", json)
+                                    //不相等，重新上傳圖片
+                                    console.log("更換圖片", response)
                                     this.submitUpload()
                                 }
                                 this.$message.success("修改成功")
-                                // location.reload()
-                            } else if (json.serviceCode === 40001 || json.serviceCode === 40002) {
-                                this.open()
+                                location.reload()
                             } else {
-                                this.$message.error(json.message)
+                                this.$message.error(response.message)
                             }
                         })
-
                     } else {
                         this.$message.error("資料格式有誤，請檢查!")
                         return false;
@@ -222,9 +215,9 @@
             //上傳成功
             handleSuccess(response, file, fileList) {
                 if (response.serviceCode === 20000) {
-
+                    console.log("上傳圖片成功")
                 } else {
-                    let message = response.data.message
+                    let message = response.message
                     this.$message.error(message);
                 }
             },
@@ -267,60 +260,41 @@
             /*上傳圖片相關代碼結束*/
             //獲取品牌列表
             loadBrands(pageNum) {
-                let url = this.url+"/brands/list?pageNum=" + pageNum
-                this.axios
-                    .create({headers: {'Authorization': this.jwt}})
-                    .get(url).then((response) => {
-                    let json = response.data
-                    console.log("獲取品牌列表JSON", json)
-                    if (json.serviceCode === 20000) {
-                        this.brandArr = json.data.list
-                    } else if (json.serviceCode === 40001 || json.serviceCode === 40002) {
-                        this.open()
+                let url = "/brands/list?pageNum=" + pageNum
+
+                getRequest(url).then(response=>{
+                    console.log("獲取品牌列表JSON", response)
+                    if (response.serviceCode === 20000) {
+                        this.brandArr = response.data.list
                     } else {
-                        this.$message.error(json.message)
+                        this.$message.error(response.message)
                     }
                 })
             },
+            //獲取推播種類
             loadProductTypeList() {
-                let url = this.url+"/product/productTypeList"
-                this.axios
-                    .create({headers: {'Authorization': this.jwt}})
-                    .get(url).then((response) => {
-                    let json = response.data
-                    console.log("獲取推播列表JSON", json)
-                    if (json.serviceCode === 20000) {
-                        this.productTypeList = json.data
-                    } else if (json.serviceCode === 40001 || json.serviceCode === 40002){
-                        this.open()
+                let url = "/product/productTypeList"
+                getRequest(url).then(response=>{
+                    console.log("獲取推播列表JSON", response)
+                    if (response.serviceCode === 20000) {
+                        this.productTypeList = response.data
                     } else {
-                        this.$message.error(json.message)
+                        this.$message.error(response.message)
                     }
                 })
             },
             //獲取商品詳情
             loadProduct() {
-                let url = this.url+"/product/" + this.id + "/details"
-                this.axios
-                    .get(url).then((response) => {
-                    let json = response.data
-                    console.log("商品詳情JSON", json)
-                    if (json.serviceCode === 20000) {
-                        this.ruleForm = json.data
-                        this.oldPicture = json.data.picture
+                let url = "/product/" + this.id + "/details"
+                getRequest(url).then(response=>{
+                    console.log("商品詳情JSON", response)
+                    if (response.serviceCode === 20000) {
+                        this.ruleForm = response.data
+                        this.oldPicture = response.data.picture
                     } else {
-                        this.$message.error(json.message)
+                        this.$message.error(response.message)
                     }
                 })
-            },
-            open() {
-                this.$alert('請先登入', '尚未登入', {
-                    confirmButtonText: '確定',
-                    callback: action => {
-                        // location.href = "/login"
-                        this.$router.push({path: '/login'})
-                    }
-                });
             },
         },
         created() {
@@ -329,6 +303,7 @@
         mounted() {
             this.jwt = localStorage.getItem("jwt")
             this.id = location.search.split("=")[1];
+            haveJwt(this.jwt)
             //獲取品牌列表
             this.loadBrands(1);
             //獲取推播種類

@@ -55,7 +55,7 @@
 
 
 <script>
-    import {getUrl} from '@/utils/Utils';
+    import {getRequest,postRequest} from "@/utils/api";
 
     export default {
         data() {
@@ -73,7 +73,6 @@
                 picture: '',
                 jwt: '',
                 id: '',
-                url:getUrl(),
                 ruleForm: {
                     quantity:''
                 },
@@ -88,16 +87,14 @@
         methods: {
             loadProduct() {
                 //自動獲取
-                let url = this.url+"/product/" + this.id + "/details"
-                this.axios
-                    .get(url).then((response) => {
-                    let json = response.data
-                    console.log("JSON", json)
-                    if (json.serviceCode === 20000) {
-                        this.product = json.data
-                        this.picture = json.data.picture
+                let url = "/product/" + this.id + "/details"
+                getRequest(url).then(response=>{
+                    console.log("獲取到的資料", response)
+                    if (response.serviceCode === 20000) {
+                        this.product = response.data
+                        this.picture = response.data.picture
                     } else {
-                        this.$message.error(json.message)
+                        this.$message.error(response.message)
                     }
                 })
             },
@@ -110,20 +107,14 @@
                             price: this.product.price,
                             quantity: this.ruleForm.quantity,
                         }
-
                         console.log(productAddNewDTO)
-                        let url = this.url+"/cart/insert"
-                        this.axios
-                            .create({headers:{'Authorization':this.jwt}})
-                            .post(url, productAddNewDTO).then((response) => {
-                            let json = response.data
-                            console.log("JSON", json)
-                            if (json.serviceCode === 20000) {
+                        let url ="/cart/insert"
+                        postRequest(url,productAddNewDTO).then(response=>{
+                            console.log("新增購物車JSON", response)
+                            if (response.serviceCode === 20000) {
                                 this.$message.success("新增成功")
-                            } else if (json.serviceCode === 40004 || json.serviceCode === 40002){
-                                this.open()
                             }else{
-                                this.$message.error(json.message)
+                                this.$message.error(response.message)
                             }
                         })
                     } else {
@@ -132,15 +123,6 @@
                     }
                 });
             },
-            open() {
-                this.$alert('請先登入', '尚未登入', {
-                    confirmButtonText: '確定',
-                    callback: action => {
-                        // location.href = "/login"
-                        this.$router.push({path: '/login'})
-                    }
-                });
-            }
         },
         created() { //已創建 在mounted 顯示頁面之前執行
 

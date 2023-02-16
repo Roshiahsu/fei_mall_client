@@ -36,41 +36,39 @@
 
 
 <script>
-    import {getUrl} from '@/utils/Utils';
+    import{getRequest,postRequest} from "@/utils/api";
+
     const allProduct =1
     export default {
         data() {
             return {
                 brandArr:[],
-                jwt:'',
-                url:getUrl()+"/product/",
                 pages:100,//分類頁
                 pageSize:1,
                 imgWidth:200,
                 imgHeight:200,
-
             };
         },
         methods: {
+            //商品詳情
             productDetails(id){
                 location.href = "/product/details?="+id
             },
+            //獲取商品列表
             loadProductList(pageNum){
-                //自動獲取
-                let url = this.url+allProduct+"/listProduct?pageNum="+pageNum+"&pageSize=8"
-                this.axios
-                .get(url).then((response)=>{
-                    let json=response.data
-                    console.log("JSON",json)
-                    if(json.serviceCode===20000){
-                        this.brandArr=json.data.list
-                        this.pages = json.data.totalPage
-                        this.pageSize = json.data.pageSize
+                let url ='/product/'+allProduct+"/listProduct?pageNum="+pageNum+"&pageSize=8"
+                getRequest(url).then(response=>{
+                    console.log("獲取商品列表JSON",response)
+                    if(response.serviceCode===20000){
+                        this.brandArr=response.data.list
+                        this.pages = response.data.totalPage
+                        this.pageSize = response.data.pageSize
                     }else {
-                        this.$message.error(json.message)
+                        this.$message.error(response.message)
                     }
                 })
             },
+            //分頁功能狀態改變
             handleCurrentChange(val) {
                 this.loadProductList(val)
             }

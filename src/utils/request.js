@@ -27,10 +27,13 @@ service.interceptors.request.use(config => {
 // response攔截器
 service.interceptors.response.use(
     response => {
+        console.log("response",response)
         if (response.data.serviceCode === 20000) {
             return response.data
-        }else if(response.serviceCode === 40001 ||response.serviceCode === 40001 ){
+        }else if(response.data.serviceCode === 40001
+            || response.data.serviceCode === 40004){
             reLogin()
+            return response.data
         } else{
             console.log("response錯誤>>>",response.data)
             return response.data

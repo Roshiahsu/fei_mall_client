@@ -64,14 +64,14 @@
 
 
 <script>
-    import {getUrl} from '@/utils/Utils';
+    import {getRequest,postRequest} from "@/utils/api";
+    import {haveJwt} from "@/utils/Utils";
 
     const allProduct =1
     export default {
         data() {
             return {
                 productArr:[],
-                url:getUrl()+"/product/",
                 pages:1,//分類頁
                 imgWidth:50,
                 imgHeight:50,
@@ -79,20 +79,16 @@
             };
         },
         methods: {
+            //獲取商品列表
             loadProductList(pageNum){
-                //自動獲取
-                let url = this.url+allProduct+"/listProduct?pageNum="+pageNum+"&pageSize=10"
-                this.axios
-                .get(url).then((response)=>{
-                    let json=response.data
-                    console.log("商品列表JSON",json)
-                    if(json.serviceCode===20000) {
-                        this.productArr = json.data.list
-                        this.pages = json.data.totalPage
-                    }else if (json.serviceCode === 40001 || json.serviceCode === 40002){
-                            this.open()
+                let url = "/product/"+allProduct+"/listProduct?pageNum="+pageNum+"&pageSize=10"
+                getRequest(url).then(response=>{
+                    console.log("商品列表JSON",response)
+                    if(response.serviceCode===20000) {
+                        this.productArr = response.data.list
+                        this.pages = response.data.totalPage
                     }else {
-                        this.$message.error(json.message)
+                        this.$message.error(response.message)
                     }
                 })
             },
@@ -117,29 +113,16 @@
             //根據id刪除商品
             handleDelete(id){
                 console.log(id)
-                let url=this.url+id+"/delete"
-                this.axios
-                    .create({headers:{'Authorization':localStorage.getItem("jwt")}})
-                    .get(url).then((response)=>{
-                    let json = response.data;
-                    if(json.serviceCode===20000){
+                let url="/product/"+id+"/delete"
+                getRequest(url).then(response=>{
+                    if(response.serviceCode===20000){
                         this.$message.success("刪除成功")
-                        this.loadProductList(1);
+                        location.reload()
                     }else{
-                        let message = response.data.message
+                        let message = response.message
                         this.$message.error(message);
                     }
-                    this.loadProductList(1);
                 })
-            },
-            open() {
-                this.$alert('請先登入', '尚未登入', {
-                    confirmButtonText: '確定',
-                    callback: action => {
-                        // location.href = "/login"
-                        this.$router.push({path: '/login'})
-                    }
-                });
             },
             handleCurrentChange(val) {
                 this.loadProductList(val)
@@ -149,7 +132,7 @@
 
         },
         mounted() { //已掛載 在created 顯示頁面之後執行
-
+            haveJwt(localStorage.getItem('jwt'))
             // let pageNum = location.search.split("&")[0].split("=")[1];
             // let pageSize = location.search.split("&")[1].split("=")[1];
             this.loadProductList(1);
