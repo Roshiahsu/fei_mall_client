@@ -84,7 +84,6 @@
 
 <script>
     import {haveJwt} from '@/utils/Utils';
-    import {getCookie} from "@/utils/support";
     import {getRequest,postRequest} from "@/utils/api";
 
     export default {
