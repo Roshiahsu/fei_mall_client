@@ -176,6 +176,7 @@
                     this.fullscreenLoading = false;
                 }, 2000);
             },
+            //確認框
             checkToConfirm(confirmMessage,title,path){
                 this.$alert(confirmMessage, title, {
                     confirmButtonText: '確定',

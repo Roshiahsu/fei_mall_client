@@ -87,6 +87,12 @@
             productDetails(id){
                 location.href = "/product/details?id="+id
             },
+            /*
+            查詢商品
+            newProduct = 新品推薦
+            hotProduct = 熱門商品
+            discountedProduct = 優惠商品
+         */
             newProductList(){
                 getRequest("/product/"+newProduct+"/listProduct?pageNum=1&pageSize=6")
                     .then(response => {
@@ -110,12 +116,6 @@
         created() {
             //自動獲取
         },
-        /*
-            查詢商品
-            newProduct = 新品推薦
-            hotProduct = 熱門商品
-            discountedProduct = 優惠商品
-         */
         mounted() {
             this.newProductList()
             this.hotProductList()
