@@ -55,14 +55,13 @@
 
 
 <script>
-    import {getUrl} from '@/utils/Utils';
-    import Cookies from 'js-cookie'
+    import {getRequest, postRequest} from '@/utils/api'
+    import {haveJwt} from "@/utils/Utils";
     export default {
         data() {
             return {
                 cartArr:[],
                 jwt:"",
-                url:getUrl(),
                 subtotal:"",
                 pages:'',
                 totalPrice:'',
@@ -88,17 +87,12 @@
             //根據id刪除購物車商品
             handleDelete(id){
                 console.log(id)
-                let url=this.url+"/cart/"+id+"/delete"
-                this.axios
-                    .create({headers:{'Authorization':this.jwt}})
-                    .get(url).then((response)=>{
-                    let json = response.data;
-                    if(json.serviceCode===20000){
+                let url="/cart/"+id+"/delete"
+                getRequest(url).then(response=>{
+                    if(response.serviceCode===20000){
                         this.$message.success("刪除成功")
-                    } else if (json.serviceCode === 40002) {
-                        this.open()
-                    }else{
-                        let message = response.data.message
+                    } else{
+                        let message = response.message
                         this.$message.error(message);
                     }
                     this.loadCarts()
@@ -106,17 +100,14 @@
             },
             //獲取購物車列表
             loadCarts(){
-                let url=this.url+"/cart/list"
-                this.axios
-                    .create({headers:{'Authorization':this.jwt}})
-                    .get(url).then((response)=>{
-                    let json=response.data
-                    console.log("CartJSON",json)
-                    if(json.serviceCode===20000){
-                        this.cartArr=json.data
+                let url="/cart/list"
+                getRequest(url).then(response=>{
+                    console.log("CartJSON",response)
+                    if(response.serviceCode===20000){
+                        this.cartArr=response.data
                         this.total()
                     }else {
-                        this.$message.error(json.message)
+                        this.$message.error(response.message)
                     }
                 })
             },
@@ -141,40 +132,18 @@
                     this.$message.error("沒有商品")
                     return
                 }
-                console.log("updataCart")
-                let url =this.url+'/cart/update'
-                this.axios
-                    .create({headers:{'Authorization':this.jwt}})
-                    .post(url,this.cartArr).then((response)=>{
-                    let json = response.data
-                    console.log("JSON", json)
-                    if (json.serviceCode === 20000) {
+                let url ='/cart/update'
+                postRequest(url,this.cartArr).then(response=>{
+                    console.log("UpdateJSON", response)
+                    if (response.serviceCode === 20000) {
                         //跳轉到付款頁面
                         // location.href = this.url
                         // location.href="/order/list"
                         this.$router.push({path: '/order/list'})
-                    } else if (json.serviceCode === 40004 ||json.serviceCode === 40001 ||json.serviceCode === 40002){
-                        this.open()
-                    }else{
-                        this.$message.error(json.message)
+                    } else{
+                        this.$message.error(response.message)
                     }
                 })
-            },
-            open() {
-                this.$alert('請先登入', '尚未登入', {
-                    confirmButtonText: '確定',
-                    callback: action => {
-                        // location.href = "/login"
-                        this.$router.push({path: '/login'})
-                    }
-                });
-            },
-            //判斷是否有包含jwt，如果沒有則跳到登入頁
-            haveJwt(){
-                if(this.jwt ===null){
-                    this.open()
-                    return
-                }
             },
         },
         created() { //已創建 在mounted 顯示頁面之前執行
@@ -182,7 +151,7 @@
         },
         mounted() { //已掛載 在created 顯示頁面之後執行
             this.jwt = localStorage.getItem("jwt")
-            this.haveJwt()
+            haveJwt(this.jwt)
             let pageNum = location.search.split("&")[0].split("=")[1];
             // let pageSize = location.search.split("&")[1].split("=")[1];
             this.loadCarts(pageNum);
