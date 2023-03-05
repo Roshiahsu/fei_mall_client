@@ -191,8 +191,15 @@
                                     console.log("更換圖片", response)
                                     this.submitUpload()
                                 }
-                                this.$message.success("修改成功")
-                                location.reload()
+                                this.$alert('修改成功','點擊後跳轉', {
+                                    confirmButtonText: '確定',
+                                    callback: action => {
+                                        location.reload()
+                                    }
+                                });
+
+                                // this.$message.success("修改成功")
+                                // console.log("111")
                             } else {
                                 this.$message.error(response.message)
                             }
