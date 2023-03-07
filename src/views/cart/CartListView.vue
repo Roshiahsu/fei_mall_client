@@ -19,7 +19,7 @@
             <el-table-column prop="price" label="單價" width="100"  align="center"></el-table-column>
             <el-table-column prop="quantity" label="購買數量" align="center" >
                 <template slot-scope="scope">
-                    <el-input-number size="mini" :min="0" :max="scope.row.stock" @change="handleChange(scope.row)"  v-model="scope.row.quantity" ></el-input-number>
+                    <el-input-number size="mini" :min="1" :max="scope.row.stock" @change="handleChange(scope.row)"  v-model="scope.row.quantity" ></el-input-number>
                 </template>
             </el-table-column>
             <el-table-column prop="subtotal" label="小計" width="150" align="center"></el-table-column>
