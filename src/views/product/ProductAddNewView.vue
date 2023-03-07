@@ -1,6 +1,6 @@
 <template>
     <div>
-        <h1>添加品牌頁面</h1>
+        <h1>添加商品頁面</h1>
         <el-card>
             <!--form表單組件 驗證表單開始-->
             <el-form :model="ruleForm" :rules="rules" ref="ruleForm" label-width="150px" class="demo-ruleForm">
